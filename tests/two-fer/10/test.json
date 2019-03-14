@@ -1,0 +1,7 @@
+{
+  "expected_status": "approve",
+  "expected_comments": [],
+  "not_expected_comments": [
+    "go.two_fer.wrong_comment_format"
+  ]
+}

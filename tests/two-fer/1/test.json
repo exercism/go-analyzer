@@ -1,0 +1,13 @@
+{
+  "expected_status": "approve_with_comment",
+  "expected_comments": [
+    "go.two_fer.plus_used",
+    "go.two_fer.remove_stub"
+  ],
+  "not_expected_comments": [
+    "go.two_fer.missing_comment",
+    "go.two_fer.comment_format",
+    "go.two_fer.wrong_comment_format",
+    "go.two_fer.minimal_conditional"
+  ]
+}

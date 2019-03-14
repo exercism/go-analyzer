@@ -1,0 +1,7 @@
+{
+  "expected_status": "approve_with_comment",
+  "expected_comments": [
+    "go.two_fer.missing_package_comment"
+  ],
+  "not_expected_comments": []
+}

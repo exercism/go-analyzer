@@ -1,0 +1,7 @@
+{
+  "expected_status": "approve_with_comment",
+  "expected_comments": [
+    "go.two_fer.use_string_place_holder"
+  ],
+  "not_expected_comments": []
+}

@@ -1,0 +1,10 @@
+{
+  "expected_status": "disapprove_with_comment",
+  "expected_comments": [
+    "go.two_fer.stub",
+    "go.two_fer.minimal_conditional"
+  ],
+  "not_expected_comments": [
+    "go.two_fer.plus_used"
+  ]
+}

@@ -4,15 +4,12 @@ One for you and one for me.
 */
 package twofer
 
-import "strings"
+import "fmt"
 
-// ShareWith accepts a string and returns a modified string
+// ShareWith shares with provided name.
 func ShareWith(name string) string {
-	if name == "" {
+	if name != "" {
 		name = "you"
 	}
-
-	s := []string{"One for ", name, ", one for me."}
-
-	return strings.Join(s, "")
+	return fmt.Sprintf("One for %s, one for me.", name)
 }
