@@ -1,0 +1,7 @@
+{
+  "expected_status": "approve_with_comment",
+  "expected_comments": [
+    "go.two_fer.remove_extra_function"
+  ],
+  "not_expected_comments": []
+}

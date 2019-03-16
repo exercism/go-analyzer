@@ -21,8 +21,16 @@ var Register = sugg.Register{
 		examConditional,
 		examStringsJoin,
 		examExtraVariable,
+		examExtraFunction,
 	},
 	Severity: severity,
+}
+
+func examExtraFunction(pkg *astrav.Package, suggs sugg.Suggester) {
+	nodes := pkg.FindByNodeType(astrav.NodeTypeFuncDecl)
+	if 1 < len(nodes) {
+		suggs.AppendUnique(ExtraFunction)
+	}
 }
 
 func examExtraVariable(pkg *astrav.Package, suggs sugg.Suggester) {
