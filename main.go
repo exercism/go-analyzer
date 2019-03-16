@@ -3,8 +3,12 @@
 package main
 
 import (
+	"encoding/json"
+	"io/ioutil"
 	"os"
+	"path"
 
+	"github.com/exercism/go-analyzer/analyzer"
 	"github.com/namsral/flag"
 )
 
@@ -24,6 +28,12 @@ func main() {
 		*exercise, *solutionPath = args[0], args[1]
 	}
 
-	// 	TODO:
-	// 	 - write result to file
+	res := analyzer.Analyze(*exercise, *solutionPath)
+	bytes, err := json.MarshalIndent(res, "", "\t")
+	if err != nil {
+		os.Exit(2)
+	}
+	if err := ioutil.WriteFile(path.Join(*solutionPath, "analysis.json"), bytes, 0644); err != nil {
+		os.Exit(3)
+	}
 }

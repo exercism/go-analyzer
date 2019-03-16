@@ -8,7 +8,7 @@ import (
 type Result struct {
 	Status   Status   `json:"status"`
 	Comments []string `json:"comments"`
-	Errors   []error  `json:"errors"`
+	Errors   []error  `json:"errors,omitempty"`
 	Severity int      `json:"-"`
 }
 
