@@ -6,8 +6,16 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestListPatterns(t *testing.T) {
+func TestPatternDirs(t *testing.T) {
 	dirs, err := PatternDirs("two-fer")
+	if err != nil {
+		t.Error(err)
+	}
+	assert.NotEmpty(t, dirs)
+}
+
+func TestGetDirs(t *testing.T) {
+	dirs, err := GetDirs("two-fer", Patterns)
 	if err != nil {
 		t.Error(err)
 	}

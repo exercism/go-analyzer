@@ -62,6 +62,9 @@ func (s *SuggestionReport) AppendUnique(comment string) {
 
 // ReportError reports an error to the analyzer.
 func (s *SuggestionReport) ReportError(err error) {
+	if err == nil {
+		return
+	}
 	s.errors = append(s.errors, err)
 }
 

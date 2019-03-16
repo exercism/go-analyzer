@@ -48,8 +48,8 @@ func loadPatterns(paths ...string) ([]*astpatt.Pattern, error) {
 }
 
 // GetDirs retrieces a list of sub directories of a given parent/path folder.
-func GetDirs(exercise string, parent http.FileSystem) ([]string, error) {
-	dir, err := parent.Open(exercise)
+func GetDirs(path string, parent http.FileSystem) ([]string, error) {
+	dir, err := parent.Open(path)
 	if err != nil {
 		return nil, err
 	}

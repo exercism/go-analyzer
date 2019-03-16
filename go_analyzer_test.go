@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"net/http"
 	"path"
@@ -18,9 +19,9 @@ var Tests http.FileSystem = http.Dir("tests")
 // A test case is a folder containing a solution and a file with the `test.json`
 // containing the TestCase structure.
 type TestCase struct {
-	ExpectedStatus      string   `json:"expected_status"`
-	ExpectedComments    []string `json:"expected_comments"`
-	NotExpectedComments []string `json:"not_expected_comments"`
+	ExpectedStatus      analyzer.Status `json:"expected_status"`
+	ExpectedComments    []string        `json:"expected_comments"`
+	NotExpectedComments []string        `json:"not_expected_comments"`
 }
 
 func TestAnalyze(t *testing.T) {
@@ -38,8 +39,8 @@ func TestAnalyze(t *testing.T) {
 
 		for _, dir := range paths {
 			res := analyzer.Analyze(exercise, dir)
-			if res.Error != nil {
-				t.Error(res.Error)
+			for _, err := range res.Errors {
+				t.Error(err)
 			}
 
 			test, err := GetTestResult(dir)
@@ -48,12 +49,12 @@ func TestAnalyze(t *testing.T) {
 				continue
 			}
 
-			assert.Equal(t, test.ExpectedStatus, res.Status)
+			assert.Equal(t, test.ExpectedStatus, res.Status, fmt.Sprintf("Wrong status on %s", dir))
 			for _, comment := range test.ExpectedComments {
-				assert.Contains(t, res.Comments, comment)
+				assert.Contains(t, res.Comments, comment, fmt.Sprintf("Missing comment `%s` on %s", comment, dir))
 			}
 			for _, comment := range test.NotExpectedComments {
-				assert.NotContains(t, res.Comments, comment)
+				assert.NotContains(t, res.Comments, comment, fmt.Sprintf("Wrong comment `%s` on %s", comment, dir))
 			}
 		}
 	}
