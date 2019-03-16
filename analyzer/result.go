@@ -13,6 +13,7 @@ func getResult(goodPattern bool, suggReporter *sugg.SuggestionReport) Result {
 		Status:   getStatus(goodPattern, len(comments), severity, len(errs)),
 		Comments: comments,
 		Errors:   errs,
+		Severity: severity,
 	}
 }
 

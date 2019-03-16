@@ -9,6 +9,7 @@ type Result struct {
 	Status   Status   `json:"status"`
 	Comments []string `json:"comments"`
 	Errors   []error  `json:"errors"`
+	Severity int      `json:"-"`
 }
 
 // Status defines the status of a solution to be acted upon by exercism.

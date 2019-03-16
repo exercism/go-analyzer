@@ -1,8 +1,8 @@
 {
   "expected_status": "disapprove_with_comment",
   "expected_comments": [
-    "go.two_fer.use_string_place_holder",
-    "go.two_fer.minimal_conditional"
+    "go.two_fer.use_fmt_placeholder_for_string",
+    "go.two_fer.find_minimal_conditional"
   ],
   "not_expected_comments": []
 }

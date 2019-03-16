@@ -9,7 +9,7 @@ import (
 )
 
 var exercisePkgs = map[string]sugg.Register{
-	"twofer": twofer.Register,
+	"two-fer": twofer.Register,
 }
 
 // Suggest statically analysis the solution and returns a list of comments to provide.

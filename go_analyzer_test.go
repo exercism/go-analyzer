@@ -24,6 +24,8 @@ type TestCase struct {
 	NotExpectedComments []string        `json:"not_expected_comments"`
 }
 
+// var runOnly = ""
+
 func TestAnalyze(t *testing.T) {
 	exercises, err := ExercisesWithTests()
 	if err != nil {
@@ -38,6 +40,9 @@ func TestAnalyze(t *testing.T) {
 		}
 
 		for _, dir := range paths {
+			// if runOnly != "" && runOnly != dir {
+			// 	continue
+			// }
 			res := analyzer.Analyze(exercise, dir)
 			for _, err := range res.Errors {
 				t.Error(err)
@@ -49,7 +54,7 @@ func TestAnalyze(t *testing.T) {
 				continue
 			}
 
-			assert.Equal(t, test.ExpectedStatus, res.Status, fmt.Sprintf("Wrong status on %s", dir))
+			assert.Equal(t, test.ExpectedStatus, res.Status, fmt.Sprintf("Wrong status on %s (severity: %d)", dir, res.Severity))
 			for _, comment := range test.ExpectedComments {
 				assert.Contains(t, res.Comments, comment, fmt.Sprintf("Missing comment `%s` on %s", comment, dir))
 			}
