@@ -13,15 +13,25 @@ var exercisePkgs = map[string]sugg.Register{
 }
 
 // Suggest statically analysis the solution and returns a list of comments to provide.
-func Suggest(exercise string, pkg *astrav.Package) (*sugg.DefaultSuggs, error) {
+func Suggest(exercise string, pkg *astrav.Package) *sugg.SuggestionReport {
 	register, ok := exercisePkgs[exercise]
 	if !ok {
-		return nil, fmt.Errorf("suggester for exercise '%s' not implemented", exercise)
+		return nil
 	}
 
 	var suggs = sugg.NewSuggestions(register.Severity)
 	for _, fn := range register.Funcs {
-		fn(pkg, suggs)
+		func(fn sugg.SuggestionFunc) {
+			defer func() {
+				// in case one of the functions panics we catch that
+				// and create an error from the panic value.
+				if r := recover(); r != nil {
+					suggs.ReportError(fmt.Errorf("PANIC: %+v", r))
+				}
+			}()
+
+			fn(pkg, suggs)
+		}(fn)
 	}
-	return suggs, nil
+	return suggs
 }

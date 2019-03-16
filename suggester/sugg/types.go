@@ -4,10 +4,10 @@ import (
 	"github.com/tehsphinx/astrav"
 )
 
-// Suggestions defines a list of comments including severity information.
+// Suggester defines a list of comments including severity information.
 // The reason for this interface is mainly to provide a focused (limited)
 // set of functionality to suggester implementers.
-type Suggestions interface {
+type Suggester interface {
 	// AppendUnique adds a suggestion while checking if it exists already.
 	// That way it does not matter if the code accidentally adds the same suggestion multiple times.
 	AppendUnique(comment string)
@@ -34,7 +34,7 @@ type Register struct {
 }
 
 // SuggestionFunc defines a function checking a solution for a specific problem.
-type SuggestionFunc func(pkg *astrav.Package, suggs Suggestions)
+type SuggestionFunc func(pkg *astrav.Package, suggs Suggester)
 
 type suggestion struct {
 	comment  string
@@ -42,30 +42,55 @@ type suggestion struct {
 }
 
 // NewSuggestions creates a new collection of suggestions.
-func NewSuggestions(severity map[string]int) *DefaultSuggs {
-	return &DefaultSuggs{
+func NewSuggestions(severity map[string]int) *SuggestionReport {
+	return &SuggestionReport{
 		severity: severity,
 	}
 }
 
-// DefaultSuggs is a list of comments including severity information.
-type DefaultSuggs struct {
+// SuggestionReport is a list of comments including severity information.
+type SuggestionReport struct {
 	suggs    []suggestion
 	severity map[string]int
 	errors   []error
 }
 
 // AppendUnique adds a comment if it does not exist.
-func (s *DefaultSuggs) AppendUnique(comment string) {
+func (s *SuggestionReport) AppendUnique(comment string) {
 	s.appendUnique(comment)
 }
 
 // ReportError reports an error to the analyzer.
-func (s *DefaultSuggs) ReportError(err error) {
+func (s *SuggestionReport) ReportError(err error) {
 	s.errors = append(s.errors, err)
 }
 
-func (s *DefaultSuggs) appendUnique(comment string) {
+// GetComments returns the comments and their severity sum.
+func (s *SuggestionReport) GetComments() ([]string, int) {
+	if s == nil {
+		return nil, 0
+	}
+
+	var (
+		comments    []string
+		sumSeverity int
+	)
+	for _, sugg := range s.suggs {
+		comments = append(comments, sugg.comment)
+		sumSeverity += sugg.severity
+	}
+	return comments, sumSeverity
+}
+
+// GetErrors returns a list of errors that occured.
+func (s *SuggestionReport) GetErrors() []error {
+	if s == nil {
+		return nil
+	}
+	return s.errors
+}
+
+func (s *SuggestionReport) appendUnique(comment string) {
 	for _, sugg := range s.suggs {
 		if sugg.comment == comment {
 			return

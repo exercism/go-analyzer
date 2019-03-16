@@ -24,14 +24,14 @@ var Register = sugg.Register{
 	Severity: severity,
 }
 
-func examStringsJoin(pkg *astrav.Package, suggs sugg.Suggestions) {
+func examStringsJoin(pkg *astrav.Package, suggs sugg.Suggester) {
 	node := pkg.FindFirstByName("Join")
 	if node != nil {
 		suggs.AppendUnique(StringsJoin)
 	}
 }
 
-func examPlusUsed(pkg *astrav.Package, suggs sugg.Suggestions) {
+func examPlusUsed(pkg *astrav.Package, suggs sugg.Suggester) {
 	main := pkg.FindFirstByName("ShareWith")
 	if main == nil {
 		suggs.AppendUnique(MissingShareWith)
@@ -54,7 +54,7 @@ func examPlusUsed(pkg *astrav.Package, suggs sugg.Suggestions) {
 	}
 }
 
-func examFmt(pkg *astrav.Package, suggs sugg.Suggestions) {
+func examFmt(pkg *astrav.Package, suggs sugg.Suggester) {
 	nodes := pkg.FindByName("Sprintf")
 
 	var spfCount int
@@ -78,7 +78,7 @@ func examFmt(pkg *astrav.Package, suggs sugg.Suggestions) {
 	}
 }
 
-func examComments(pkg *astrav.Package, suggs sugg.Suggestions) {
+func examComments(pkg *astrav.Package, suggs sugg.Suggester) {
 	if bytes.Contains(pkg.GetSource(), []byte("stub")) {
 		suggs.AppendUnique(StubComments)
 	}
@@ -101,14 +101,14 @@ func examComments(pkg *astrav.Package, suggs sugg.Suggestions) {
 
 var outputPart = regexp.MustCompile(`, one for me\.`)
 
-func examConditional(pkg *astrav.Package, suggs sugg.Suggestions) {
+func examConditional(pkg *astrav.Package, suggs sugg.Suggester) {
 	matches := outputPart.FindAllIndex(pkg.FindFirstByName("ShareWith").GetSource(), -1)
 	if 1 < len(matches) {
 		suggs.AppendUnique(MinimalConditional)
 	}
 }
 
-func examGeneralizeNames(pkg *astrav.Package, suggs sugg.Suggestions) {
+func examGeneralizeNames(pkg *astrav.Package, suggs sugg.Suggester) {
 	contains := bytes.Contains(pkg.FindFirstByName("ShareWith").GetSource(), []byte("Alice"))
 	if !contains {
 		contains = bytes.Contains(pkg.FindFirstByName("ShareWith").GetSource(), []byte("Bob"))
@@ -139,7 +139,7 @@ var commentStrings = map[string]struct {
 }
 
 // we only do this on the first exercise. Later we ask them to use golint.
-func checkComment(cGroup astrav.Node, suggs sugg.Suggestions, commentType, name string) {
+func checkComment(cGroup astrav.Node, suggs sugg.Suggester, commentType, name string) {
 	strPack := commentStrings[commentType]
 	if cGroup == nil || len(cGroup.Children()) == 0 {
 		suggs.AppendUnique(fmt.Sprintf("go.two_fer.missing_%s_comment", commentType))
