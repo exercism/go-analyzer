@@ -2,32 +2,36 @@ package twofer
 
 import (
 	"bytes"
+	"errors"
+	"fmt"
+	"regexp"
+	"strings"
 
-	"github.com/exercism/go-analyzer/suggester/types"
+	"github.com/exercism/go-analyzer/suggester/sugg"
 	"github.com/tehsphinx/astrav"
 )
 
 // Register registers all suggestion functions for this exercise.
-var Register = types.Register{
-	Funcs: []types.SuggestionFunc{
+var Register = sugg.Register{
+	Funcs: []sugg.SuggestionFunc{
 		examPlusUsed,
-		// examGeneralizeNames,
+		examGeneralizeNames,
 		examFmt,
-		// examComments,
-		// examConditional,
+		examComments,
+		examConditional,
 		examStringsJoin,
 	},
 	Severity: severity,
 }
 
-func examStringsJoin(pkg *astrav.Package, suggs *types.Suggestions) {
+func examStringsJoin(pkg *astrav.Package, suggs sugg.Suggestions) {
 	node := pkg.FindFirstByName("Join")
 	if node != nil {
 		suggs.AppendUnique(StringsJoin)
 	}
 }
 
-func examPlusUsed(pkg *astrav.Package, suggs *types.Suggestions) {
+func examPlusUsed(pkg *astrav.Package, suggs sugg.Suggestions) {
 	main := pkg.FindFirstByName("ShareWith")
 	if main == nil {
 		suggs.AppendUnique(MissingShareWith)
@@ -50,7 +54,7 @@ func examPlusUsed(pkg *astrav.Package, suggs *types.Suggestions) {
 	}
 }
 
-func examFmt(pkg *astrav.Package, suggs *types.Suggestions) {
+func examFmt(pkg *astrav.Package, suggs sugg.Suggestions) {
 	nodes := pkg.FindByName("Sprintf")
 
 	var spfCount int
@@ -74,98 +78,86 @@ func examFmt(pkg *astrav.Package, suggs *types.Suggestions) {
 	}
 }
 
-// func examComments(pkg *astrav.Package, r *extypes.Response) {
-// 	if bytes.Contains(pkg.GetSource(), []byte("stub")) {
-// 		addStub(r)
-// 	}
-//
-// 	cGroup := pkg.ChildByNodeType(astrav.NodeTypeFile).ChildByNodeType(astrav.NodeTypeCommentGroup)
-// 	checkComment(cGroup, r, "package", "twofer")
-//
-// 	cGroup = pkg.FindFirstByName("ShareWith").ChildByNodeType(astrav.NodeTypeCommentGroup)
-// 	checkComment(cGroup, r, "function", "ShareWith")
-// }
-//
-// var outputPart = regexp.MustCompile(`, one for me\.`)
-//
-// func examConditional(pkg *astrav.Package, r *extypes.Response) {
-// 	matches := outputPart.FindAllIndex(pkg.FindFirstByName("ShareWith").GetSource(), -1)
-// 	if 1 < len(matches) {
-// 		r.AppendImprovement(tpl.MinimalConditional)
-// 	}
-// }
-//
-// func examGeneralizeNames(pkg *astrav.Package, r *extypes.Response) {
-// 	contains := bytes.Contains(pkg.FindFirstByName("ShareWith").GetSource(), []byte("Alice"))
-// 	if !contains {
-// 		contains = bytes.Contains(pkg.FindFirstByName("ShareWith").GetSource(), []byte("Bob"))
-// 	}
-// 	if contains {
-// 		r.AppendTodo(tpl.GeneralizeName)
-// 	}
-// }
-//
-// var commentStrings = map[string]struct {
-// 	typeString       string
-// 	stubString       string
-// 	prefixString     string
-// 	wrongCommentName string
-// }{
-// 	"package": {
-// 		typeString:       "Packages",
-// 		stubString:       "should have a package comment",
-// 		prefixString:     "Package %s ",
-// 		wrongCommentName: "package `%s`",
-// 	},
-// 	"function": {
-// 		typeString:       "Exported functions",
-// 		stubString:       "should have a comment",
-// 		prefixString:     "%s ",
-// 		wrongCommentName: "function `%s`",
-// 	},
-// }
-//
-// // we only do this on the first exercise. Later we ask them to use golint.
-// func checkComment(cGroup astrav.Node, r *extypes.Response, commentType, name string) {
-// 	strPack := commentStrings[commentType]
-// 	if cGroup == nil {
-// 		r.AppendImprovement(tpl.MissingComment.Format(strPack.typeString))
-// 		addCommentFormat(r)
-// 	} else {
-// 		text := cGroup.Children()[0].(*astrav.Suggestion).Text
-// 		c := strings.TrimSpace(strings.Replace(strings.Replace(text, "/*", "", 1), "//", "", 1))
-//
-// 		if strings.Contains(c, strPack.stubString) {
-// 			addStub(r)
-// 		} else if !strings.HasPrefix(c, fmt.Sprintf(strPack.prefixString, name)) {
-// 			r.AppendImprovement(tpl.WrongCommentFormat.Format(fmt.Sprintf(strPack.wrongCommentName, name)))
-// 			addCommentFormat(r)
-// 		}
-// 	}
-// }
-//
-// var (
-// 	addStub          func(r *extypes.Response)
-// 	addCommentFormat func(r *extypes.Response)
-// )
-//
-// func getAddStub() func(r *extypes.Response) {
-// 	var added bool
-// 	return func(r *extypes.Response) {
-// 		if added {
-// 			return
-// 		}
-// 		added = true
-// 		r.AppendImprovement(tpl.Stub)
-// 	}
-// }
-// func getAddCommentFormat() func(r *extypes.Response) {
-// 	var added bool
-// 	return func(r *extypes.Response) {
-// 		if added {
-// 			return
-// 		}
-// 		added = true
-// 		r.AppendOutro(tpl.CommentFormat)
-// 	}
-// }
+func examComments(pkg *astrav.Package, suggs sugg.Suggestions) {
+	if bytes.Contains(pkg.GetSource(), []byte("stub")) {
+		suggs.AppendUnique(StubComments)
+	}
+
+	// TODO: what if there are multiple files??
+	file := pkg.ChildByNodeType(astrav.NodeTypeFile)
+	if file != nil {
+		cGroup := file.ChildByNodeType(astrav.NodeTypeCommentGroup)
+		checkComment(cGroup, suggs, "package", "twofer")
+	}
+
+	main := pkg.FindFirstByName("ShareWith")
+	if main == nil {
+		suggs.AppendUnique(MissingShareWith)
+		return
+	}
+	cGroup := main.ChildByNodeType(astrav.NodeTypeCommentGroup)
+	checkComment(cGroup, suggs, "function", "ShareWith")
+}
+
+var outputPart = regexp.MustCompile(`, one for me\.`)
+
+func examConditional(pkg *astrav.Package, suggs sugg.Suggestions) {
+	matches := outputPart.FindAllIndex(pkg.FindFirstByName("ShareWith").GetSource(), -1)
+	if 1 < len(matches) {
+		suggs.AppendUnique(MinimalConditional)
+	}
+}
+
+func examGeneralizeNames(pkg *astrav.Package, suggs sugg.Suggestions) {
+	contains := bytes.Contains(pkg.FindFirstByName("ShareWith").GetSource(), []byte("Alice"))
+	if !contains {
+		contains = bytes.Contains(pkg.FindFirstByName("ShareWith").GetSource(), []byte("Bob"))
+	}
+	if contains {
+		suggs.AppendUnique(GeneralizeName)
+	}
+}
+
+var commentStrings = map[string]struct {
+	typeString       string
+	stubString       string
+	prefixString     string
+	wrongCommentName string
+}{
+	"package": {
+		typeString:       "Packages",
+		stubString:       "should have a package comment",
+		prefixString:     "Package %s ",
+		wrongCommentName: "package `%s`",
+	},
+	"function": {
+		typeString:       "Exported functions",
+		stubString:       "should have a comment",
+		prefixString:     "%s ",
+		wrongCommentName: "function `%s`",
+	},
+}
+
+// we only do this on the first exercise. Later we ask them to use golint.
+func checkComment(cGroup astrav.Node, suggs sugg.Suggestions, commentType, name string) {
+	strPack := commentStrings[commentType]
+	if cGroup == nil || len(cGroup.Children()) == 0 {
+		suggs.AppendUnique(fmt.Sprintf("go.two_fer.missing_%s_comment", commentType))
+		suggs.AppendUnique(CommentSection)
+		return
+	}
+
+	comment, ok := cGroup.Children()[0].(*astrav.Comment)
+	if !ok {
+		suggs.ReportError(errors.New("expected comment in comment group"))
+		return
+	}
+	cmt := strings.TrimSpace(strings.Replace(strings.Replace(comment.Text, "/*", "", 1), "//", "", 1))
+
+	if strings.Contains(cmt, strPack.stubString) {
+		suggs.AppendUnique(StubComments)
+	} else if !strings.HasPrefix(cmt, fmt.Sprintf(strPack.prefixString, name)) {
+		suggs.AppendUnique(fmt.Sprintf("go.two_fer.wrong_%s_comment", commentType))
+		suggs.AppendUnique(CommentSection)
+	}
+}
