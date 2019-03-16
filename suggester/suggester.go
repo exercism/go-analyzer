@@ -3,30 +3,25 @@ package suggester
 import (
 	"fmt"
 
-	"github.com/exercism/go-analyzer/suggester/suggTypes"
 	"github.com/exercism/go-analyzer/suggester/twofer"
+	"github.com/exercism/go-analyzer/suggester/types"
 	"github.com/tehsphinx/astrav"
 )
 
-var exercisePkgs = map[string][]suggTypes.SuggestionFunc{
-	"twofer": twofer.FuncRegister,
+var exercisePkgs = map[string]types.Register{
+	"twofer": twofer.Register,
 }
 
 // Suggest statically analysis the solution and returns a list of comments to provide.
-func Suggest(exercise string, pkg *astrav.Package) (suggTypes.Suggestions, error) {
-	funcs, ok := exercisePkgs[exercise]
+func Suggest(exercise string, pkg *astrav.Package) (*types.Suggestions, error) {
+	register, ok := exercisePkgs[exercise]
 	if !ok {
 		return nil, fmt.Errorf("suggester for exercise '%s' not implemented", exercise)
 	}
 
-	var suggs suggTypes.Suggestions
-	for _, fn := range funcs {
-		res, err := fn(pkg)
-		if err != nil {
-			return nil, err
-		}
-
-		suggs.Merge(res)
+	var suggs = types.NewSuggestions(register.Severity)
+	for _, fn := range register.Funcs {
+		fn(pkg, suggs)
 	}
 	return suggs, nil
 }

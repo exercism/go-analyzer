@@ -2,34 +2,36 @@ package twofer
 
 import (
 	"bytes"
-	"errors"
 
-	"github.com/exercism/go-analyzer/suggester/suggTypes"
+	"github.com/exercism/go-analyzer/suggester/types"
 	"github.com/tehsphinx/astrav"
 )
 
-// FuncRegister registers all suggestion functions for this exercise.
-var FuncRegister = []suggTypes.SuggestionFunc{
-	examPlusUsed,
-	// examGeneralizeNames,
-	examFmt,
-	// examComments,
-	// examConditional,
-	examStringsJoin,
+// Register registers all suggestion functions for this exercise.
+var Register = types.Register{
+	Funcs: []types.SuggestionFunc{
+		examPlusUsed,
+		// examGeneralizeNames,
+		examFmt,
+		// examComments,
+		// examConditional,
+		examStringsJoin,
+	},
+	Severity: severity,
 }
 
-func examStringsJoin(pkg *astrav.Package) (suggs suggTypes.Suggestions, err error) {
+func examStringsJoin(pkg *astrav.Package, suggs *types.Suggestions) {
 	node := pkg.FindFirstByName("Join")
 	if node != nil {
-		suggs.AppendUnique(StringsJoin, severity)
+		suggs.AppendUnique(StringsJoin)
 	}
-	return suggs, nil
 }
 
-func examPlusUsed(pkg *astrav.Package) (suggs suggTypes.Suggestions, err error) {
+func examPlusUsed(pkg *astrav.Package, suggs *types.Suggestions) {
 	main := pkg.FindFirstByName("ShareWith")
 	if main == nil {
-		return nil, errors.New("main function 'ShareWith' not found")
+		suggs.AppendUnique(MissingShareWith)
+		return
 	}
 	nodes := main.FindByNodeType(astrav.NodeTypeBinaryExpr)
 
@@ -44,12 +46,11 @@ func examPlusUsed(pkg *astrav.Package) (suggs suggTypes.Suggestions, err error) 
 		}
 	}
 	if plusUsed {
-		suggs.AppendUnique(PlusUsed, severity)
+		suggs.AppendUnique(PlusUsed)
 	}
-	return suggs, nil
 }
 
-func examFmt(pkg *astrav.Package) (suggs suggTypes.Suggestions, err error) {
+func examFmt(pkg *astrav.Package, suggs *types.Suggestions) {
 	nodes := pkg.FindByName("Sprintf")
 
 	var spfCount int
@@ -60,7 +61,7 @@ func examFmt(pkg *astrav.Package) (suggs suggTypes.Suggestions, err error) {
 
 		spfCount++
 		if 1 < spfCount {
-			suggs.AppendUnique(MinimalConditional, severity)
+			suggs.AppendUnique(MinimalConditional)
 		}
 	}
 
@@ -68,10 +69,9 @@ func examFmt(pkg *astrav.Package) (suggs suggTypes.Suggestions, err error) {
 	for _, node := range nodes {
 		bLit := node.(*astrav.BasicLit)
 		if bytes.Contains(bLit.GetSource(), []byte("%v")) {
-			suggs.AppendUnique(UseStringPH, severity)
+			suggs.AppendUnique(UseStringPH)
 		}
 	}
-	return suggs, nil
 }
 
 // func examComments(pkg *astrav.Package, r *extypes.Response) {
