@@ -2,6 +2,7 @@ package suggester
 
 import (
 	"fmt"
+	"runtime/debug"
 
 	"github.com/exercism/go-analyzer/suggester/sugg"
 	"github.com/exercism/go-analyzer/suggester/twofer"
@@ -26,7 +27,7 @@ func Suggest(exercise string, pkg *astrav.Package) *sugg.SuggestionReport {
 				// in case one of the functions panics we catch that
 				// and create an error from the panic value.
 				if r := recover(); r != nil {
-					suggs.ReportError(fmt.Errorf("PANIC: %+v", r))
+					suggs.ReportError(fmt.Errorf("PANIC: %+v\n%s", r, debug.Stack()))
 				}
 			}()
 

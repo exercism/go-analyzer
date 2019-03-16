@@ -20,8 +20,46 @@ var Register = sugg.Register{
 		examComments,
 		examConditional,
 		examStringsJoin,
+		examExtraVariable,
 	},
 	Severity: severity,
+}
+
+func examExtraVariable(pkg *astrav.Package, suggs sugg.Suggester) {
+	main := pkg.FindFirstByName("ShareWith")
+	if main == nil {
+		suggs.AppendUnique(MissingShareWith)
+		return
+	}
+
+	decl, ok := main.(*astrav.FuncDecl)
+	if !ok {
+		suggs.ReportError(errors.New("expected ShareWith to be of type *astrav.FuncDecl"))
+		return
+	}
+	params := decl.Params().Children()
+	if len(params) != 1 {
+		suggs.AppendUnique(FuncSignatureChanged)
+		return
+	}
+	paramName := params[0].(astrav.Named).NodeName()
+
+	decls := main.FindByNodeType(astrav.NodeTypeAssignStmt)
+	for _, decl := range decls {
+		right := decl.(*astrav.AssignStmt).Rhs()
+		if len(right) == 0 {
+			continue
+		}
+
+		for _, node := range right {
+			if !node.IsNodeType(astrav.NodeTypeIdent) {
+				continue
+			}
+			if node.(astrav.Named).NodeName().Name == paramName.Name {
+				suggs.AppendUnique(ExtraNameVar)
+			}
+		}
+	}
 }
 
 func examStringsJoin(pkg *astrav.Package, suggs sugg.Suggester) {
@@ -102,16 +140,28 @@ func examComments(pkg *astrav.Package, suggs sugg.Suggester) {
 var outputPart = regexp.MustCompile(`, one for me\.`)
 
 func examConditional(pkg *astrav.Package, suggs sugg.Suggester) {
-	matches := outputPart.FindAllIndex(pkg.FindFirstByName("ShareWith").GetSource(), -1)
+	main := pkg.FindFirstByName("ShareWith")
+	if main == nil {
+		suggs.AppendUnique(MissingShareWith)
+		return
+	}
+
+	matches := outputPart.FindAllIndex(main.GetSource(), -1)
 	if 1 < len(matches) {
 		suggs.AppendUnique(MinimalConditional)
 	}
 }
 
 func examGeneralizeNames(pkg *astrav.Package, suggs sugg.Suggester) {
-	contains := bytes.Contains(pkg.FindFirstByName("ShareWith").GetSource(), []byte("Alice"))
+	main := pkg.FindFirstByName("ShareWith")
+	if main == nil {
+		suggs.AppendUnique(MissingShareWith)
+		return
+	}
+
+	contains := bytes.Contains(main.GetSource(), []byte("Alice"))
 	if !contains {
-		contains = bytes.Contains(pkg.FindFirstByName("ShareWith").GetSource(), []byte("Bob"))
+		contains = bytes.Contains(main.GetSource(), []byte("Bob"))
 	}
 	if contains {
 		suggs.AppendUnique(GeneralizeName)

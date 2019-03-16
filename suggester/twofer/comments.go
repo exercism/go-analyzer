@@ -16,6 +16,8 @@ const (
 	WrongPackageComment    = "go.two_fer.wrong_package_comment"
 	WrongFunctionComment   = "go.two_fer.wrong_function_comment"
 	GeneralizeName         = "go.two_fer.work_with_any_provided_name"
+	FuncSignatureChanged   = "go.two_fer.sharewith_signature_changed"
+	ExtraNameVar           = "go.two-fer.extra_name_variable_created"
 )
 
 // Severity defines how severe a comment is. A sum over all comments of 5 means no approval.
@@ -36,4 +38,6 @@ var severity = map[string]int{
 	WrongPackageComment:    2,
 	WrongFunctionComment:   2,
 	GeneralizeName:         5,
+	FuncSignatureChanged:   5,
+	ExtraNameVar:           1,
 }

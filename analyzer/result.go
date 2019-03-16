@@ -1,6 +1,8 @@
 package analyzer
 
-import "github.com/exercism/go-analyzer/suggester/sugg"
+import (
+	"github.com/exercism/go-analyzer/suggester/sugg"
+)
 
 func getResult(goodPattern bool, suggReporter *sugg.SuggestionReport) Result {
 	comments, severity := suggReporter.GetComments()
