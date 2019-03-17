@@ -42,10 +42,8 @@ type suggestion struct {
 }
 
 // NewSuggestions creates a new collection of suggestions.
-func NewSuggestions(severity map[string]int) *SuggestionReport {
-	return &SuggestionReport{
-		severity: severity,
-	}
+func NewSuggestions() *SuggestionReport {
+	return &SuggestionReport{}
 }
 
 // SuggestionReport is a list of comments including severity information.
@@ -91,6 +89,11 @@ func (s *SuggestionReport) GetErrors() []error {
 		return nil
 	}
 	return s.errors
+}
+
+// SetSeverity overwrites severity register.
+func (s *SuggestionReport) SetSeverity(severity map[string]int) {
+	s.severity = severity
 }
 
 func (s *SuggestionReport) appendUnique(comment string) {

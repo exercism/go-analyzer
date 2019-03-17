@@ -58,7 +58,10 @@ func TestSuggest(t *testing.T) {
 
 		suggs := Suggest("test", nil)
 		errs := suggs.GetErrors()
-		assert.Equal(t, test.errors, errs)
+		assert.Equal(t, len(test.errors), len(errs))
+		for i := 0; i < len(test.errors); i++ {
+			assert.Contains(t, errs[i].Error(), test.errors[i].Error())
+		}
 	}
 }
 

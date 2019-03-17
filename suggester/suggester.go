@@ -10,29 +10,36 @@ import (
 )
 
 var exercisePkgs = map[string]sugg.Register{
+	"general": sugg.GeneralRegister,
 	"two-fer": twofer.Register,
 }
 
 // Suggest statically analysis the solution and returns a list of comments to provide.
 func Suggest(exercise string, pkg *astrav.Package) *sugg.SuggestionReport {
-	register, ok := exercisePkgs[exercise]
-	if !ok {
-		return nil
+	var suggs = sugg.NewSuggestions()
+	for _, key := range []string{"general", exercise} {
+		register, ok := exercisePkgs[key]
+		if !ok {
+			continue
+		}
+
+		suggs.SetSeverity(register.Severity)
+		for _, fn := range register.Funcs {
+			catchSuggFunc(pkg, suggs, fn)
+		}
 	}
 
-	var suggs = sugg.NewSuggestions(register.Severity)
-	for _, fn := range register.Funcs {
-		func(fn sugg.SuggestionFunc) {
-			defer func() {
-				// in case one of the functions panics we catch that
-				// and create an error from the panic value.
-				if r := recover(); r != nil {
-					suggs.ReportError(fmt.Errorf("PANIC: %+v\n%s", r, debug.Stack()))
-				}
-			}()
-
-			fn(pkg, suggs)
-		}(fn)
-	}
 	return suggs
+}
+
+func catchSuggFunc(pkg *astrav.Package, suggs *sugg.SuggestionReport, fn sugg.SuggestionFunc) {
+	defer func() {
+		// in case one of the functions panics we catch that
+		// and create an error from the panic value.
+		if r := recover(); r != nil {
+			suggs.ReportError(fmt.Errorf("PANIC: %+v\n%s", r, debug.Stack()))
+		}
+	}()
+
+	fn(pkg, suggs)
 }

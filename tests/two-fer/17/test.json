@@ -1,7 +1,7 @@
 {
   "expected_status": "disapprove_with_comment",
   "expected_comments": [
-    "go.two_fer.remove_extra_function"
+    "go.general.taking_lenght_of_string_to_check_empty"
   ],
   "not_expected_comments": []
 }

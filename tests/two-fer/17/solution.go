@@ -1,13 +1,11 @@
-// Package twofer implements sharing functionality
 package twofer
 
 import "fmt"
 
-// ShareWith function
+// ShareWith shares with provided name.
 func ShareWith(name string) string {
-	if name == "" {
+	if len(name) == 0 {
 		name = "you"
 	}
 	return fmt.Sprintf("One for %v, one for me.", name)
-
 }

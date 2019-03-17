@@ -54,7 +54,7 @@ func examExtraVariable(pkg *astrav.Package, suggs sugg.Suggester) {
 
 	decls := main.FindByNodeType(astrav.NodeTypeAssignStmt)
 	for _, decl := range decls {
-		right := decl.(*astrav.AssignStmt).Rhs()
+		right := decl.(*astrav.AssignStmt).RHS()
 		if len(right) == 0 {
 			continue
 		}

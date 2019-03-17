@@ -41,5 +41,5 @@ var severity = map[string]int{
 	GeneralizeName:         5,
 	FuncSignatureChanged:   5,
 	ExtraNameVar:           1,
-	ExtraFunction:          3,
+	ExtraFunction:          5,
 }

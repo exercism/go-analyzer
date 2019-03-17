@@ -1,13 +1,14 @@
-package analyzer
+package main
 
 import (
 	"testing"
 
+	"github.com/exercism/go-analyzer/analyzer"
 	"github.com/stretchr/testify/assert"
 )
 
 func TestPatternDirs(t *testing.T) {
-	dirs, err := PatternDirs("two-fer")
+	dirs, err := analyzer.PatternDirs("two-fer")
 	if err != nil {
 		t.Error(err)
 	}
@@ -15,7 +16,7 @@ func TestPatternDirs(t *testing.T) {
 }
 
 func TestGetDirs(t *testing.T) {
-	dirs, err := GetDirs("two-fer", Patterns)
+	dirs, err := analyzer.GetDirs("two-fer", analyzer.Patterns)
 	if err != nil {
 		t.Error(err)
 	}

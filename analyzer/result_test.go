@@ -51,6 +51,7 @@ var getResultTests = []struct {
 		result: Result{
 			Status:   DisapproveWithComment,
 			Comments: []string{"go.two-fer.some_comment"},
+			Severity: 5,
 		},
 		severity: map[string]int{"go.two-fer.some_comment": 5},
 	},
@@ -71,11 +72,34 @@ var getResultTests = []struct {
 		},
 		errors: []error{nil},
 	},
+	{
+		goodPattern: false,
+		comments: []string{
+			"go.two-fer.some_comment",
+			"go.two-fer.some_comment_2",
+			"go.two-fer.some_comment_3",
+		},
+		result: Result{
+			Status: DisapproveWithComment,
+			Comments: []string{
+				"go.two-fer.some_comment",
+				"go.two-fer.some_comment_2",
+				"go.two-fer.some_comment_3",
+			},
+			Severity: 6,
+		},
+		severity: map[string]int{
+			"go.two-fer.some_comment":   2,
+			"go.two-fer.some_comment_2": 1,
+			"go.two-fer.some_comment_3": 3,
+		},
+	},
 }
 
 func Test_getResult(t *testing.T) {
 	for _, test := range getResultTests {
-		suggs := sugg.NewSuggestions(test.severity)
+		suggs := sugg.NewSuggestions()
+		suggs.SetSeverity(test.severity)
 		for _, comment := range test.comments {
 			suggs.AppendUnique(comment)
 		}
