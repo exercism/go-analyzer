@@ -1,7 +1,0 @@
-{
-  "expected_status": "disapprove_with_comment",
-  "expected_comments": [
-    "go.two_fer.strings_join_used_for_concatenation"
-  ],
-  "not_expected_comments": []
-}

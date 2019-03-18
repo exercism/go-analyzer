@@ -1,7 +1,0 @@
-{
-  "expected_status": "approve_with_comment",
-  "expected_comments": [
-    "go.two_fer.use_fmt_placeholder_for_string"
-  ],
-  "not_expected_comments": []
-}

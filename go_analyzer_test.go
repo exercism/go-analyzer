@@ -1,8 +1,6 @@
 package main
 
 import (
-	"encoding/json"
-	"fmt"
 	"io/ioutil"
 	"net/http"
 	"path"
@@ -45,22 +43,20 @@ func TestAnalyze(t *testing.T) {
 			// }
 			res := analyzer.Analyze(exercise, dir)
 			for _, err := range res.Errors {
-				t.Error(err)
+				t.Errorf("error analyzing the solution %s: %s", dir, err)
 			}
 
-			test, err := GetTestResult(dir)
+			bytes, err := toJson(res)
+			if err != nil {
+				t.Errorf("error transforming to json for path %s: %s", dir, err)
+			}
+
+			expected, err := GetExpected(dir)
 			if err != nil {
 				t.Errorf("error getting TestResult for path %s: %s", dir, err)
 				continue
 			}
-
-			assert.Equal(t, test.ExpectedStatus, res.Status, fmt.Sprintf("Wrong status on %s (severity: %d)", dir, res.Severity))
-			for _, comment := range test.ExpectedComments {
-				assert.Contains(t, res.Comments, comment, fmt.Sprintf("Missing comment `%s` on %s", comment, dir))
-			}
-			for _, comment := range test.NotExpectedComments {
-				assert.NotContains(t, res.Comments, comment, fmt.Sprintf("Wrong comment `%s` on %s", comment, dir))
-			}
+			assert.Equal(t, string(bytes), expected, "result is not as expected on %s", dir)
 		}
 	}
 }
@@ -83,16 +79,12 @@ func ExerciseTests(exercise string) ([]string, error) {
 	return paths, err
 }
 
-// GetTestResult returns the content of the `test.json` file in given path.
-func GetTestResult(dir string) (*TestCase, error) {
-	bytes, err := ioutil.ReadFile(path.Join(dir, "test.json"))
+// GetExpected returns the content of the `test.json` file in given path.
+func GetExpected(dir string) (string, error) {
+	bytes, err := ioutil.ReadFile(path.Join(dir, "expected.json"))
 	if err != nil {
-		return nil, err
+		return "", err
 	}
 
-	var res = &TestCase{}
-	if err := json.Unmarshal(bytes, res); err != nil {
-		return nil, err
-	}
-	return res, nil
+	return string(bytes), nil
 }

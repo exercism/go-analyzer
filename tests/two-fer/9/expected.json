@@ -1,0 +1,7 @@
+{
+	"status": "approve_with_comment",
+	"comments": [
+		"go.two_fer.missing_function_comment",
+		"go.general.section_about_comments"
+	]
+}

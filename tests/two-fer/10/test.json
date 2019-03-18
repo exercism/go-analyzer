@@ -1,8 +1,0 @@
-{
-  "expected_status": "approve_as_optimal",
-  "expected_comments": [],
-  "not_expected_comments": [
-    "go.two_fer.wrong_package_comment",
-    "go.two_fer.wrong_function_comment"
-  ]
-}

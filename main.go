@@ -15,6 +15,7 @@ import (
 var (
 	exercise     = flag.String("exercise", "", "exercise slug (e.g. 'two-fer')")
 	solutionPath = flag.String("solution", "", "path to solution to be processed")
+	output       = flag.String("output", "analysis.json", "name of the output file")
 )
 
 func main() {
@@ -29,11 +30,15 @@ func main() {
 	}
 
 	res := analyzer.Analyze(*exercise, *solutionPath)
-	bytes, err := json.MarshalIndent(res, "", "\t")
+	bytes, err := toJson(res)
 	if err != nil {
 		os.Exit(2)
 	}
-	if err := ioutil.WriteFile(path.Join(*solutionPath, "analysis.json"), bytes, 0644); err != nil {
+	if err := ioutil.WriteFile(path.Join(*solutionPath, *output), bytes, 0644); err != nil {
 		os.Exit(3)
 	}
+}
+
+func toJson(res analyzer.Result) ([]byte, error) {
+	return json.MarshalIndent(res, "", "\t")
 }
