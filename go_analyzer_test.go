@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"io/ioutil"
 	"net/http"
 	"path"
@@ -54,7 +55,6 @@ func TestAnalyze(t *testing.T) {
 			expected, err := GetExpected(dir)
 			if err != nil {
 				t.Errorf("error getting TestResult for path %s: %s", dir, err)
-				continue
 			}
 			assert.Equal(t, string(bytes), expected, "result is not as expected on %s", dir)
 		}
@@ -86,5 +86,12 @@ func GetExpected(dir string) (string, error) {
 		return "", err
 	}
 
-	return string(bytes), nil
+	// transforming to struct and back to json to eliminate different formatting
+	var res = analyzer.Result{}
+	if err := json.Unmarshal(bytes, &res); err != nil {
+		return string(bytes), err
+	}
+
+	bytes, err = toJson(res)
+	return string(bytes), err
 }
