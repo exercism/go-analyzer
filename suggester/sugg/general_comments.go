@@ -2,6 +2,7 @@ package sugg
 
 // general comments
 const (
+	SyntaxError      = "go.general.syntax_error"
 	CommentSection   = "go.general.section_about_comments"
 	LenOfStringEqual = "go.general.taking_lenght_of_string_to_check_empty"
 )

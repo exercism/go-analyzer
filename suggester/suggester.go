@@ -17,6 +17,13 @@ var exercisePkgs = map[string]sugg.Register{
 // Suggest statically analysis the solution and returns a list of comments to provide.
 func Suggest(exercise string, pkg *astrav.Package) *sugg.SuggestionReport {
 	var suggs = sugg.NewSuggestions()
+
+	suggs.SetSeverity(sugg.GeneralRegister.Severity)
+	if pkg == nil {
+		suggs.AppendUnique(sugg.SyntaxError)
+		return suggs
+	}
+
 	for _, key := range []string{"general", exercise} {
 		register, ok := exercisePkgs[key]
 		if !ok {

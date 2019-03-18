@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"flag"
+	"fmt"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -30,6 +31,7 @@ func main() {
 		log.Fatal(err)
 	}
 
+	sum := map[analyzer.Status]int{}
 	for _, dir := range dirs {
 		res := analyzer.Analyze(*exercise, path.Join(*parentDir, dir))
 		for _, err := range res.Errors {
@@ -39,6 +41,7 @@ func main() {
 			continue
 		}
 
+		sum[res.Status]++
 		bytes, err := json.MarshalIndent(res, "", "\t")
 		if err != nil {
 			log.Println(err)
@@ -49,4 +52,7 @@ func main() {
 			continue
 		}
 	}
+
+	fmt.Println("Statistics:")
+	fmt.Printf("%+v\n", sum)
 }
