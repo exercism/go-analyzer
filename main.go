@@ -34,7 +34,7 @@ func main() {
 	if err != nil {
 		os.Exit(2)
 	}
-	if err := ioutil.WriteFile(path.Join(*solutionPath, *output), bytes, 0644); err != nil {
+	if err := ioutil.WriteFile(path.Join(*solutionPath, *output), append(bytes, '\n'), 0644); err != nil {
 		os.Exit(3)
 	}
 }
