@@ -34,18 +34,13 @@ func examExtraFunction(pkg *astrav.Package, suggs sugg.Suggester) {
 }
 
 func examExtraVariable(pkg *astrav.Package, suggs sugg.Suggester) {
-	main := pkg.FindFirstByName("ShareWith")
+	main := pkg.FuncDeclByName("ShareWith")
 	if main == nil {
 		suggs.AppendUnique(MissingShareWith)
 		return
 	}
 
-	decl, ok := main.(*astrav.FuncDecl)
-	if !ok {
-		suggs.ReportError(errors.New("expected ShareWith to be of type *astrav.FuncDecl"))
-		return
-	}
-	params := decl.Params().Children()
+	params := main.Params().Children()
 	if len(params) != 1 {
 		suggs.AppendUnique(FuncSignatureChanged)
 		return
@@ -78,7 +73,7 @@ func examStringsJoin(pkg *astrav.Package, suggs sugg.Suggester) {
 }
 
 func examPlusUsed(pkg *astrav.Package, suggs sugg.Suggester) {
-	main := pkg.FindFirstByName("ShareWith")
+	main := pkg.FuncDeclByName("ShareWith")
 	if main == nil {
 		suggs.AppendUnique(MissingShareWith)
 		return
@@ -136,7 +131,7 @@ func examComments(pkg *astrav.Package, suggs sugg.Suggester) {
 		checkComment(cGroup, suggs, "package", "twofer")
 	}
 
-	main := pkg.FindFirstByName("ShareWith")
+	main := pkg.FuncDeclByName("ShareWith")
 	if main == nil {
 		suggs.AppendUnique(MissingShareWith)
 		return
@@ -148,7 +143,7 @@ func examComments(pkg *astrav.Package, suggs sugg.Suggester) {
 var outputPart = regexp.MustCompile(`, one for me\.`)
 
 func examConditional(pkg *astrav.Package, suggs sugg.Suggester) {
-	main := pkg.FindFirstByName("ShareWith")
+	main := pkg.FuncDeclByName("ShareWith")
 	if main == nil {
 		suggs.AppendUnique(MissingShareWith)
 		return
@@ -161,7 +156,7 @@ func examConditional(pkg *astrav.Package, suggs sugg.Suggester) {
 }
 
 func examGeneralizeNames(pkg *astrav.Package, suggs sugg.Suggester) {
-	main := pkg.FindFirstByName("ShareWith")
+	main := pkg.FuncDeclByName("ShareWith")
 	if main == nil {
 		suggs.AppendUnique(MissingShareWith)
 		return
