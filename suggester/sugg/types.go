@@ -45,7 +45,7 @@ func NewSuggestions() *SuggestionReport {
 
 // SuggestionReport is a list of comments including severity information.
 type SuggestionReport struct {
-	suggs    []suggestion
+	suggs    []Comment
 	severity map[string]int
 	errors   []error
 }
@@ -58,8 +58,8 @@ func (s *SuggestionReport) AppendUnique(commentID string) {
 // AppendUniquePH adds a comment with placeholder(s). Uniqueness includes the placeholder(s) and value(s).
 func (s *SuggestionReport) AppendUniquePH(commentID string, params map[string]string) {
 	s.appendUnique(&placeholderComment{
-		Comment: commentID,
-		Params:  params,
+		comment: commentID,
+		params:  params,
 	})
 }
 
@@ -82,8 +82,8 @@ func (s *SuggestionReport) GetComments() ([]Comment, int) {
 		sumSeverity int
 	)
 	for _, sugg := range s.suggs {
-		comments = append(comments, sugg.comment)
-		sumSeverity += sugg.severity
+		comments = append(comments, sugg)
+		sumSeverity += sugg.Severity()
 	}
 	return comments, sumSeverity
 }
@@ -102,21 +102,10 @@ func (s *SuggestionReport) SetSeverity(severity map[string]int) {
 }
 
 func (s *SuggestionReport) appendUnique(comment Comment) {
-	if !s.isUnique(comment) {
+	if Contains(s.suggs, comment) {
 		return
 	}
 
-	s.suggs = append(s.suggs, suggestion{
-		comment:  comment,
-		severity: s.severity[comment.ID()],
-	})
-}
-
-func (s *SuggestionReport) isUnique(comment Comment) bool {
-	for _, sugg := range s.suggs {
-		if sugg.comment.compareString() == comment.compareString() {
-			return false
-		}
-	}
-	return true
+	comment.setSeverity(s.severity[comment.ID()])
+	s.suggs = append(s.suggs, comment)
 }

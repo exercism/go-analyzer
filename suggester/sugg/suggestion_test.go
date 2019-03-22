@@ -25,8 +25,8 @@ func TestComment_MarshalJSON(t *testing.T) {
 
 func TestPlaceholderComment_MarshalJSON(t *testing.T) {
 	var c = &placeholderComment{
-		Comment: "testComment",
-		Params: map[string]string{
+		comment: "testComment",
+		params: map[string]string{
 			"param1": "foo",
 			"param2": "bar",
 		},
