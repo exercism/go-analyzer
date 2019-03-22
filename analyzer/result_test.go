@@ -9,69 +9,68 @@ import (
 )
 
 var getResultTests = []struct {
-	goodPattern    bool
-	comments       []string
-	result         Result
-	resultComments []string
-	severity       map[string]int
-	errors         []error
+	goodPattern bool
+	comments    []string
+	result      Result
+	severity    map[string]int
+	errors      []error
 }{
 	{
 		goodPattern: true,
 		result: Result{
-			Status: ApproveAsOptimal,
+			Status:   ApproveAsOptimal,
+			Comments: []sugg.Comment{},
 		},
-		resultComments: []string{},
 	},
 	{
 		goodPattern: false,
 		result: Result{
-			Status: ReferToMentor,
+			Status:   ReferToMentor,
+			Comments: []sugg.Comment{},
 		},
-		resultComments: []string{},
 	},
 	{
 		goodPattern: false,
 		comments:    []string{"go.two-fer.some_comment"},
 		result: Result{
-			Status: ReferToMentor,
+			Status:   ReferToMentor,
+			Comments: []sugg.Comment{sugg.NewComment("go.two-fer.some_comment")},
 		},
-		resultComments: []string{"go.two-fer.some_comment"},
 	},
 	{
 		goodPattern: true,
 		comments:    []string{"go.two-fer.some_comment"},
 		result: Result{
-			Status: ApproveWithComment,
+			Status:   ApproveWithComment,
+			Comments: []sugg.Comment{sugg.NewComment("go.two-fer.some_comment")},
 		},
-		resultComments: []string{"go.two-fer.some_comment"},
 	},
 	{
 		goodPattern: true,
 		comments:    []string{"go.two-fer.some_comment"},
 		result: Result{
 			Status:   DisapproveWithComment,
+			Comments: []sugg.Comment{sugg.NewComment("go.two-fer.some_comment")},
 			Severity: 5,
 		},
-		resultComments: []string{"go.two-fer.some_comment"},
-		severity:       map[string]int{"go.two-fer.some_comment": 5},
+		severity: map[string]int{"go.two-fer.some_comment": 5},
 	},
 	{
 		goodPattern: true,
 		result: Result{
-			Status: ReferToMentor,
-			Errors: []string{"some error"},
+			Status:   ReferToMentor,
+			Comments: []sugg.Comment{},
+			Errors:   []string{"some error"},
 		},
-		resultComments: []string{},
-		errors:         []error{errors.New("some error")},
+		errors: []error{errors.New("some error")},
 	},
 	{
 		goodPattern: true,
 		result: Result{
-			Status: ApproveAsOptimal,
+			Status:   ApproveAsOptimal,
+			Comments: []sugg.Comment{},
 		},
-		resultComments: []string{},
-		errors:         []error{nil},
+		errors: []error{nil},
 	},
 	{
 		goodPattern: false,
@@ -81,13 +80,13 @@ var getResultTests = []struct {
 			"go.two-fer.some_comment_3",
 		},
 		result: Result{
-			Status:   DisapproveWithComment,
+			Status: DisapproveWithComment,
+			Comments: []sugg.Comment{
+				sugg.NewComment("go.two-fer.some_comment"),
+				sugg.NewComment("go.two-fer.some_comment_2"),
+				sugg.NewComment("go.two-fer.some_comment_3"),
+			},
 			Severity: 6,
-		},
-		resultComments: []string{
-			"go.two-fer.some_comment",
-			"go.two-fer.some_comment_2",
-			"go.two-fer.some_comment_3",
 		},
 		severity: map[string]int{
 			"go.two-fer.some_comment":   2,
@@ -109,10 +108,6 @@ func Test_getResult(t *testing.T) {
 		}
 
 		res := getResult(test.goodPattern, suggs)
-		for _, comment := range res.Comments {
-			assert.Contains(t, test.resultComments, comment.ID())
-		}
-		res.Comments = nil
 		assert.Equal(t, test.result, res)
 	}
 }

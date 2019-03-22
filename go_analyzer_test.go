@@ -2,12 +2,15 @@ package main
 
 import (
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"net/http"
 	"path"
 	"testing"
 
 	"github.com/exercism/go-analyzer/analyzer"
+	"github.com/exercism/go-analyzer/suggester/sugg"
+	"github.com/pmezard/go-difflib/difflib"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -38,17 +41,46 @@ func TestAnalyze(t *testing.T) {
 				t.Errorf("error analyzing the solution %s: %s", dir, err)
 			}
 
-			bytes, err := toJson(res)
-			if err != nil {
-				t.Errorf("error transforming to json for path %s: %s", dir, err)
-			}
-
 			expected, err := GetExpected(dir)
 			if err != nil {
 				t.Errorf("error getting TestResult for path %s: %s", dir, err)
 			}
-			assert.Equal(t, expected, string(bytes), "result is not as expected on %s", dir)
+
+			assert.Equal(t, expected.Status, res.Status,
+				fmt.Sprintf("Wrong status on %s (severity: %d)", dir, res.Severity))
+
+			checkContains(t, expected.Comments, res.Comments, "Missing comment", dir, true)
+			checkContains(t, res.Comments, expected.Comments, "Additional comment", dir, false)
+
+			for _, expError := range expected.Errors {
+				assert.NotContains(t, res.Errors, expError, fmt.Sprintf("Wrong comment `%s` on %s", expError, dir))
+			}
 		}
+	}
+}
+
+func checkContains(t *testing.T, search, container []sugg.Comment, message, dir string, showDiff bool) {
+	for _, comment := range search {
+		var (
+			diff     string
+			err      error
+			contains = sugg.Contains(container, comment)
+			msg      = message
+		)
+		if !contains {
+			cmt := getCommentIdOnly(container, comment.ID())
+			if cmt != nil {
+				if !showDiff {
+					continue
+				}
+				msg = "Different parameters on comment"
+				diff, err = commentDiff(comment, cmt)
+				if err != nil {
+					t.Error(err)
+				}
+			}
+		}
+		assert.True(t, contains, fmt.Sprintf("%s `%s` on %s\n%s", msg, comment.ID(), dir, diff))
 	}
 }
 
@@ -71,20 +103,41 @@ func ExerciseTests(exercise string) ([]string, error) {
 }
 
 // GetExpected returns the content of the `test.json` file in given path.
-func GetExpected(dir string) (string, error) {
+func GetExpected(dir string) (*analyzer.Result, error) {
 	bytes, err := ioutil.ReadFile(path.Join(dir, "expected.json"))
 	if err != nil {
-		return "", err
+		return nil, err
 	}
 
 	// transforming to struct and back to json to eliminate different formatting
 	var res = unmarshalResult{}
 	if err := json.Unmarshal(bytes, &res); err != nil {
-		return string(bytes), err
+		return nil, err
 	}
 
-	bytes, err = toJson(res)
-	return string(bytes), err
+	// bytes, err = toJson(res)
+	result := &analyzer.Result{
+		Status:   res.Status,
+		Severity: res.Severity,
+		Errors:   res.Errors,
+	}
+	for _, comment := range res.Comments {
+		switch cmt := comment.(type) {
+		case string:
+			result.Comments = append(result.Comments, sugg.NewComment(cmt))
+		case map[string]interface{}:
+			comment, _ := cmt["comment"].(string)
+			ps, _ := cmt["params"].(map[string]interface{})
+
+			params := map[string]string{}
+			for key, value := range ps {
+				params[key], _ = value.(string)
+			}
+
+			result.Comments = append(result.Comments, sugg.NewPlaceholderComment(comment, params))
+		}
+	}
+	return result, err
 }
 
 type unmarshalResult struct {
@@ -92,4 +145,40 @@ type unmarshalResult struct {
 	Comments []interface{}   `json:"comments"`
 	Errors   []string        `json:"errors,omitempty"`
 	Severity int             `json:"-"`
+}
+
+func commentDiff(expected, got sugg.Comment) (string, error) {
+	expectedB, err := json.MarshalIndent(expected, "", "\t")
+	if err != nil {
+		return "", err
+	}
+	gotB, err := json.MarshalIndent(got, "", "\t")
+	if err != nil {
+		return "", err
+	}
+	return getDiff(expectedB, gotB), nil
+}
+
+func getDiff(expected, got []byte) string {
+	diff := difflib.UnifiedDiff{
+		A:        difflib.SplitLines(string(expected)),
+		B:        difflib.SplitLines(string(got)),
+		FromFile: "Expected",
+		ToFile:   "Got",
+		Context:  0,
+	}
+	text, err := difflib.GetUnifiedDiffString(diff)
+	if err != nil {
+		return fmt.Sprintf("error while diffing strings: %s", err)
+	}
+	return text
+}
+
+func getCommentIdOnly(comments []sugg.Comment, id string) sugg.Comment {
+	for _, cmt := range comments {
+		if cmt.ID() == id {
+			return cmt
+		}
+	}
+	return nil
 }

@@ -5,6 +5,7 @@ import (
 	"fmt"
 )
 
+// TODO: replace with Comment
 type suggestion struct {
 	comment  Comment
 	severity int
@@ -18,7 +19,18 @@ type Comment interface {
 	ID() string
 }
 
-func newComment(s string) *comment {
+// Contains reports if the list of comments includes a certain comment.
+func Contains(comments []Comment, comment Comment) bool {
+	for _, cmt := range comments {
+		if cmt.compareString() == comment.compareString() {
+			return true
+		}
+	}
+	return false
+}
+
+// NewComment creates a new comment
+func NewComment(s string) Comment {
 	return (*comment)(&s)
 }
 
@@ -47,6 +59,14 @@ func (s *comment) UnmarshalJSON(data []byte) error {
 	}
 	*s = comment(v)
 	return nil
+}
+
+// NewPlaceholderComment creates a new comment with placeholder(s).
+func NewPlaceholderComment(comment string, params map[string]string) Comment {
+	return &placeholderComment{
+		Comment: comment,
+		Params:  params,
+	}
 }
 
 type placeholderComment struct {

@@ -52,7 +52,7 @@ type SuggestionReport struct {
 
 // AppendUnique adds a comment if it does not exist.
 func (s *SuggestionReport) AppendUnique(commentID string) {
-	s.appendUnique(newComment(commentID))
+	s.appendUnique(NewComment(commentID))
 }
 
 // AppendUniquePH adds a comment with placeholder(s). Uniqueness includes the placeholder(s) and value(s).

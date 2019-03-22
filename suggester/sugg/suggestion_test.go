@@ -8,13 +8,13 @@ import (
 )
 
 func TestComment_MarshalJSON(t *testing.T) {
-	var c = newComment("string")
+	var c = NewComment("string")
 	bytes, err := json.Marshal(c)
 	if err != nil {
 		t.Fatal(err)
 	}
 
-	var c2 = newComment("")
+	var c2 = NewComment("")
 	err = json.Unmarshal(bytes, c2)
 	if err != nil {
 		t.Fatal(err)
