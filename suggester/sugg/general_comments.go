@@ -6,6 +6,7 @@ const (
 	CommentSection   = "go.general.section_about_comments"
 	LenOfStringEqual = "go.general.taking_lenght_of_string_to_check_empty"
 	MainFunction     = "go.general.remove_main_function_and_correct_package_name"
+	GoFmt            = "go.general.gofmt_not_used"
 	GoLint           = "go.general.golint_not_satisfied"
 )
 
@@ -19,5 +20,6 @@ var severity = map[string]int{
 	CommentSection:   0,
 	LenOfStringEqual: 2,
 	MainFunction:     5,
+	GoFmt:            5,
 	GoLint:           5,
 }

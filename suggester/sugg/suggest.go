@@ -7,6 +7,7 @@ import (
 // GeneralRegister registers all suggestion functions for this exercise.
 var GeneralRegister = Register{
 	Funcs: []SuggestionFunc{
+		examGoFmt,
 		examGoLint,
 		examMainFunction,
 		examEmptyByLenOfString,
@@ -14,15 +15,27 @@ var GeneralRegister = Register{
 	Severity: severity,
 }
 
+func examGoFmt(pkg *astrav.Package, suggs Suggester) {
+	files := pkg.GetRawFiles()
+	res := fmtCode(files)
+	if res == "" {
+		return
+	}
+
+	suggs.AppendUniquePH(GoFmt, map[string]string{
+		"gofmt": res,
+	})
+}
+
 func examGoLint(pkg *astrav.Package, suggs Suggester) {
 	files := pkg.GetRawFiles()
-	resLint := lintCode(files)
-	if resLint == "" {
+	res := lintCode(files)
+	if res == "" {
 		return
 	}
 
 	suggs.AppendUniquePH(GoLint, map[string]string{
-		"golint": resLint,
+		"golint": res,
 	})
 }
 
