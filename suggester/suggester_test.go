@@ -56,7 +56,8 @@ func TestSuggest(t *testing.T) {
 			"test": test.register,
 		}
 
-		suggs := Suggest("test", nil)
+		suggs := sugg.NewSuggestions()
+		Suggest("test", &astrav.Package{}, suggs)
 		errs := suggs.GetErrors()
 		assert.Equal(t, len(test.errors), len(errs))
 		for i := 0; i < len(test.errors); i++ {
@@ -66,7 +67,8 @@ func TestSuggest(t *testing.T) {
 }
 
 func TestSuggestUnknownPackage(t *testing.T) {
-	suggs := Suggest("unknown", nil)
+	suggs := sugg.NewSuggestions()
+	Suggest("unknown", nil, suggs)
 	errs := suggs.GetErrors()
 	assert.Equal(t, []error(nil), errs)
 }

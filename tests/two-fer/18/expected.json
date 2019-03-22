@@ -1,0 +1,11 @@
+{
+	"status": "disapprove_with_comment",
+	"comments": [
+		{
+			"comment": "go.general.syntax_error",
+			"params": {
+				"err": "tests/two-fer/18/two_fer.go:15:13: cannot convert nil (untyped nil value) to string"
+			}
+		}
+	]
+}

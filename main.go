@@ -39,6 +39,6 @@ func main() {
 	}
 }
 
-func toJson(res analyzer.Result) ([]byte, error) {
+func toJson(res interface{}) ([]byte, error) {
 	return json.MarshalIndent(res, "", "\t")
 }

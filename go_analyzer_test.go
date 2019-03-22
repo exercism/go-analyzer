@@ -14,15 +14,6 @@ import (
 // Tests contains the test cases.
 var Tests http.FileSystem = http.Dir("tests")
 
-// TestCase defines the structure for a test case.
-// A test case is a folder containing a solution and a file with the `test.json`
-// containing the TestCase structure.
-type TestCase struct {
-	ExpectedStatus      analyzer.Status `json:"expected_status"`
-	ExpectedComments    []string        `json:"expected_comments"`
-	NotExpectedComments []string        `json:"not_expected_comments"`
-}
-
 // var runOnly = ""
 
 func TestAnalyze(t *testing.T) {
@@ -56,7 +47,7 @@ func TestAnalyze(t *testing.T) {
 			if err != nil {
 				t.Errorf("error getting TestResult for path %s: %s", dir, err)
 			}
-			assert.Equal(t, string(bytes), expected, "result is not as expected on %s", dir)
+			assert.Equal(t, expected, string(bytes), "result is not as expected on %s", dir)
 		}
 	}
 }
@@ -87,11 +78,18 @@ func GetExpected(dir string) (string, error) {
 	}
 
 	// transforming to struct and back to json to eliminate different formatting
-	var res = analyzer.Result{}
+	var res = unmarshalResult{}
 	if err := json.Unmarshal(bytes, &res); err != nil {
 		return string(bytes), err
 	}
 
 	bytes, err = toJson(res)
 	return string(bytes), err
+}
+
+type unmarshalResult struct {
+	Status   analyzer.Status `json:"status"`
+	Comments []interface{}   `json:"comments"`
+	Errors   []string        `json:"errors,omitempty"`
+	Severity int             `json:"-"`
 }

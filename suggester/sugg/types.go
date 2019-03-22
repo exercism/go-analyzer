@@ -36,14 +36,11 @@ type Register struct {
 // SuggestionFunc defines a function checking a solution for a specific problem.
 type SuggestionFunc func(pkg *astrav.Package, suggs Suggester)
 
-type suggestion struct {
-	comment  string
-	severity int
-}
-
 // NewSuggestions creates a new collection of suggestions.
 func NewSuggestions() *SuggestionReport {
-	return &SuggestionReport{}
+	return &SuggestionReport{
+		severity: GeneralRegister.Severity,
+	}
 }
 
 // SuggestionReport is a list of comments including severity information.
@@ -54,8 +51,16 @@ type SuggestionReport struct {
 }
 
 // AppendUnique adds a comment if it does not exist.
-func (s *SuggestionReport) AppendUnique(comment string) {
-	s.appendUnique(comment)
+func (s *SuggestionReport) AppendUnique(commentID string) {
+	s.appendUnique(newComment(commentID))
+}
+
+// AppendUniquePH adds a comment with placeholder(s). Uniqueness includes the placeholder(s) and value(s).
+func (s *SuggestionReport) AppendUniquePH(commentID string, params map[string]string) {
+	s.appendUnique(&placeholderComment{
+		Comment: commentID,
+		Params:  params,
+	})
 }
 
 // ReportError reports an error to the analyzer.
@@ -67,13 +72,13 @@ func (s *SuggestionReport) ReportError(err error) {
 }
 
 // GetComments returns the comments and their severity sum.
-func (s *SuggestionReport) GetComments() ([]string, int) {
+func (s *SuggestionReport) GetComments() ([]Comment, int) {
 	if s == nil {
 		return nil, 0
 	}
 
 	var (
-		comments    []string
+		comments    []Comment
 		sumSeverity int
 	)
 	for _, sugg := range s.suggs {
@@ -96,15 +101,22 @@ func (s *SuggestionReport) SetSeverity(severity map[string]int) {
 	s.severity = severity
 }
 
-func (s *SuggestionReport) appendUnique(comment string) {
-	for _, sugg := range s.suggs {
-		if sugg.comment == comment {
-			return
-		}
+func (s *SuggestionReport) appendUnique(comment Comment) {
+	if !s.isUnique(comment) {
+		return
 	}
 
 	s.suggs = append(s.suggs, suggestion{
 		comment:  comment,
-		severity: s.severity[comment],
+		severity: s.severity[comment.ID()],
 	})
+}
+
+func (s *SuggestionReport) isUnique(comment Comment) bool {
+	for _, sugg := range s.suggs {
+		if sugg.comment.compareString() == comment.compareString() {
+			return false
+		}
+	}
+	return true
 }

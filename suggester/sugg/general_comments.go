@@ -13,6 +13,7 @@ const (
 // should block approval?
 // We can be very strict on automated comments since the student has a very fast feedback loop.
 var severity = map[string]int{
+	SyntaxError:      5,
 	CommentSection:   0,
 	LenOfStringEqual: 2,
 }
