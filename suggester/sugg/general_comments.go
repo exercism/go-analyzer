@@ -6,6 +6,7 @@ const (
 	CommentSection   = "go.general.section_about_comments"
 	LenOfStringEqual = "go.general.taking_lenght_of_string_to_check_empty"
 	MainFunction     = "go.general.remove_main_function_and_correct_package_name"
+	GoLint           = "go.general.golint_not_satisfied"
 )
 
 // Severity defines how severe a comment is. A sum over all comments of 5 means no approval.
@@ -18,4 +19,5 @@ var severity = map[string]int{
 	CommentSection:   0,
 	LenOfStringEqual: 2,
 	MainFunction:     5,
+	GoLint:           5,
 }

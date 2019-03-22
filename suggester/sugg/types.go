@@ -12,6 +12,9 @@ type Suggester interface {
 	// That way it does not matter if the code accidentally adds the same suggestion multiple times.
 	AppendUnique(comment string)
 
+	// AppendUniquePH adds a suggestion with placeholders while checking if it exists already.
+	AppendUniquePH(commentID string, params map[string]string)
+
 	// ReportError collects provided errors. They will be added to the output file
 	// for debugging purpose. Reporting will fail the analyzer with `refer_to_mentor` status.
 	// If that is not what you want consider adding a comment to the student instead of an error.
