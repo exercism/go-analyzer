@@ -35,22 +35,26 @@ func main() {
 	for _, dir := range dirs {
 		res := analyzer.Analyze(*exercise, path.Join(*parentDir, dir))
 		for _, err := range res.Errors {
+			log.Printf("ERROR on %s:\n", path.Join(*parentDir, dir))
 			log.Println(err)
 		}
 		if len(res.Errors) != 0 {
+			sum[analyzer.Ejected]++
 			continue
 		}
 
-		sum[res.Status]++
 		bytes, err := json.MarshalIndent(res, "", "\t")
 		if err != nil {
 			log.Println(err)
+			sum[analyzer.Ejected]++
 			continue
 		}
 		if err := ioutil.WriteFile(path.Join(*parentDir, dir, *output), append(bytes, '\n'), 0644); err != nil {
 			log.Println(err)
+			sum[analyzer.Ejected]++
 			continue
 		}
+		sum[res.Status]++
 	}
 
 	fmt.Println("Statistics:")

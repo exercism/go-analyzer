@@ -31,6 +31,7 @@ const (
 	ApproveWithComment    Status = "approve_with_comment"
 	DisapproveWithComment Status = "disapprove_with_comment"
 	ReferToMentor         Status = "refer_to_mentor"
+	Ejected               Status = "ejected"
 )
 
 func getResult(goodPattern bool, suggReporter *sugg.SuggestionReport) Result {
