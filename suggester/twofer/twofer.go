@@ -28,7 +28,8 @@ var Register = sugg.Register{
 
 func examExtraFunction(pkg *astrav.Package, suggs sugg.Suggester) {
 	nodes := pkg.FindByNodeType(astrav.NodeTypeFuncDecl)
-	if 1 < len(nodes) {
+	main := pkg.FuncDeclByName("main")
+	if 1 < len(nodes) && main == nil {
 		suggs.AppendUnique(ExtraFunction)
 	}
 }

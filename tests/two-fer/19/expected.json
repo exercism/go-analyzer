@@ -1,0 +1,7 @@
+{
+	"status": "disapprove_with_comment",
+	"comments": [
+		"go.general.remove_main_function_and_correct_package_name",
+		"go.two_fer.replace_stub_comments"
+	]
+}

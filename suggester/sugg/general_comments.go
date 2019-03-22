@@ -5,6 +5,7 @@ const (
 	SyntaxError      = "go.general.syntax_error"
 	CommentSection   = "go.general.section_about_comments"
 	LenOfStringEqual = "go.general.taking_lenght_of_string_to_check_empty"
+	MainFunction     = "go.general.remove_main_function_and_correct_package_name"
 )
 
 // Severity defines how severe a comment is. A sum over all comments of 5 means no approval.
@@ -16,4 +17,5 @@ var severity = map[string]int{
 	SyntaxError:      5,
 	CommentSection:   0,
 	LenOfStringEqual: 2,
+	MainFunction:     5,
 }

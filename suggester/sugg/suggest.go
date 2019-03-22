@@ -7,9 +7,17 @@ import (
 // GeneralRegister registers all suggestion functions for this exercise.
 var GeneralRegister = Register{
 	Funcs: []SuggestionFunc{
+		examMainFunction,
 		examEmptyByLenOfString,
 	},
 	Severity: severity,
+}
+
+func examMainFunction(pkg *astrav.Package, suggs Suggester) {
+	mainFunc := pkg.FuncDeclByName("main")
+	if mainFunc != nil {
+		suggs.AppendUnique(MainFunction)
+	}
 }
 
 func examEmptyByLenOfString(pkg *astrav.Package, suggs Suggester) {
