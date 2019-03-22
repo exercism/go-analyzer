@@ -30,7 +30,7 @@ func examEmptyByLenOfString(pkg *astrav.Package, suggs Suggester) {
 		}
 		// check if there are 2 idents ("len" and variable name)
 		idents := bin.FindByNodeType(astrav.NodeTypeIdent)
-		if len(idents) != 2 {
+		if len(idents) < 2 {
 			continue
 		}
 		// check if one of the idents is "len" and the other one is of type string
