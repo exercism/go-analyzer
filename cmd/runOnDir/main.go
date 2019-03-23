@@ -8,6 +8,7 @@ import (
 	"log"
 	"net/http"
 	"path"
+	"strings"
 
 	"github.com/exercism/go-analyzer/analyzer"
 )
@@ -31,6 +32,7 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
+	fileName := strings.ReplaceAll(*exercise, "-", "_") + ".go:1"
 
 	sum := map[analyzer.Status]int{}
 	for _, dir := range dirs {
@@ -41,7 +43,8 @@ func main() {
 		}
 
 		if res.Status == analyzer.Status(*printStatus) {
-			fmt.Printf("Status %s: %s\n", *printStatus, path.Join(*parentDir, dir))
+			fmt.Printf("Status %s: %s (%s)\n",
+				*printStatus, path.Join(*parentDir, dir, fileName), path.Join(*parentDir, dir, "expected.json:1"))
 		}
 
 		bytes, err := json.MarshalIndent(res, "", "\t")

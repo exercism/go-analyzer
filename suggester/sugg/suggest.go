@@ -10,7 +10,7 @@ var GeneralRegister = Register{
 		examGoFmt,
 		examGoLint,
 		examMainFunction,
-		examEmptyByLenOfString,
+		examLenComparison,
 	},
 	Severity: severity,
 }
@@ -46,12 +46,13 @@ func examMainFunction(pkg *astrav.Package, suggs Suggester) {
 	}
 }
 
-func examEmptyByLenOfString(pkg *astrav.Package, suggs Suggester) {
+func examLenComparison(pkg *astrav.Package, suggs Suggester) {
 	nodes := pkg.FindByNodeType(astrav.NodeTypeBinaryExpr)
 	for _, node := range nodes {
 		bin := node.(*astrav.BinaryExpr)
 		op := bin.Op.String()
-		if op != "==" && op != "!=" {
+		if op != "==" && op != "!=" &&
+			op != "<=" && op != "<" {
 			continue
 		}
 		// check if there are 2 idents ("len" and variable name)
@@ -60,14 +61,17 @@ func examEmptyByLenOfString(pkg *astrav.Package, suggs Suggester) {
 			continue
 		}
 		// check if one of the idents is "len" and the other one is of type string
-		var foundLen bool
+		var (
+			foundLen    bool
+			foundString bool
+		)
 		for _, ident := range idents {
 			id := ident.(*astrav.Ident)
 			if id.NodeName().String() == "len" {
 				foundLen = true
 			} else {
-				if id.ValueType().String() != "string" {
-					continue
+				if id.ValueType().String() == "string" {
+					foundString = true
 				}
 			}
 		}
@@ -76,10 +80,22 @@ func examEmptyByLenOfString(pkg *astrav.Package, suggs Suggester) {
 		}
 		// Check if a basicLit exists and it is 0
 		basic := bin.FindByNodeType(astrav.NodeTypeBasicLit)
-		if len(basic) != 1 || basic[0].(*astrav.BasicLit).Value != "0" {
+		if len(basic) != 1 {
 			continue
 		}
 
-		suggs.AppendUnique(LenOfStringEqual)
+		basicVal := basic[0].(*astrav.BasicLit).Value
+		if op == "<" && basicVal == "1" {
+			suggs.AppendUnique(LengthSmallerZero)
+		}
+		if basicVal != "0" {
+			continue
+		}
+		if op == "<=" {
+			suggs.AppendUnique(LengthSmallerZero)
+		}
+		if foundString {
+			suggs.AppendUnique(LenOfStringEqual)
+		}
 	}
 }
