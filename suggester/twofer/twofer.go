@@ -22,8 +22,16 @@ var Register = sugg.Register{
 		examStringsJoin,
 		examExtraVariable,
 		examExtraFunction,
+		examStringsTrimSpace,
 	},
 	Severity: severity,
+}
+
+func examStringsTrimSpace(pkg *astrav.Package, suggs sugg.Suggester) {
+	nodes := pkg.FindByName("TrimSpace")
+	if len(nodes) != 0 {
+		suggs.AppendUnique(TrimSpace)
+	}
 }
 
 func examExtraFunction(pkg *astrav.Package, suggs sugg.Suggester) {

@@ -4,7 +4,7 @@ package sugg
 const (
 	SyntaxError      = "go.general.syntax_error"
 	CommentSection   = "go.general.section_about_comments"
-	LenOfStringEqual = "go.general.taking_lenght_of_string_to_check_empty"
+	LenOfStringEqual = "go.general.taking_length_of_string_to_check_empty"
 	MainFunction     = "go.general.remove_main_function_and_correct_package_name"
 	GoFmt            = "go.general.gofmt_not_used"
 	GoLint           = "go.general.golint_not_satisfied"

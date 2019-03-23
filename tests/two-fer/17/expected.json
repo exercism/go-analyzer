@@ -1,7 +1,7 @@
 {
 	"status": "disapprove_with_comment",
 	"comments": [
-		"go.general.taking_lenght_of_string_to_check_empty",
+		"go.general.taking_length_of_string_to_check_empty",
 		"go.two_fer.use_fmt_placeholder_for_string",
 		"go.two_fer.missing_package_comment",
 		"go.general.section_about_comments"

@@ -19,6 +19,7 @@ const (
 	FuncSignatureChanged   = "go.two_fer.sharewith_signature_changed"
 	ExtraNameVar           = "go.two-fer.extra_name_variable_created"
 	ExtraFunction          = "go.two_fer.remove_extra_function"
+	TrimSpace              = "go.two_fer.strings_trimspace_used"
 )
 
 // Severity defines how severe a comment is. A sum over all comments of 5 means no approval.
@@ -42,4 +43,5 @@ var severity = map[string]int{
 	FuncSignatureChanged:   5,
 	ExtraNameVar:           1,
 	ExtraFunction:          5,
+	TrimSpace:              0,
 }
