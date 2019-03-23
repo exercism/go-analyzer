@@ -37,10 +37,6 @@ func TestAnalyze(t *testing.T) {
 			// 	continue
 			// }
 			res := analyzer.Analyze(exercise, dir)
-			for _, err := range res.Errors {
-				t.Errorf("error analyzing the solution %s: %s", dir, err)
-			}
-
 			expected, err := GetExpected(dir)
 			if err != nil {
 				t.Errorf("error getting TestResult for path %s: %s", dir, err)
@@ -52,8 +48,11 @@ func TestAnalyze(t *testing.T) {
 			checkContains(t, expected.Comments, res.Comments, "Missing comment", dir, true)
 			checkContains(t, res.Comments, expected.Comments, "Additional comment", dir, false)
 
+			for _, err := range res.Errors {
+				assert.Contains(t, expected.Errors, err, "unexpected error analyzing the solution %s: %s", dir, err)
+			}
 			for _, expError := range expected.Errors {
-				assert.NotContains(t, res.Errors, expError, fmt.Sprintf("Wrong comment `%s` on %s", expError, dir))
+				assert.Contains(t, res.Errors, expError, "missing error analyzing the solution %s: %s", dir, err)
 			}
 		}
 	}

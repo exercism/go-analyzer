@@ -9,6 +9,7 @@ import (
 // NewErrResult creates a result with an error.
 func NewErrResult(err error) Result {
 	return Result{
+		Status:   ReferToMentor,
 		Comments: []sugg.Comment{},
 		Errors:   []string{fmt.Sprintf("%v", err)},
 	}
@@ -20,6 +21,7 @@ type Result struct {
 	Comments []sugg.Comment `json:"comments"`
 	Errors   []string       `json:"errors,omitempty"`
 	Severity int            `json:"-"`
+	Rating   float64        `json:"-"`
 }
 
 // Status defines the status of a solution to be acted upon by exercism.
@@ -34,7 +36,7 @@ const (
 	Ejected               Status = "ejected"
 )
 
-func getResult(goodPattern bool, suggReporter *sugg.SuggestionReport) Result {
+func getResult(patternRating float64, suggReporter *sugg.SuggestionReport) Result {
 	comments, severity := suggReporter.GetComments()
 	if comments == nil {
 		// make sure not to add nil to json
@@ -42,10 +44,11 @@ func getResult(goodPattern bool, suggReporter *sugg.SuggestionReport) Result {
 	}
 	errs := suggReporter.GetErrors()
 	return Result{
-		Status:   getStatus(goodPattern, len(comments), severity, len(errs)),
+		Status:   getStatus(patternRating, len(comments), severity, len(errs)),
 		Comments: comments,
 		Errors:   fmtErrors(errs),
 		Severity: severity,
+		Rating:   patternRating,
 	}
 }
 
@@ -57,15 +60,24 @@ func fmtErrors(errs []error) []string {
 	return strs
 }
 
-func getStatus(goodPattern bool, comments, severity int, errors int) Status {
+var (
+	limitGoodPattern    = 0.99
+	limitAllowedPattern = 0.90
+)
+
+func getStatus(rating float64, comments, severity int, errors int) Status {
 	switch {
 	case errors != 0:
 		return ReferToMentor
-	case goodPattern && comments == 0:
+
+	case comments == 0 && rating <= limitGoodPattern:
+		return ReferToMentor
+	case comments == 0 && limitGoodPattern < rating:
 		return ApproveAsOptimal
-	case goodPattern && severity < 5:
+
+	case limitAllowedPattern < rating && severity < 5:
 		return ApproveWithComment
-	case goodPattern:
+	case limitAllowedPattern < rating:
 		return DisapproveWithComment
 	case 5 <= severity:
 		return DisapproveWithComment

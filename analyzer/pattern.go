@@ -22,13 +22,14 @@ func PatternDirs(exercise string) ([]string, error) {
 }
 
 // CheckPattern checks if the given package matches any good pattern
-func CheckPattern(exercise string, solution *astrav.Package) (bool, error) {
+func CheckPattern(exercise string, solution *astrav.Package) (float64, bool, error) {
 	dirs, err := PatternDirs(exercise)
 	if err != nil {
-		return false, err
+		return 0, false, err
 	}
 	patterns, err := loadPatterns(dirs...)
-	return astpatt.MatchPatterns(patterns, solution), err
+	_, ratio, ok := astpatt.DiffPatterns(patterns, solution)
+	return ratio, ok, err
 }
 
 func loadPatterns(paths ...string) ([]*astpatt.Pattern, error) {

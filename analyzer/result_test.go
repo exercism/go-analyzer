@@ -9,28 +9,28 @@ import (
 )
 
 var getResultTests = []struct {
-	goodPattern bool
+	goodPattern float64
 	comments    []string
 	result      Result
 	severity    map[string]int
 	errors      []error
 }{
 	{
-		goodPattern: true,
+		goodPattern: 1,
 		result: Result{
 			Status:   ApproveAsOptimal,
 			Comments: []sugg.Comment{},
 		},
 	},
 	{
-		goodPattern: false,
+		goodPattern: 0,
 		result: Result{
 			Status:   ReferToMentor,
 			Comments: []sugg.Comment{},
 		},
 	},
 	{
-		goodPattern: false,
+		goodPattern: 0,
 		comments:    []string{"go.two-fer.some_comment"},
 		result: Result{
 			Status:   ReferToMentor,
@@ -38,7 +38,7 @@ var getResultTests = []struct {
 		},
 	},
 	{
-		goodPattern: true,
+		goodPattern: 1,
 		comments:    []string{"go.two-fer.some_comment"},
 		result: Result{
 			Status:   ApproveWithComment,
@@ -46,7 +46,7 @@ var getResultTests = []struct {
 		},
 	},
 	{
-		goodPattern: true,
+		goodPattern: 1,
 		comments:    []string{"go.two-fer.some_comment"},
 		result: Result{
 			Status:   DisapproveWithComment,
@@ -56,7 +56,7 @@ var getResultTests = []struct {
 		severity: map[string]int{"go.two-fer.some_comment": 5},
 	},
 	{
-		goodPattern: true,
+		goodPattern: 1,
 		result: Result{
 			Status:   ReferToMentor,
 			Comments: []sugg.Comment{},
@@ -65,7 +65,7 @@ var getResultTests = []struct {
 		errors: []error{errors.New("some error")},
 	},
 	{
-		goodPattern: true,
+		goodPattern: 1,
 		result: Result{
 			Status:   ApproveAsOptimal,
 			Comments: []sugg.Comment{},
@@ -73,7 +73,7 @@ var getResultTests = []struct {
 		errors: []error{nil},
 	},
 	{
-		goodPattern: false,
+		goodPattern: 0,
 		comments: []string{
 			"go.two-fer.some_comment",
 			"go.two-fer.some_comment_2",
@@ -108,6 +108,14 @@ func Test_getResult(t *testing.T) {
 		}
 
 		res := getResult(test.goodPattern, suggs)
-		assert.Equal(t, test.result, res)
+
+		assert.Equal(t, test.result.Status, res.Status)
+		assert.Equal(t, test.result.Severity, res.Severity)
+		assert.Equal(t, test.result.Errors, res.Errors)
+
+		assert.Equal(t, len(test.result.Comments), len(res.Comments))
+		for _, comment := range test.result.Comments {
+			assert.True(t, sugg.Contains(res.Comments, comment))
+		}
 	}
 }

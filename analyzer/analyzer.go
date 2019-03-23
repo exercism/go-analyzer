@@ -1,6 +1,7 @@
 package analyzer
 
 import (
+	"errors"
 	"fmt"
 
 	"github.com/exercism/go-analyzer/suggester"
@@ -16,15 +17,18 @@ func Analyze(exercise string, path string) Result {
 		suggs.AppendUniquePH(sugg.SyntaxError, map[string]string{
 			"err": fmt.Sprintf("%v", err),
 		})
-		return getResult(false, suggs)
+		return getResult(0, suggs)
+	}
+	if solution == nil {
+		return NewErrResult(errors.New("there doesn't seem to be any solution uploaded"))
 	}
 
-	goodPattern, err := CheckPattern(exercise, solution)
+	patternRating, _, err := CheckPattern(exercise, solution)
 	if err != nil {
 		return NewErrResult(err)
 	}
 
 	suggester.Suggest(exercise, solution, suggs)
 
-	return getResult(goodPattern, suggs)
+	return getResult(patternRating, suggs)
 }

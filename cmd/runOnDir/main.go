@@ -39,10 +39,6 @@ func main() {
 			log.Printf("ERROR on %s:\n", path.Join(*parentDir, dir))
 			log.Println(err)
 		}
-		if len(res.Errors) != 0 {
-			eject(sum, dir)
-			continue
-		}
 
 		if res.Status == analyzer.Status(*printStatus) {
 			fmt.Printf("Status %s: %s\n", *printStatus, path.Join(*parentDir, dir))
