@@ -13,9 +13,10 @@ import (
 )
 
 var (
-	exercise  = flag.String("exercise", "", "exercise slug (e.g. 'two-fer'). All sub-dirs must contain this exercise!")
-	parentDir = flag.String("parentDir", "", "run analyzer for all sub-directories in this folder")
-	output    = flag.String("output", "analysis.json", "name of the output file")
+	exercise    = flag.String("exercise", "", "exercise slug (e.g. 'two-fer'). All sub-dirs must contain this exercise!")
+	parentDir   = flag.String("parentDir", "", "run analyzer for all sub-directories in this folder")
+	output      = flag.String("output", "analysis.json", "name of the output file")
+	printStatus = flag.String("printStatus", "", "prints out every folder with the provided status")
 )
 
 func main() {
@@ -39,19 +40,23 @@ func main() {
 			log.Println(err)
 		}
 		if len(res.Errors) != 0 {
-			sum[analyzer.Ejected]++
+			eject(sum, dir)
 			continue
+		}
+
+		if res.Status == analyzer.Status(*printStatus) {
+			fmt.Printf("Status %s: %s\n", *printStatus, path.Join(*parentDir, dir))
 		}
 
 		bytes, err := json.MarshalIndent(res, "", "\t")
 		if err != nil {
 			log.Println(err)
-			sum[analyzer.Ejected]++
+			eject(sum, dir)
 			continue
 		}
 		if err := ioutil.WriteFile(path.Join(*parentDir, dir, *output), append(bytes, '\n'), 0644); err != nil {
 			log.Println(err)
-			sum[analyzer.Ejected]++
+			eject(sum, dir)
 			continue
 		}
 		sum[res.Status]++
@@ -59,4 +64,11 @@ func main() {
 
 	fmt.Println("Statistics:")
 	fmt.Printf("%+v\n", sum)
+}
+
+func eject(sum map[analyzer.Status]int, dir string) {
+	sum[analyzer.Ejected]++
+	if *printStatus == "ejected" {
+		fmt.Printf("Status %s: %s\n", *printStatus, path.Join(*parentDir, dir))
+	}
 }
