@@ -7,6 +7,7 @@ const (
 	CommentSection         = sugg.CommentSection
 	MissingShareWith       = "go.two_fer.missing_share_with_function"
 	StringsJoin            = "go.two_fer.strings_join_used_for_concatenation"
+	StringsBuilder         = "go.two_fer.strings_builder_used_for_concatenation"
 	PlusUsed               = "go.two_fer.plus_used_for_concatenation"
 	MinimalConditional     = "go.two_fer.find_minimal_conditional"
 	UseStringPH            = "go.two_fer.use_fmt_placeholder_for_string"
@@ -31,6 +32,7 @@ var severity = map[string]int{
 	CommentSection:         0,
 	MissingShareWith:       5,
 	StringsJoin:            5,
+	StringsBuilder:         5,
 	PlusUsed:               0,
 	MinimalConditional:     5,
 	UseStringPH:            2,

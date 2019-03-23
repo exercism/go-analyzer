@@ -20,6 +20,7 @@ var Register = sugg.Register{
 		examComments,
 		examConditional,
 		examStringsJoin,
+		examStringsBuilder,
 		examExtraVariable,
 		examExtraFunction,
 		examStringsTrimSpace,
@@ -78,6 +79,13 @@ func examStringsJoin(pkg *astrav.Package, suggs sugg.Suggester) {
 	node := pkg.FindFirstByName("Join")
 	if node != nil {
 		suggs.AppendUnique(StringsJoin)
+	}
+}
+
+func examStringsBuilder(pkg *astrav.Package, suggs sugg.Suggester) {
+	node := pkg.FindFirstByName("Builder")
+	if node != nil {
+		suggs.AppendUnique(StringsBuilder)
 	}
 }
 
