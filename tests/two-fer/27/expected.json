@@ -2,13 +2,16 @@
 	"status": "disapprove_with_comment",
 	"comments": [
 		"go.two_fer.plus_used_for_concatenation",
-		"go.general.length_smaller_zero_impossible",
-		"go.general.taking_length_of_string_to_check_empty",
-		"go.two-fer.extra_name_variable_created",
 		{
 			"comment": "go.two-fer.remove_extra_variable",
 			"params": {
-				"name": "res"
+				"name": "prefix"
+			}
+		},
+		{
+			"comment": "go.two-fer.remove_extra_variable",
+			"params": {
+				"name": "suffix"
 			}
 		}
 	]

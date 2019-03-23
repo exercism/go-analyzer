@@ -19,6 +19,7 @@ const (
 	GeneralizeName         = "go.two_fer.work_with_any_provided_name"
 	FuncSignatureChanged   = "go.two_fer.sharewith_signature_changed"
 	ExtraNameVar           = "go.two-fer.extra_name_variable_created"
+	ExtraVar               = "go.two-fer.remove_extra_variable"
 	ExtraFunction          = "go.two_fer.remove_extra_function"
 	TrimSpace              = "go.two_fer.strings_trimspace_used"
 )
@@ -44,6 +45,7 @@ var severity = map[string]int{
 	GeneralizeName:         5,
 	FuncSignatureChanged:   5,
 	ExtraNameVar:           1,
+	ExtraVar:               3,
 	ExtraFunction:          5,
 	TrimSpace:              0,
 }

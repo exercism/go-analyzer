@@ -30,3 +30,17 @@ go build -o analyze .
 ```
 
 `go generate` is called before the build to incorporate all necessary files within the binary.
+
+## Stats
+
+### Twofer
+
+Out of 500 real world samples we get:
+
+```
+approve_as_optimal      10
+approve_with_comment    24
+disapprove_with_comment 463
+refer_to_mentor         3
+ejected (failed)        0
+```

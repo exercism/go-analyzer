@@ -60,9 +60,6 @@ func examExtraVariable(pkg *astrav.Package, suggs sugg.Suggester) {
 	decls := main.FindByNodeType(astrav.NodeTypeAssignStmt)
 	for _, decl := range decls {
 		right := decl.(*astrav.AssignStmt).RHS()
-		if len(right) == 0 {
-			continue
-		}
 
 		for _, node := range right {
 			if !node.IsNodeType(astrav.NodeTypeIdent) {
@@ -71,6 +68,20 @@ func examExtraVariable(pkg *astrav.Package, suggs sugg.Suggester) {
 			if node.(astrav.Named).NodeName().Name == paramName.Name {
 				suggs.AppendUnique(ExtraNameVar)
 			}
+		}
+
+		left := decl.(*astrav.AssignStmt).LHS()
+		for _, node := range left {
+			if !node.IsNodeType(astrav.NodeTypeIdent) {
+				continue
+			}
+			varName := node.(astrav.Named).NodeName().Name
+			if varName != paramName.Name {
+				suggs.AppendUniquePH(ExtraVar, map[string]string{
+					"name": varName,
+				})
+			}
+
 		}
 	}
 }

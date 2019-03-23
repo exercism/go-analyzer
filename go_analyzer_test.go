@@ -43,10 +43,10 @@ func TestAnalyze(t *testing.T) {
 			}
 
 			assert.Equal(t, expected.Status, res.Status,
-				fmt.Sprintf("Wrong status on %s (severity: %d)", dir, res.Severity))
+				fmt.Sprintf("Wrong status on %s (severity: %d, rating: %.2f)", dir, res.Severity, res.Rating))
 
-			checkContains(t, expected.Comments, res.Comments, "Missing comment", dir, true)
-			checkContains(t, res.Comments, expected.Comments, "Additional comment", dir, false)
+			checkContains(t, expected.Comments, res.Comments, "Missing comment", dir)
+			checkContains(t, res.Comments, expected.Comments, "Additional comment", dir)
 
 			for _, err := range res.Errors {
 				assert.Contains(t, expected.Errors, err, "unexpected error analyzing the solution %s: %s", dir, err)
@@ -58,7 +58,7 @@ func TestAnalyze(t *testing.T) {
 	}
 }
 
-func checkContains(t *testing.T, search, container []sugg.Comment, message, dir string, showDiff bool) {
+func checkContains(t *testing.T, search, container []sugg.Comment, message, dir string) {
 	for _, comment := range search {
 		var (
 			diff     string
@@ -69,9 +69,6 @@ func checkContains(t *testing.T, search, container []sugg.Comment, message, dir 
 		if !contains {
 			cmt := getCommentIdOnly(container, comment.ID())
 			if cmt != nil {
-				if !showDiff {
-					continue
-				}
 				msg = "Different parameters on comment"
 				diff, err = commentDiff(comment, cmt)
 				if err != nil {
