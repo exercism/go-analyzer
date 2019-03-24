@@ -1,8 +1,8 @@
 // +build !build
 
-package analyzer
+package assets
 
 import "net/http"
 
 // Patterns contains good patterns per exercise for pattern matching.
-var Patterns http.FileSystem = http.Dir("patterns")
+var Patterns http.FileSystem = http.Dir("assets/patterns")

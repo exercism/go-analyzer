@@ -5,8 +5,8 @@ This is Exercism's automated analyzer for the Go track.
 ## Executing the Analyzer
 
 The analyser takes two parameters:
-- the exercise slug, e.g. `two_fer`
-- the path to the solution to analize
+- the exercise `slug`, e.g. `two_fer`
+- the `path` to the solution to analize
 
 Example to execute with binary:
 
@@ -26,16 +26,37 @@ This will create an executable called `analyze`.
 
 ```bash
 go generate .
-go build -o analyze .
+go build -tags build -o analyze .
 ```
 
 `go generate` is called before the build to incorporate all necessary files within the binary.
+
+## Docker
+
+To `build` execute the following from the repositories `root` directory:
+
+```bash
+docker build -t exercism/go-analyzer .
+```
+
+To `run` from docker pass in the solutions path as a volume and execute with the necessary parameters:
+
+```bash
+docker run -v $(PATH_TO_SOLUTION):/solution exercism/go-analyzer ${SLUG} /solution
+```
+
+Example:
+
+```bash
+docker run -v ~/solution-238382y7sds7fsadfasj23j:/solution exercism/go-analyzer two-fer /solution
+```
+
 
 ## Stats
 
 ### Twofer
 
-Out of 500 real world samples we get:
+Out of 500 real world solutions we get:
 
 ```
 approve_as_optimal      10

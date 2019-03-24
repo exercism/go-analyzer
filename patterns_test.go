@@ -16,7 +16,7 @@ func TestPatternDirs(t *testing.T) {
 }
 
 func TestGetDirs(t *testing.T) {
-	dirs, err := analyzer.GetDirs("two-fer", analyzer.Patterns)
+	dirs, err := analyzer.GetDirs("two-fer", analyzer.Folder)
 	if err != nil {
 		t.Error(err)
 	}

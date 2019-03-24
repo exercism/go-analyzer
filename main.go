@@ -5,6 +5,7 @@ package main
 import (
 	"encoding/json"
 	"io/ioutil"
+	"log"
 	"os"
 	"path"
 
@@ -30,13 +31,21 @@ func main() {
 	}
 
 	res := analyzer.Analyze(*exercise, *solutionPath)
+	for _, errStr := range res.Errors {
+		log.Println(errStr)
+	}
 	bytes, err := toJson(res)
 	if err != nil {
+		log.Printf("%+v", err)
 		os.Exit(2)
 	}
-	if err := ioutil.WriteFile(path.Join(*solutionPath, *output), append(bytes, '\n'), 0644); err != nil {
+
+	outputFile := path.Join(*solutionPath, *output)
+	if err := ioutil.WriteFile(outputFile, append(bytes, '\n'), 0644); err != nil {
+		log.Printf("%+v", err)
 		os.Exit(3)
 	}
+	log.Printf("Output written to %s", outputFile)
 }
 
 func toJson(res interface{}) ([]byte, error) {

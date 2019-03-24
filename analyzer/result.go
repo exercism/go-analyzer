@@ -11,7 +11,7 @@ func NewErrResult(err error) Result {
 	return Result{
 		Status:   ReferToMentor,
 		Comments: []sugg.Comment{},
-		Errors:   []string{fmt.Sprintf("%v", err)},
+		Errors:   []string{fmt.Sprintf("%+v", err)},
 	}
 }
 

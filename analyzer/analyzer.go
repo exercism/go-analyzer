@@ -1,11 +1,16 @@
 package analyzer
 
 import (
-	"errors"
 	"fmt"
+	"net/http"
+	"path"
 
+	"github.com/exercism/go-analyzer/assets"
 	"github.com/exercism/go-analyzer/suggester"
 	"github.com/exercism/go-analyzer/suggester/sugg"
+	"github.com/pkg/errors"
+	"github.com/tehsphinx/astpatt"
+	"github.com/tehsphinx/astrav"
 )
 
 // Analyze analyses a solution and returns the Result
@@ -31,4 +36,26 @@ func Analyze(exercise string, path string) Result {
 	suggester.Suggest(exercise, solution, suggs)
 
 	return getResult(patternRating, suggs)
+}
+
+// CheckPattern checks if the given package matches any good pattern
+func CheckPattern(exercise string, solution *astrav.Package) (float64, bool, error) {
+	patterns, err := assets.LoadPatterns(exercise)
+	_, ratio, ok := astpatt.DiffPatterns(patterns, solution)
+	return ratio, ok, err
+}
+
+// LoadPackage loads a go package from a folder
+func LoadPackage(dir string) (*astrav.Package, error) {
+	root := http.Dir(".")
+	if path.IsAbs(dir) {
+		root = http.Dir("/")
+	}
+
+	folder := astrav.NewFolder(root, dir)
+	_, err := folder.ParseFolder()
+	if err != nil {
+		return nil, errors.WithStack(err)
+	}
+	return folder.Package(folder.Pkg.Name()), nil
 }

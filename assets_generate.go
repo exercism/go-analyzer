@@ -10,11 +10,11 @@ import (
 )
 
 func main() {
-	err := vfsgen.Generate(http.Dir("patterns"), vfsgen.Options{
-		PackageName:  "analyzer",
+	err := vfsgen.Generate(http.Dir("assets/patterns"), vfsgen.Options{
+		PackageName:  "assets",
 		BuildTags:    "build",
 		VariableName: "Patterns",
-		Filename:     "analyzer/patterns_build.go",
+		Filename:     "assets/patterns_build.go",
 	})
 	if err != nil {
 		log.Fatalln(err)
