@@ -55,7 +55,7 @@ func getResult(patternRating float64, suggReporter *sugg.SuggestionReport) Resul
 func fmtErrors(errs []error) []string {
 	var strs []string
 	for _, err := range errs {
-		strs = append(strs, fmt.Sprintf("%s", err))
+		strs = append(strs, fmt.Sprintf("%+v", err))
 	}
 	return strs
 }

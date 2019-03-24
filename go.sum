@@ -1,11 +1,9 @@
 github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/davecgh/go-spew v1.1.1 h1:vj9j/u1bqnvCEfJOwUhtlOARqs3+rkHYY13jYWTU97c=
 github.com/davecgh/go-spew v1.1.1/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
-github.com/mattn/go-colorable v0.0.9 h1:UVL0vNpWh04HeJXV0KLcaT7r06gOH2l4OW6ddYRUIY4=
 github.com/mattn/go-colorable v0.0.9/go.mod h1:9vuHe8Xs5qXnSaW/c/ABM9alt+Vo+STaOChaDxuIBZU=
 github.com/mattn/go-colorable v0.1.1 h1:G1f5SKeVxmagw/IyvzvtZE4Gybcc4Tr1tf7I8z0XgOg=
 github.com/mattn/go-colorable v0.1.1/go.mod h1:FuOcm+DKB9mbwrcAfNl7/TZVBZ6rcnceauSikq3lYCQ=
-github.com/mattn/go-isatty v0.0.4 h1:bnP0vzxcAdeI1zdubAl5PjU6zsERjGZb7raWodagDYs=
 github.com/mattn/go-isatty v0.0.4/go.mod h1:M+lRXTBqGeGNdLjl/ufCoiOlB5xdOkqRJdNxMWT7Zi4=
 github.com/mattn/go-isatty v0.0.5 h1:tHXDdz1cpzGaovsTB+TVB8q90WEokoVmfMqoVcrLUgw=
 github.com/mattn/go-isatty v0.0.5/go.mod h1:Iq45c/XA43vh69/j3iqttzPXn0bhXyGjM0Hdxcsrc5s=
@@ -26,8 +24,8 @@ github.com/stretchr/testify v1.3.0/go.mod h1:M5WIy9Dh21IEIfnGCwXGc5bZfKNJtfHm1UV
 github.com/tehsphinx/astpatt v0.2.0 h1:Mml8pBPRa2MsFaB1+48oWSykbSbv80VbipoKci7dl4k=
 github.com/tehsphinx/astpatt v0.2.0/go.mod h1:UulnEudulTUh82V1EwnGM5u6tUB7T4ZWRDCMFzXQHbo=
 github.com/tehsphinx/astrav v0.0.0-20181205091422-5bfb68544745/go.mod h1:nOyPKhDavRtkQmdp+ljFJ8aNAPAilrCycVEAgsFverU=
-github.com/tehsphinx/astrav v0.2.1 h1:TYNzsMzlYg6OMoGRsB/LRKX4Z3ZbLu+jABMrucI4i7c=
-github.com/tehsphinx/astrav v0.2.1/go.mod h1:zEFhb8ClsLyrt/CT5cGip7dRM7POzPQPUZAHlJkb/3I=
+github.com/tehsphinx/astrav v0.2.2 h1:ca+qzsf8t9Gj8RariVSrcz+KvddqcA9Ui0cluI+3R6M=
+github.com/tehsphinx/astrav v0.2.2/go.mod h1:zEFhb8ClsLyrt/CT5cGip7dRM7POzPQPUZAHlJkb/3I=
 github.com/tehsphinx/dbg v0.0.0-20180912080624-6ae3be1fde4a h1:An4JM6FGIm6VrD89WG9XirMuT1qNS1KzLgA0DcXoRkU=
 github.com/tehsphinx/dbg v0.0.0-20180912080624-6ae3be1fde4a/go.mod h1:0lc75gUc5PIEHuvMfdbFQqjEGKFkP+V7XBa75j6s91c=
 golang.org/x/crypto v0.0.0-20190308221718-c2843e01d9a2 h1:VklqNMn3ovrHsnt90PveolxSbWFaJdECFbxSq0Mqo2M=

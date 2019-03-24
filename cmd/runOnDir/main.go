@@ -11,6 +11,7 @@ import (
 	"strings"
 
 	"github.com/exercism/go-analyzer/analyzer"
+	"github.com/exercism/go-analyzer/assets"
 )
 
 var (
@@ -28,7 +29,7 @@ func main() {
 		return
 	}
 
-	dirs, err := analyzer.GetDirs(".", http.Dir(*parentDir))
+	dirs, err := assets.GetDirs(".", http.Dir(*parentDir))
 	if err != nil {
 		log.Fatal(err)
 	}

@@ -6,9 +6,11 @@ import (
 	"io/ioutil"
 	"net/http"
 	"path"
+	"strings"
 	"testing"
 
 	"github.com/exercism/go-analyzer/analyzer"
+	"github.com/exercism/go-analyzer/assets"
 	"github.com/exercism/go-analyzer/suggester/sugg"
 	"github.com/pmezard/go-difflib/difflib"
 	"github.com/stretchr/testify/assert"
@@ -17,7 +19,7 @@ import (
 // Tests contains the test cases.
 var Tests http.FileSystem = http.Dir("tests")
 
-// var runOnly = ""
+// var runOnly = "tests/two-fer/24"
 
 func TestAnalyze(t *testing.T) {
 	exercises, err := ExercisesWithTests()
@@ -48,12 +50,7 @@ func TestAnalyze(t *testing.T) {
 			checkContains(t, expected.Comments, res.Comments, "Missing comment", dir)
 			checkContains(t, res.Comments, expected.Comments, "Additional comment", dir)
 
-			for _, err := range res.Errors {
-				assert.Contains(t, expected.Errors, err, "unexpected error analyzing the solution %s: %s", dir, err)
-			}
-			for _, expError := range expected.Errors {
-				assert.Contains(t, res.Errors, expError, "missing error analyzing the solution %s: %s", dir, err)
-			}
+			checkContainsError(t, expected.Errors, res.Errors, dir)
 		}
 	}
 }
@@ -80,14 +77,36 @@ func checkContains(t *testing.T, search, container []sugg.Comment, message, dir 
 	}
 }
 
+func checkContainsError(t *testing.T, expected, got []string, dir string) {
+	for _, err := range expected {
+		var found bool
+		for _, gotErr := range got {
+			if strings.Contains(gotErr, err) {
+				found = true
+			}
+		}
+		assert.True(t, found, "missing error analyzing the solution %s: %s", dir, err)
+	}
+
+	for _, gotErr := range got {
+		var found bool
+		for _, err := range expected {
+			if strings.Contains(gotErr, err) {
+				found = true
+			}
+		}
+		assert.True(t, found, "unexpected error analyzing the solution %s: %s", dir, gotErr)
+	}
+}
+
 // ExercisesWithTests returns a list of exercise slugs for which tests are provided.
 func ExercisesWithTests() ([]string, error) {
-	return analyzer.GetDirs(".", Tests)
+	return assets.GetDirs(".", Tests)
 }
 
 // ExerciseTests returns a list of paths containing tests for given exercise.
 func ExerciseTests(exercise string) ([]string, error) {
-	paths, err := analyzer.GetDirs(exercise, Tests)
+	paths, err := assets.GetDirs(exercise, Tests)
 	if err != nil {
 		return nil, err
 	}
