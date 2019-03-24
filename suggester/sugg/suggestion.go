@@ -62,19 +62,6 @@ func (s *comment) MarshalJSON() ([]byte, error) {
 	return json.Marshal(s.comment)
 }
 
-// UnmarshalJSON converts json to comment.
-func (s *comment) UnmarshalJSON(data []byte) error {
-	var v string
-	err := json.Unmarshal(data, &v)
-	if err != nil {
-		return err
-	}
-	*s = comment{
-		comment: v,
-	}
-	return nil
-}
-
 // NewPlaceholderComment creates a new comment with placeholder(s).
 func NewPlaceholderComment(comment string, params map[string]string) Comment {
 	return &placeholderComment{
@@ -109,7 +96,6 @@ func (s *placeholderComment) Severity() int {
 
 // MarshalJSON converts the placeholderComment to json.
 func (s *placeholderComment) MarshalJSON() ([]byte, error) {
-
 	return json.Marshal(struct {
 		Comment string            `json:"comment"`
 		Params  map[string]string `json:"params"`
