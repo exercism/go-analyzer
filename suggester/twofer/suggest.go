@@ -14,6 +14,7 @@ import (
 // Register registers all suggestion functions for this exercise.
 var Register = sugg.Register{
 	Funcs: []sugg.SuggestionFunc{
+		examMainFunc,
 		examPlusUsed,
 		examGeneralizeNames,
 		examFmt,
@@ -26,6 +27,21 @@ var Register = sugg.Register{
 		examStringsTrimSpace,
 	},
 	Severity: severity,
+}
+
+func examMainFunc(pkg *astrav.Package, suggs sugg.Suggester) {
+	main := pkg.FuncDeclByName("ShareWith")
+	if main == nil {
+		suggs.AppendUnique(MissingMainFunc)
+		return
+	}
+
+	if len(main.Params().Children()) != 1 {
+		suggs.AppendUnique(FuncSignatureChanged)
+	}
+	if len(main.Results().Children()) != 1 {
+		suggs.AppendUnique(FuncSignatureChanged)
+	}
 }
 
 func examStringsTrimSpace(pkg *astrav.Package, suggs sugg.Suggester) {
@@ -46,7 +62,6 @@ func examExtraFunction(pkg *astrav.Package, suggs sugg.Suggester) {
 func examExtraVariable(pkg *astrav.Package, suggs sugg.Suggester) {
 	main := pkg.FuncDeclByName("ShareWith")
 	if main == nil {
-		suggs.AppendUnique(MissingShareWith)
 		return
 	}
 
@@ -103,7 +118,7 @@ func examStringsBuilder(pkg *astrav.Package, suggs sugg.Suggester) {
 func examPlusUsed(pkg *astrav.Package, suggs sugg.Suggester) {
 	main := pkg.FuncDeclByName("ShareWith")
 	if main == nil {
-		suggs.AppendUnique(MissingShareWith)
+		suggs.AppendUnique(MissingMainFunc)
 		return
 	}
 	nodes := main.FindByNodeType(astrav.NodeTypeBinaryExpr)
@@ -161,7 +176,7 @@ func examComments(pkg *astrav.Package, suggs sugg.Suggester) {
 
 	main := pkg.FuncDeclByName("ShareWith")
 	if main == nil {
-		suggs.AppendUnique(MissingShareWith)
+		suggs.AppendUnique(MissingMainFunc)
 		return
 	}
 	cGroup := main.ChildByNodeType(astrav.NodeTypeCommentGroup)
@@ -173,7 +188,7 @@ var outputPart = regexp.MustCompile(`, one for me\.`)
 func examConditional(pkg *astrav.Package, suggs sugg.Suggester) {
 	main := pkg.FuncDeclByName("ShareWith")
 	if main == nil {
-		suggs.AppendUnique(MissingShareWith)
+		suggs.AppendUnique(MissingMainFunc)
 		return
 	}
 
@@ -186,7 +201,7 @@ func examConditional(pkg *astrav.Package, suggs sugg.Suggester) {
 func examGeneralizeNames(pkg *astrav.Package, suggs sugg.Suggester) {
 	main := pkg.FuncDeclByName("ShareWith")
 	if main == nil {
-		suggs.AppendUnique(MissingShareWith)
+		suggs.AppendUnique(MissingMainFunc)
 		return
 	}
 
