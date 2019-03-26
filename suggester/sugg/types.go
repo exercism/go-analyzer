@@ -19,6 +19,11 @@ type Suggester interface {
 	// for debugging purpose. Reporting will fail the analyzer with `refer_to_mentor` status.
 	// If that is not what you want consider adding a comment to the student instead of an error.
 	ReportError(err error)
+
+	// HasSuggestion checks if a comment was added. This should not be used to avoid duplicated.
+	// Duplicates are avoided by default. It might however be useful to check if some other algorithm
+	// found a certain pattern so it doesn't have to be checked again.
+	HasSuggestion(comment string) bool
 }
 
 // Register defines a register type to be provided by every suggerter track implementation.
@@ -72,6 +77,16 @@ func (s *SuggestionReport) ReportError(err error) {
 		return
 	}
 	s.errors = append(s.errors, err)
+}
+
+// HasSuggestion checks if the comment was added already. Params are ignored for comparison.
+func (s *SuggestionReport) HasSuggestion(commentID string) bool {
+	for _, cmt := range s.suggs {
+		if cmt.ID() == commentID {
+			return true
+		}
+	}
+	return false
 }
 
 // GetComments returns the comments and their severity sum.

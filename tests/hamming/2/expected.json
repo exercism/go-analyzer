@@ -1,0 +1,19 @@
+{
+	"status": "disapprove_with_comment",
+	"comments": [
+		{
+			"comment": "go.general.golint_not_satisfied",
+			"params": {
+				"golint": "comments: exported function Distance should have comment or be unexported\n\ttests/hamming/2/solution.go:8:1\n\tdoc: https://golang.org/wiki/CodeReviewComments#doc-comments\nerrors: error strings should not be capitalized or end with punctuation or a newline\n\ttests/hamming/2/solution.go:14:24\n\tdoc: https://golang.org/wiki/CodeReviewComments#error-strings\n"
+			}
+		},
+		{
+			"comment": "go.hamming.declare_variable_when_needed_not_start_of_function",
+			"params": {
+				"returnVar": "cnt"
+			}
+		},
+		"go.hamming.multiple_string_conversions",
+		"go.hamming.error_msg_not_capitalized_nor_punctuated"
+	]
+}

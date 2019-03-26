@@ -1,0 +1,19 @@
+{
+	"status": "disapprove_with_comment",
+	"comments": [
+		{
+			"comment": "go.general.golint_not_satisfied",
+			"params": {
+				"golint": "comments: exported function Distance should have comment or be unexported\n\ttests/hamming/5/solution.go:5:1\n\tdoc: https://golang.org/wiki/CodeReviewComments#doc-comments\nindent: if block ends with a return statement, so drop this else and outdent its block\n\ttests/hamming/5/solution.go:9:9\n\tdoc: https://golang.org/wiki/CodeReviewComments#indent-error-flow\n"
+			}
+		},
+		"go.hamming.use_zero_value_for_other_return_params_on_error",
+		{
+			"comment": "go.hamming.declare_variable_when_needed_not_start_of_function",
+			"params": {
+				"returnVar": "count"
+			}
+		},
+		"go.hamming.error_msg_not_capitalized_nor_punctuated"
+	]
+}

@@ -1,0 +1,8 @@
+{
+	"status": "disapprove_with_comment",
+	"comments": [
+		"go.hamming.use_zero_value_for_other_return_params_on_error",
+		"go.hamming.lossy_rune_to_byte_conversion",
+		"go.hamming.error_msg_not_capitalized_nor_punctuated"
+	]
+}

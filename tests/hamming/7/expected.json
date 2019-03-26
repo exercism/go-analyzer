@@ -1,0 +1,13 @@
+{
+	"status": "disapprove_with_comment",
+	"comments": [
+		{
+			"comment": "go.general.golint_not_satisfied",
+			"params": {
+				"golint": "comments: exported function Distance should have comment or be unexported\n\ttests/hamming/7/solution.go:5:1\n\tdoc: https://golang.org/wiki/CodeReviewComments#doc-comments\n"
+			}
+		},
+		"go.hamming.use_zero_value_for_other_return_params_on_error",
+		"go.hamming.omitted_error_message"
+	]
+}
