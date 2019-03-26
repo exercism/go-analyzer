@@ -164,6 +164,10 @@ func examInvertIf(pkg *astrav.Package, suggs sugg.Suggester) {
 func examRuneToByte(pkg *astrav.Package, suggs sugg.Suggester) {
 	nodes := pkg.FindByName("byte")
 	for _, node := range nodes {
+		parentType := node.Parent().NodeType()
+		if parentType != astrav.NodeTypeCallExpr {
+			continue
+		}
 		for _, n := range node.Siblings() {
 			if n.ValueType().String() == "rune" {
 				suggs.AppendUnique(RuneToByte)
