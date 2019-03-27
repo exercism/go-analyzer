@@ -4,15 +4,18 @@ package hamming
 const (
 	MissingMainFunc      = "go.hamming.missing_distance_function"
 	FuncSignatureChanged = "go.hamming.distance_signature_changed"
+	MixtureRunesBytes    = "go.hamming.mixture_of_runes_and_bytes"
 	DeclareWhenNeeded    = "go.hamming.declare_variable_when_needed_not_start_of_function"
 	ErrorMsgFormat       = "go.hamming.error_msg_not_capitalized_nor_punctuated"
 	IncreaseOperator     = "go.hamming.use_increase_operator"
 	InvertIf             = "go.hamming.invert_if_for_happy_path_on_left"
 	NakedReturns         = "go.hamming.use_of_naked_returns"
 	OmittedErrorMsg      = "go.hamming.omitted_error_message"
-	ZeroValueOnErr       = "go.hamming.use_zero_value_for_other_return_params_on_error"
+	ZeroValueOnErr       = "go.hamming.use_zero_values_on_error_return"
 	RuneToByte           = "go.hamming.lossy_rune_to_byte_conversion"
-	MultipleStringConv   = "go.hamming.multiple_string_conversions"
+	ToStringConversion   = "go.hamming.rune_or_byte_to_string_conversion"
+	StringsSplitUsed     = "go.hamming.strings_split_used"
+	ComparingBytes       = "go.hamming.comparing_bytes"
 )
 
 // Severity defines how severe a comment is. A sum over all comments of 5 means no approval.
@@ -23,6 +26,7 @@ const (
 var severity = map[string]int{
 	MissingMainFunc:      5,
 	FuncSignatureChanged: 5,
+	MixtureRunesBytes:    3,
 	DeclareWhenNeeded:    1,
 	ErrorMsgFormat:       1,
 	IncreaseOperator:     2,
@@ -31,5 +35,7 @@ var severity = map[string]int{
 	OmittedErrorMsg:      3,
 	ZeroValueOnErr:       2,
 	RuneToByte:           3,
-	MultipleStringConv:   3,
+	ToStringConversion:   3,
+	StringsSplitUsed:     5,
+	ComparingBytes:       0,
 }

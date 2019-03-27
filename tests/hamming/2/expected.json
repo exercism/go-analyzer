@@ -13,7 +13,9 @@
 				"returnVar": "cnt"
 			}
 		},
-		"go.hamming.multiple_string_conversions",
-		"go.hamming.error_msg_not_capitalized_nor_punctuated"
+		"go.hamming.rune_or_byte_to_string_conversion",
+		"go.hamming.error_msg_not_capitalized_nor_punctuated",
+		"go.hamming.mixture_of_runes_and_bytes",
+		"go.hamming.strings_trim_space_used"
 	]
 }

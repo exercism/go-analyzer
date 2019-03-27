@@ -7,8 +7,9 @@
 				"golint": "unary-op: should replace answer += 1 with answer++\n\ttests/hamming/4/solution.go:21:5\n\tdoc: \nerrors: error strings should not be capitalized or end with punctuation or a newline\n\ttests/hamming/4/solution.go:25:25\n\tdoc: https://golang.org/wiki/CodeReviewComments#error-strings\n"
 			}
 		},
-		"go.hamming.use_zero_value_for_other_return_params_on_error",
+		"go.hamming.use_zero_values_on_error_return",
 		"go.hamming.invert_if_for_happy_path_on_left",
-		"go.hamming.error_msg_not_capitalized_nor_punctuated"
+		"go.hamming.error_msg_not_capitalized_nor_punctuated",
+		"go.hamming.strings_split_used"
 	]
 }

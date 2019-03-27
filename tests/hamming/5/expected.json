@@ -14,6 +14,7 @@
 				"returnVar": "count"
 			}
 		},
-		"go.hamming.error_msg_not_capitalized_nor_punctuated"
+		"go.hamming.error_msg_not_capitalized_nor_punctuated",
+		"go.hamming.comparing_bytes"
 	]
 }

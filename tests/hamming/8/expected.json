@@ -1,6 +1,10 @@
 {
 	"status": "refer_to_mentor",
 	"comments": [
-		"go.hamming.use_zero_value_for_other_return_params_on_error"
+		"go.hamming.use_zero_value_for_other_return_params_on_error",
+		"go.hamming.custom_error_created",
+		"go.general.remove_extra_variable",
+		"go.hamming.extra_if_strings_empty",
+		"go.hamming.range_with_byte_comparison"
 	]
 }

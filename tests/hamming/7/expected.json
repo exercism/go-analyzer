@@ -8,6 +8,7 @@
 			}
 		},
 		"go.hamming.use_zero_value_for_other_return_params_on_error",
-		"go.hamming.omitted_error_message"
+		"go.hamming.omitted_error_message",
+		"go.hamming.comparing_bytes"
 	]
 }

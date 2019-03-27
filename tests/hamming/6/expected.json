@@ -7,6 +7,7 @@
 			"params": {
 				"returnVar": "distance"
 			}
-		}
+		},
+		"go.hamming.comparing_bytes"
 	]
 }

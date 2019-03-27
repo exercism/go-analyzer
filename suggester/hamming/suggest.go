@@ -189,7 +189,7 @@ func examMultipleStringConversions(pkg *astrav.Package, suggs sugg.Suggester) {
 		}
 	}
 	if 1 < count {
-		suggs.AppendUnique(MultipleStringConv)
+		suggs.AppendUnique(ToStringConversion)
 	}
 }
 
