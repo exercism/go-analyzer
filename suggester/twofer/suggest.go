@@ -55,7 +55,7 @@ func examExtraFunction(pkg *astrav.Package, suggs sugg.Suggester) {
 	nodes := pkg.FindByNodeType(astrav.NodeTypeFuncDecl)
 	main := pkg.FuncDeclByName("main")
 	if 1 < len(nodes) && main == nil {
-		suggs.AppendUnique(ExtraFunction)
+		suggs.AppendUnique(sugg.ExtraFunction)
 	}
 }
 
@@ -92,7 +92,7 @@ func examExtraVariable(pkg *astrav.Package, suggs sugg.Suggester) {
 			}
 			varName := node.(astrav.Named).NodeName().Name
 			if varName != paramName.Name {
-				suggs.AppendUniquePH(ExtraVar, map[string]string{
+				suggs.AppendUniquePH(sugg.ExtraVar, map[string]string{
 					"name": varName,
 				})
 			}

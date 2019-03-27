@@ -22,6 +22,7 @@ func Suggest(exercise string, pkg *astrav.Package, suggs *sugg.SuggestionReport)
 		return
 	}
 
+	// TODO: compine severity general+exercise where exercise can overwrite general
 	for _, key := range []string{"general", exercise} {
 		register, ok := exercisePkgs[key]
 		if !ok {

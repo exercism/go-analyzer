@@ -9,6 +9,8 @@ const (
 	GoFmt             = "go.general.gofmt_not_used"
 	GoLint            = "go.general.golint_not_satisfied"
 	LengthSmallerZero = "go.general.length_smaller_zero_impossible"
+	ExtraVar          = "go.general.remove_extra_variable"
+	ExtraFunction     = "go.general.remove_extra_function"
 )
 
 // Severity defines how severe a comment is. A sum over all comments of 5 means no approval.
@@ -24,4 +26,6 @@ var severity = map[string]int{
 	GoFmt:             5,
 	GoLint:            5,
 	LengthSmallerZero: 2,
+	ExtraVar:          3,
+	ExtraFunction:     5,
 }
