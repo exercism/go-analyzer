@@ -9,12 +9,6 @@ linters-settings:
     suggest-new: true
   dupl:
     threshold: 100
-  depguard:
-    list-type: blacklist
-    include-go-root: false
-    packages:
-      # allow logrus only in lg package
-      - github.com/sirupsen/logrus
   lll:
     line-length: 150
   nakedret:
