@@ -13,6 +13,10 @@ COPY ./go.mod /go-analyzer/go.mod
 # download dependencies
 RUN go mod download
 
+# Create analyze.sh
+RUN printf '%s\n' '#!/bin/sh' '/opt/analyzer/bin/analyzer "$@"' > /go/bin/analyze.sh
+RUN chmod +x /go/bin/analyze.sh
+
 # get the rest of the source code
 COPY . /go-analyzer
 
@@ -26,7 +30,7 @@ RUN GOOS=linux GOARCH=amd64 go build --tags=build -o /go/bin/analyzer .
 FROM golang:1.12-alpine
 COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
 COPY --from=builder /etc/passwd /etc/passwd
-COPY --from=builder /go/bin/analyzer /app/
+COPY --from=builder /go/bin /opt/analyzer/bin
 USER appuser
-WORKDIR /app
-ENTRYPOINT ["/app/analyzer"]
+WORKDIR /opt/analyzer
+ENTRYPOINT ["/opt/analyzer/bin/analyze.sh"]

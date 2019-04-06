@@ -29,6 +29,7 @@ func main() {
 		args := flag.Args()
 		*exercise, *solutionPath = args[0], args[1]
 	}
+	log.Printf("Starting check for `%s` exercise in folder `%s`\n", *exercise, *solutionPath)
 
 	res := analyzer.Analyze(*exercise, *solutionPath)
 	for _, errStr := range res.Errors {
