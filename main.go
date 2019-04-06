@@ -35,7 +35,7 @@ func main() {
 	for _, errStr := range res.Errors {
 		log.Println(errStr)
 	}
-	bytes, err := toJson(res)
+	bytes, err := toJSON(res)
 	if err != nil {
 		log.Printf("%+v", err)
 		os.Exit(2)
@@ -49,6 +49,6 @@ func main() {
 	log.Printf("Output written to %s", outputFile)
 }
 
-func toJson(res interface{}) ([]byte, error) {
+func toJSON(res interface{}) ([]byte, error) {
 	return json.MarshalIndent(res, "", "\t")
 }

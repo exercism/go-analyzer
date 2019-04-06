@@ -64,7 +64,7 @@ func checkContains(t *testing.T, search, container []sugg.Comment, message, dir 
 			msg      = message
 		)
 		if !contains {
-			cmt := getCommentIdOnly(container, comment.ID())
+			cmt := getCommentIDOnly(container, comment.ID())
 			if cmt != nil {
 				msg = "Different parameters on comment"
 				diff, err = commentDiff(comment, cmt)
@@ -130,7 +130,6 @@ func GetExpected(dir string) (*analyzer.Result, error) {
 		return nil, err
 	}
 
-	// bytes, err = toJson(res)
 	result := &analyzer.Result{
 		Status:   res.Status,
 		Severity: res.Severity,
@@ -189,7 +188,7 @@ func getDiff(expected, got []byte) string {
 	return text
 }
 
-func getCommentIdOnly(comments []sugg.Comment, id string) sugg.Comment {
+func getCommentIDOnly(comments []sugg.Comment, id string) sugg.Comment {
 	for _, cmt := range comments {
 		if cmt.ID() == id {
 			return cmt

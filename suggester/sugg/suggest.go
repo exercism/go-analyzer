@@ -69,10 +69,8 @@ func examLenComparison(pkg *astrav.Package, suggs Suggester) {
 			id := ident.(*astrav.Ident)
 			if id.NodeName().String() == "len" {
 				foundLen = true
-			} else {
-				if id.ValueType().String() == "string" {
-					foundString = true
-				}
+			} else if id.ValueType().String() == "string" {
+				foundString = true
 			}
 		}
 		if !foundLen {

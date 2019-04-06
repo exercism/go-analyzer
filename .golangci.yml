@@ -1,3 +1,8 @@
+run:
+  skip-dirs:
+    - tests
+    - samples
+
 linters-settings:
   govet:
     check-shadowing: true
@@ -9,6 +14,12 @@ linters-settings:
     suggest-new: true
   dupl:
     threshold: 100
+  depguard:
+    list-type: blacklist
+    include-go-root: false
+    packages:
+      # protect from pushing debug package to production
+      - github.com/tehsphinx/dbg
   lll:
     line-length: 150
   nakedret:
@@ -31,9 +42,12 @@ linters:
 
 issues:
   exclude-use-default: false
-  exclued:
+  exclude:
     # errcheck: Almost all programs ignore errors on these functions and in most cases it's ok
     - Error return value of .((os\.)?std(out|err)\..*|.*Close|.*Flush|os\.Remove(All)?|.*printf?|os\.(Un)?Setenv). is not checked
 
     # golint: False positive when tests are defined in package 'test'
     - func name will be used as test\.Test.* by other packages, and that stutters; consider calling this
+
+    # govet: shadowing of err variable
+    - declaration of "err" shadows declaration at
