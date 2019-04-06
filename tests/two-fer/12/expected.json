@@ -3,7 +3,7 @@
 	"comments": [
 		"go.two-fer.extra_name_variable_created",
 		{
-			"comment": "go.two-fer.remove_extra_variable",
+			"comment": "go.general.remove_extra_variable",
 			"params": {
 				"name": "n"
 			}

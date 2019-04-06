@@ -16,20 +16,18 @@ var exercisePkgs = map[string]sugg.Register{
 
 // Suggest statically analysis the solution and returns a list of comments to provide.
 func Suggest(exercise string, pkg *astrav.Package, suggs *sugg.SuggestionReport) {
-	suggs.SetSeverity(sugg.GeneralRegister.Severity)
 	if pkg == nil {
 		suggs.AppendUnique(sugg.SyntaxError)
 		return
 	}
 
-	// TODO: compine severity general+exercise where exercise can overwrite general
 	for _, key := range []string{"general", exercise} {
 		register, ok := exercisePkgs[key]
 		if !ok {
 			continue
 		}
 
-		suggs.SetSeverity(register.Severity)
+		suggs.AppendSeverity(register.Severity)
 		for _, fn := range register.Funcs {
 			catchSuggFunc(pkg, suggs, fn)
 		}

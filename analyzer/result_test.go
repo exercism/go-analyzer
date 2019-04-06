@@ -99,7 +99,7 @@ var getResultTests = []struct {
 func Test_getResult(t *testing.T) {
 	for _, test := range getResultTests {
 		suggs := sugg.NewSuggestions()
-		suggs.SetSeverity(test.severity)
+		suggs.AppendSeverity(test.severity)
 		for _, comment := range test.comments {
 			suggs.AppendUnique(comment)
 		}

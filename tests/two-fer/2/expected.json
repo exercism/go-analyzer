@@ -4,7 +4,7 @@
 		"go.two_fer.replace_stub_comments",
 		"go.two_fer.find_minimal_conditional",
 		{
-			"comment": "go.two-fer.remove_extra_variable",
+			"comment": "go.general.remove_extra_variable",
 			"params": {
 				"name": "t"
 			}

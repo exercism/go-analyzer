@@ -4,7 +4,7 @@
 		"go.two_fer.find_minimal_conditional",
 		"go.two_fer.use_fmt_placeholder_for_string",
 		{
-			"comment": "go.two-fer.remove_extra_variable",
+			"comment": "go.general.remove_extra_variable",
 			"params": {
 				"name": "template"
 			}

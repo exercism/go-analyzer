@@ -99,9 +99,11 @@ func (s *SuggestionReport) GetErrors() []error {
 	return s.errors
 }
 
-// SetSeverity overwrites severity register.
-func (s *SuggestionReport) SetSeverity(severity map[string]int) {
-	s.severity = severity
+// AppendSeverity adds new severities overwriting existing ones.
+func (s *SuggestionReport) AppendSeverity(severity map[string]int) {
+	for k, v := range severity {
+		s.severity[k] = v
+	}
 }
 
 func (s *SuggestionReport) appendUnique(comment Comment) {
