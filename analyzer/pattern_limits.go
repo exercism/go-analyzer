@@ -5,4 +5,8 @@ var patternLimits = map[string]patternReport{
 		OptimalLimit: 0.99,
 		ApproveLimit: 0.9,
 	},
+	"hamming": {
+		OptimalLimit: 0.99,
+		ApproveLimit: 0.9,
+	},
 }

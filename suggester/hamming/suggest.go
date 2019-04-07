@@ -23,10 +23,52 @@ var Register = sugg.Register{
 		examMixture,
 		examComparingBytes,
 		examStringSplit,
+		examDefineError,
+		examReturnOnError,
+		examCaseInsensitive,
 	},
 	Severity: severity,
 }
 
+// checks if the hamming distance is made case insensitive -- which is not tested for but should not be done
+func examCaseInsensitive(pkg *astrav.Package, suggs sugg.Suggester) {
+	nodes := pkg.FindByName("ToLower")
+	nodes = append(nodes, pkg.FindByName("ToUpper")...)
+	if len(nodes) != 0 {
+		suggs.AppendUnique(CaseInsensitive)
+	}
+}
+
+// checks if an error is being returned right away. It should be.
+func examReturnOnError(pkg *astrav.Package, suggs sugg.Suggester) {
+	nodes := pkg.FindByName("New")
+	nodes = append(nodes, pkg.FindByName("Errorf")...)
+
+	for _, node := range nodes {
+		ifStmt := node.NextParentByType(astrav.NodeTypeIfStmt)
+		returns := ifStmt.FindByNodeType(astrav.NodeTypeReturnStmt)
+		if len(returns) == 0 {
+			suggs.AppendUnique(ReturnOnError)
+		}
+	}
+}
+
+// looking for error definition in the form of "err := error(nil)"
+func examDefineError(pkg *astrav.Package, suggs sugg.Suggester) {
+	nodes := pkg.FindByName("error")
+	for _, node := range nodes {
+		if !node.IsNodeType(astrav.NodeTypeCallExpr) {
+			continue
+		}
+		for _, child := range node.Children() {
+			if named, ok := child.(astrav.Named); ok && named.NodeName().Name == "nil" {
+				suggs.AppendUnique(DefineEmptyErr)
+			}
+		}
+	}
+}
+
+// looking for a mixture of runes and bytes. Also using the range index of string iteration as a byte or rune index.
 func examMixture(pkg *astrav.Package, suggs sugg.Suggester) {
 	loop := pkg.FindFirstByNodeType(astrav.NodeTypeForStmt)
 	if loop == nil {
@@ -110,6 +152,7 @@ func isOneOf(s string, strs ...string) bool {
 	return false
 }
 
+// check if strings.Split was used
 func examStringSplit(pkg *astrav.Package, suggs sugg.Suggester) {
 	nodes := pkg.FindByName("Split")
 	for _, node := range nodes {
@@ -118,6 +161,8 @@ func examStringSplit(pkg *astrav.Package, suggs sugg.Suggester) {
 		}
 	}
 }
+
+// check if bytes are being compared. Comment on how this won't work with utf8.
 func examComparingBytes(pkg *astrav.Package, suggs sugg.Suggester) {
 	if suggs.HasSuggestion(MixtureRunesBytes) {
 		return
@@ -135,6 +180,7 @@ func examComparingBytes(pkg *astrav.Package, suggs sugg.Suggester) {
 	}
 }
 
+// check if Distance function exists
 func examMainFunc(pkg *astrav.Package, suggs sugg.Suggester) {
 	main := pkg.FuncDeclByName("Distance")
 	if main == nil {
@@ -150,6 +196,7 @@ func examMainFunc(pkg *astrav.Package, suggs sugg.Suggester) {
 	}
 }
 
+// check if returns of Distance function have been tempered with
 func examReturns(pkg *astrav.Package, suggs sugg.Suggester) {
 	main := pkg.FindFirstByName("Distance")
 	if main == nil {
@@ -187,6 +234,7 @@ func examReturns(pkg *astrav.Package, suggs sugg.Suggester) {
 	}
 }
 
+// check if an empty error message was provided
 func examNoErrorMsg(pkg *astrav.Package, suggs sugg.Suggester) {
 	nodes := pkg.FindByName("New")
 	for _, node := range nodes {
@@ -204,11 +252,12 @@ func examNoErrorMsg(pkg *astrav.Package, suggs sugg.Suggester) {
 		}
 
 		if bLit.(*astrav.BasicLit).Value == `""` {
-			suggs.AppendUnique(ErrorMsgFormat)
+			suggs.AppendUnique(OmittedErrorMsg)
 		}
 	}
 }
 
+// Check if the distance counter was declared too early -- e.g. before the error check
 func examDeclareWhenNeeded(pkg *astrav.Package, suggs sugg.Suggester) {
 	if suggs.HasSuggestion(InvertIf) {
 		return
@@ -255,6 +304,7 @@ func examDeclareWhenNeeded(pkg *astrav.Package, suggs sugg.Suggester) {
 	}
 }
 
+// Check for an if that can be inverted so the error case is checked first
 func examInvertIf(pkg *astrav.Package, suggs sugg.Suggester) {
 	for _, ifNode := range pkg.FindByNodeType(astrav.NodeTypeIfStmt) {
 		loop := ifNode.FindFirstByNodeType(astrav.NodeTypeRangeStmt)
@@ -272,6 +322,7 @@ func examInvertIf(pkg *astrav.Package, suggs sugg.Suggester) {
 	}
 }
 
+// Look for rune to byte conversion
 func examRuneToByte(pkg *astrav.Package, suggs sugg.Suggester) {
 	nodes := pkg.FindByName("byte")
 	for _, node := range nodes {
@@ -287,6 +338,7 @@ func examRuneToByte(pkg *astrav.Package, suggs sugg.Suggester) {
 	}
 }
 
+// Look for conversion to string in order to compare runes and bytes
 func examMultipleStringConversions(pkg *astrav.Package, suggs sugg.Suggester) {
 	rngNode := pkg.FindFirstByNodeType(astrav.NodeTypeRangeStmt)
 	if rngNode == nil {
@@ -304,6 +356,7 @@ func examMultipleStringConversions(pkg *astrav.Package, suggs sugg.Suggester) {
 	}
 }
 
+// make sure ++ was used, if not comment
 func examIncrease(pkg *astrav.Package, suggs sugg.Suggester) {
 	loop := pkg.FindFirstByNodeType(astrav.NodeTypeRangeStmt)
 	if loop == nil {
@@ -319,6 +372,7 @@ func examIncrease(pkg *astrav.Package, suggs sugg.Suggester) {
 	}
 }
 
+// Check error message format for capitalization and punctuation
 func examErrorMessage(pkg *astrav.Package, suggs sugg.Suggester) {
 	checkErrMessage(pkg.FindByName("New"), suggs)
 	checkErrMessage(pkg.FindByName("Errorf"), suggs)

@@ -7,7 +7,7 @@
 				"golint": "comments: exported function Distance should have comment or be unexported\n\ttests/hamming/7/solution.go:5:1\n\tdoc: https://golang.org/wiki/CodeReviewComments#doc-comments\n"
 			}
 		},
-		"go.hamming.use_zero_value_for_other_return_params_on_error",
+		"go.hamming.use_zero_values_on_error_return",
 		"go.hamming.omitted_error_message",
 		"go.hamming.comparing_bytes"
 	]

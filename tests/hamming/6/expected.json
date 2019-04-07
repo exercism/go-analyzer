@@ -1,7 +1,7 @@
 {
 	"status": "approve_with_comment",
 	"comments": [
-		"go.hamming.use_zero_value_for_other_return_params_on_error",
+		"go.hamming.use_zero_values_on_error_return",
 		{
 			"comment": "go.hamming.declare_variable_when_needed_not_start_of_function",
 			"params": {

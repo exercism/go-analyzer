@@ -17,6 +17,9 @@ const (
 	ToStringConversion   = "go.hamming.rune_or_byte_to_string_conversion"
 	StringsSplitUsed     = "go.hamming.strings_split_used"
 	ComparingBytes       = "go.hamming.comparing_bytes"
+	DefineEmptyErr       = "go.hamming.defining_empty_error"
+	ReturnOnError        = "go.hamming.return_on_error_case"
+	CaseInsensitive      = "go.hamming.hamming_is_case_sensitive"
 )
 
 // Severity defines how severe a comment is. A sum over all comments of 5 means no approval.
