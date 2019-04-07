@@ -3,6 +3,7 @@ module github.com/exercism/go-analyzer
 go 1.12
 
 require (
+	github.com/logrusorgru/aurora v0.0.0-20181002194514-a7b3b318ed4e
 	github.com/namsral/flag v1.7.4-pre
 	github.com/pkg/errors v0.8.1
 	github.com/pmezard/go-difflib v1.0.0
@@ -11,7 +12,6 @@ require (
 	github.com/stretchr/testify v1.3.0
 	github.com/tehsphinx/astpatt v0.2.0
 	github.com/tehsphinx/astrav v0.2.3
-	golang.org/x/crypto v0.0.0-20190308221718-c2843e01d9a2
 	golang.org/x/lint v0.0.0-20181212231659-93c0bb5c8393
 	golang.org/x/tools v0.0.0-20190312170243-e65039ee4138 // indirect
 )

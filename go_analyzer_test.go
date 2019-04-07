@@ -12,14 +12,16 @@ import (
 	"github.com/exercism/go-analyzer/analyzer"
 	"github.com/exercism/go-analyzer/assets"
 	"github.com/exercism/go-analyzer/suggester/sugg"
+	"github.com/logrusorgru/aurora"
 	"github.com/pmezard/go-difflib/difflib"
 	"github.com/stretchr/testify/assert"
+	"github.com/tehsphinx/astrav"
 )
 
 // Tests contains the test cases.
 var Tests http.FileSystem = http.Dir("tests")
 
-// var runOnly = "tests/two-fer/24"
+var runOnly = ""
 
 func TestAnalyze(t *testing.T) {
 	exercises, err := ExercisesWithTests()
@@ -35,9 +37,15 @@ func TestAnalyze(t *testing.T) {
 		}
 
 		for _, dir := range paths {
-			// if runOnly != "" && runOnly != dir {
-			// 	continue
-			// }
+			if runOnly != "" {
+				if runOnly != dir {
+					continue
+				}
+				// print ast for orientation while implementing
+				if err := printAST(dir); err != nil {
+					t.Fatal(err)
+				}
+			}
 			res := analyzer.Analyze(exercise, dir)
 			expected, err := GetExpected(dir)
 			if err != nil {
@@ -194,5 +202,21 @@ func getCommentIDOnly(comments []sugg.Comment, id string) sugg.Comment {
 			return cmt
 		}
 	}
+	return nil
+}
+
+func printAST(dir string) error {
+	solution, err := analyzer.LoadPackage(dir)
+	if err != nil {
+		return err
+	}
+	solution.Walk(func(node astrav.Node) bool {
+		src := node.GetSourceString()
+		if i := strings.Index(src, "\n"); i != -1 {
+			src = src[:i]
+		}
+		fmt.Printf("%s%s\t\t%s\n", strings.Repeat("\t", node.Level()), aurora.Cyan(fmt.Sprintf("%T", node)), src)
+		return true
+	})
 	return nil
 }
