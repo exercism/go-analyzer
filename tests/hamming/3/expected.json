@@ -3,6 +3,7 @@
 	"comments": [
 		"go.hamming.use_zero_values_on_error_return",
 		"go.hamming.error_msg_not_capitalized_nor_punctuated",
-		"go.hamming.use_increase_operator"
+		"go.hamming.use_increase_operator",
+		"go.hamming.rune_index_used_with_bytes"
 	]
 }

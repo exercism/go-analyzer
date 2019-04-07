@@ -5,6 +5,7 @@ const (
 	MissingMainFunc      = "go.hamming.missing_distance_function"
 	FuncSignatureChanged = "go.hamming.distance_signature_changed"
 	MixtureRunesBytes    = "go.hamming.mixture_of_runes_and_bytes"
+	RuneByteIndex        = "go.hamming.rune_index_used_with_bytes"
 	DeclareWhenNeeded    = "go.hamming.declare_variable_when_needed_not_start_of_function"
 	ErrorMsgFormat       = "go.hamming.error_msg_not_capitalized_nor_punctuated"
 	IncreaseOperator     = "go.hamming.use_increase_operator"

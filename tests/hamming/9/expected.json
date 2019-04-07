@@ -8,7 +8,6 @@
 			}
 		},
 		"go.hamming.use_of_naked_returns",
-		"go.hamming.error_msg_not_capitalized_nor_punctuated",
-		"go.hamming.range_already_converts_to_slice_of_rune"
+		"go.hamming.error_msg_not_capitalized_nor_punctuated"
 	]
 }

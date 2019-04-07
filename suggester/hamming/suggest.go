@@ -20,8 +20,119 @@ var Register = sugg.Register{
 		examMultipleStringConversions,
 		examErrorMessage,
 		examIncrease,
+		examMixture,
+		examComparingBytes,
+		examStringSplit,
 	},
 	Severity: severity,
+}
+
+func examMixture(pkg *astrav.Package, suggs sugg.Suggester) {
+	loop := pkg.FindFirstByNodeType(astrav.NodeTypeForStmt)
+	if loop == nil {
+		loop = pkg.FindFirstByNodeType(astrav.NodeTypeRangeStmt)
+	}
+	if loop == nil {
+		return
+	}
+	loopType := getIndexType(loop)
+
+	nodes := loop.FindByNodeType(astrav.NodeTypeBinaryExpr)
+	for _, node := range nodes {
+		if node.Parent().IsNodeType(astrav.NodeTypeForStmt) || node.Parent().IsNodeType(astrav.NodeTypeRangeStmt) {
+			continue
+		}
+		expr := node.(*astrav.BinaryExpr)
+		var xType = getUnderlyingValType(expr.X())
+		var yType = getUnderlyingValType(expr.Y())
+		if xType != yType {
+			suggs.AppendUnique(MixtureRunesBytes)
+			return
+		}
+		if loopType != "" && (xType != "" && loopType != xType || yType != "" && loopType != yType) {
+			suggs.AppendUnique(RuneByteIndex)
+			return
+		}
+		if expr.X().IsValueType("byte") {
+			suggs.AppendUnique(ComparingBytes)
+		}
+	}
+}
+
+func getIndexType(node astrav.Node) string {
+	if node.IsNodeType(astrav.NodeTypeRangeStmt) {
+		rngType := node.(*astrav.RangeStmt).X().ValueType().String()
+		switch rngType {
+		case "string":
+			return "runebyte"
+		case "[]rune":
+			return "rune"
+		case "[]byte":
+			return "byte"
+		case "[]string":
+			return "string"
+		}
+		return ""
+	}
+	return ""
+}
+
+func getUnderlyingValType(node astrav.Node) string {
+	if node.IsNodeType(astrav.NodeTypeCallExpr) {
+		for _, n := range node.Children() {
+			if t := getUnderlyingValType(n); t != "" {
+				return t
+			}
+		}
+	}
+	if node.IsNodeType(astrav.NodeTypeIdent) && isOneOf(node.(astrav.Named).NodeName().Name, "byte", "string", "rune") {
+		return ""
+	}
+
+	if node.IsValueType("byte") {
+		return "byte"
+	}
+	if node.IsValueType("rune") {
+		return "rune"
+	}
+	if node.IsValueType("string") {
+		return "string"
+	}
+	return ""
+}
+
+func isOneOf(s string, strs ...string) bool {
+	for _, str := range strs {
+		if s == str {
+			return true
+		}
+	}
+	return false
+}
+
+func examStringSplit(pkg *astrav.Package, suggs sugg.Suggester) {
+	nodes := pkg.FindByName("Split")
+	for _, node := range nodes {
+		if node.GetSourceString() == "strings.Split" {
+			suggs.AppendUnique(StringsSplitUsed)
+		}
+	}
+}
+func examComparingBytes(pkg *astrav.Package, suggs sugg.Suggester) {
+	if suggs.HasSuggestion(MixtureRunesBytes) {
+		return
+	}
+	nodes := pkg.FindByNodeType(astrav.NodeTypeBinaryExpr)
+	for _, node := range nodes {
+		if node.NextParentByType(astrav.NodeTypeForStmt) == nil && node.NextParentByType(astrav.NodeTypeRangeStmt) == nil ||
+			node.Parent().IsNodeType(astrav.NodeTypeForStmt) || node.Parent().IsNodeType(astrav.NodeTypeRangeStmt) {
+			continue
+		}
+		expr := node.(*astrav.BinaryExpr)
+		if expr.X().IsValueType("byte") {
+			suggs.AppendUnique(ComparingBytes)
+		}
+	}
 }
 
 func examMainFunc(pkg *astrav.Package, suggs sugg.Suggester) {

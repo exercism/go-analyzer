@@ -5,6 +5,7 @@
 		"go.hamming.custom_error_created",
 		"go.general.remove_extra_variable",
 		"go.hamming.extra_if_strings_empty",
-		"go.hamming.range_with_byte_comparison"
+		"go.hamming.range_with_byte_comparison",
+		"go.hamming.rune_index_used_with_bytes"
 	]
 }
