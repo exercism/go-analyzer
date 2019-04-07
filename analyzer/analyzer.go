@@ -22,7 +22,7 @@ func Analyze(exercise string, path string) Result {
 		suggs.AppendUniquePH(sugg.SyntaxError, map[string]string{
 			"err": fmt.Sprintf("%v", err),
 		})
-		return getResult(0, suggs)
+		return getResult(exercise, 0, suggs)
 	}
 	if solution == nil {
 		return NewErrResult(errors.New("there doesn't seem to be any solution uploaded"))
@@ -35,7 +35,7 @@ func Analyze(exercise string, path string) Result {
 
 	suggester.Suggest(exercise, solution, suggs)
 
-	return getResult(patternRating, suggs)
+	return getResult(exercise, patternRating, suggs)
 }
 
 // CheckPattern checks if the given package matches any good pattern

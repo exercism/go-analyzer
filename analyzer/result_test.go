@@ -9,6 +9,7 @@ import (
 )
 
 var getResultTests = []struct {
+	exercise    string
 	goodPattern float64
 	comments    []string
 	result      Result
@@ -16,6 +17,7 @@ var getResultTests = []struct {
 	errors      []error
 }{
 	{
+		exercise:    "two-fer",
 		goodPattern: 1,
 		result: Result{
 			Status:   ApproveAsOptimal,
@@ -23,6 +25,7 @@ var getResultTests = []struct {
 		},
 	},
 	{
+		exercise:    "two-fer",
 		goodPattern: 0,
 		result: Result{
 			Status:   ReferToMentor,
@@ -30,6 +33,7 @@ var getResultTests = []struct {
 		},
 	},
 	{
+		exercise:    "two-fer",
 		goodPattern: 0,
 		comments:    []string{"go.two-fer.some_comment"},
 		result: Result{
@@ -38,6 +42,7 @@ var getResultTests = []struct {
 		},
 	},
 	{
+		exercise:    "two-fer",
 		goodPattern: 1,
 		comments:    []string{"go.two-fer.some_comment"},
 		result: Result{
@@ -46,6 +51,7 @@ var getResultTests = []struct {
 		},
 	},
 	{
+		exercise:    "two-fer",
 		goodPattern: 1,
 		comments:    []string{"go.two-fer.some_comment"},
 		result: Result{
@@ -56,6 +62,7 @@ var getResultTests = []struct {
 		severity: map[string]int{"go.two-fer.some_comment": 5},
 	},
 	{
+		exercise:    "two-fer",
 		goodPattern: 1,
 		result: Result{
 			Status:   ReferToMentor,
@@ -65,6 +72,7 @@ var getResultTests = []struct {
 		errors: []error{errors.New("some error")},
 	},
 	{
+		exercise:    "two-fer",
 		goodPattern: 1,
 		result: Result{
 			Status:   ApproveAsOptimal,
@@ -73,6 +81,7 @@ var getResultTests = []struct {
 		errors: []error{nil},
 	},
 	{
+		exercise:    "two-fer",
 		goodPattern: 0,
 		comments: []string{
 			"go.two-fer.some_comment",
@@ -107,7 +116,7 @@ func Test_getResult(t *testing.T) {
 			suggs.ReportError(err)
 		}
 
-		res := getResult(test.goodPattern, suggs)
+		res := getResult(test.exercise, test.goodPattern, suggs)
 
 		assert.Equal(t, test.result.Status, res.Status)
 		assert.Equal(t, test.result.Severity, res.Severity)

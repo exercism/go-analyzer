@@ -36,20 +36,39 @@ const (
 	Ejected               Status = "ejected"
 )
 
-func getResult(patternRating float64, suggReporter *sugg.SuggestionReport) Result {
-	comments, severity := suggReporter.GetComments()
+type patternReport struct {
+	PatternRating float64
+	OptimalLimit  float64
+	ApproveLimit  float64
+}
+
+func getResult(exercise string, patternRating float64, suggReporter *sugg.SuggestionReport) Result {
+	var (
+		comments, severity = suggReporter.GetComments()
+		errs               = suggReporter.GetErrors()
+		report             = getPatternReport(exercise, patternRating)
+	)
 	if comments == nil {
 		// make sure not to add nil to json
 		comments = []sugg.Comment{}
 	}
-	errs := suggReporter.GetErrors()
+	if report.OptimalLimit == 0 {
+		panic(fmt.Sprintf("Programming Error: missing pattern limits for `%s`", exercise))
+	}
+
 	return Result{
-		Status:   getStatus(patternRating, len(comments), severity, len(errs)),
+		Status:   getStatus(report, len(comments), severity, len(errs)),
 		Comments: comments,
 		Errors:   fmtErrors(errs),
 		Severity: severity,
 		Rating:   patternRating,
 	}
+}
+
+func getPatternReport(exercise string, rating float64) patternReport {
+	report := patternLimits[exercise]
+	report.PatternRating = rating
+	return report
 }
 
 func fmtErrors(errs []error) []string {
@@ -60,24 +79,19 @@ func fmtErrors(errs []error) []string {
 	return strs
 }
 
-var (
-	limitGoodPattern    = 0.99
-	limitAllowedPattern = 0.90
-)
-
-func getStatus(rating float64, comments, severity int, errors int) Status {
+func getStatus(pattern patternReport, comments, severity int, errors int) Status {
 	switch {
 	case errors != 0:
 		return ReferToMentor
 
-	case comments == 0 && rating <= limitGoodPattern:
+	case comments == 0 && pattern.PatternRating <= pattern.OptimalLimit:
 		return ReferToMentor
-	case comments == 0 && limitGoodPattern < rating:
+	case comments == 0 && pattern.OptimalLimit < pattern.PatternRating:
 		return ApproveAsOptimal
 
-	case limitAllowedPattern < rating && severity < 5:
+	case pattern.ApproveLimit < pattern.PatternRating && severity < 5:
 		return ApproveWithComment
-	case limitAllowedPattern < rating:
+	case pattern.ApproveLimit < pattern.PatternRating:
 		return DisapproveWithComment
 	case 5 <= severity:
 		return DisapproveWithComment
