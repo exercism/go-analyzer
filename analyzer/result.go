@@ -37,9 +37,12 @@ const (
 )
 
 type patternReport struct {
+	// PatternRating is the pattern similarity with the closest pattern
 	PatternRating float64
-	OptimalLimit  float64
-	ApproveLimit  float64
+	// OptimalLimit is the exercise limit (similarity) for approve as optimal
+	OptimalLimit float64
+	// ApproveLimit is the exercise limit (similarity) for approve with comments
+	ApproveLimit float64
 }
 
 func getResult(exercise string, patternRating float64, suggReporter *sugg.SuggestionReport) Result {
@@ -82,20 +85,27 @@ func fmtErrors(errs []error) []string {
 func getStatus(pattern patternReport, comments, severity int, errors int) Status {
 	switch {
 	case errors != 0:
+		// Some error(s) occured. Better leave it to a mentor.
 		return ReferToMentor
 
-	case comments == 0 && pattern.PatternRating <= pattern.OptimalLimit:
-		return ReferToMentor
 	case comments == 0 && pattern.OptimalLimit < pattern.PatternRating:
+		// The code is close enough to be approved as optimal and we have no suggestions.
 		return ApproveAsOptimal
+	case comments == 0 && pattern.PatternRating <= pattern.OptimalLimit:
+		// The code is not close enough to be approved as optimal, but we don't know how to improve it.
+		return ReferToMentor
 
 	case pattern.ApproveLimit < pattern.PatternRating && severity < 5:
+		// The code is close enough to approve, but we have minor improvement suggestions.
 		return ApproveWithComment
 	case pattern.ApproveLimit < pattern.PatternRating:
+		// The code is close to a good solution, but we found too much or bigger things to improve on.
 		return DisapproveWithComment
 	case 5 <= severity:
+		// The code is not close to a good solution, but the analyzer has enough suggestions to improve on.
 		return DisapproveWithComment
 	}
 
+	// Default: Better leave it to a mentor.
 	return ReferToMentor
 }
