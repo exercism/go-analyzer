@@ -2,15 +2,19 @@ package sugg
 
 // general comments
 const (
-	SyntaxError       = "go.general.syntax_error"
-	CommentSection    = "go.general.section_about_comments"
-	LenOfStringEqual  = "go.general.taking_length_of_string_to_check_empty"
-	MainFunction      = "go.general.remove_main_function_and_correct_package_name"
-	GoFmt             = "go.general.gofmt_not_used"
-	GoLint            = "go.general.golint_not_satisfied"
-	LengthSmallerZero = "go.general.length_smaller_zero_impossible"
-	ExtraVar          = "go.general.remove_extra_variable"
-	ExtraFunction     = "go.general.remove_extra_function"
+	SyntaxError        = "go.general.syntax_error"
+	CommentSection     = "go.general.section_about_comments"
+	LenOfStringEqual   = "go.general.taking_length_of_string_to_check_empty"
+	MainFunction       = "go.general.remove_main_function_and_correct_package_name"
+	GoFmt              = "go.general.gofmt_not_used"
+	GoLint             = "go.general.golint_not_satisfied"
+	LengthSmallerZero  = "go.general.length_smaller_zero_impossible"
+	ExtraVar           = "go.general.remove_extra_variable"
+	UseVarAssignment   = "go.general.use_variable_assignment"
+	ExtraFunction      = "go.general.remove_extra_function"
+	OmittedErrorMsg    = "go.general.omitted_error_message"
+	ErrorfWithoutParam = "go.general.fmt_errorf_without_parameter"
+	CustomErrorCreated = "go.general.custom_error_created"
 )
 
 // Severity defines how severe a comment is. A sum over all comments of 5 means no approval.
@@ -19,13 +23,17 @@ const (
 // should block approval?
 // We can be very strict on automated comments since the student has a very fast feedback loop.
 var severity = map[string]int{
-	SyntaxError:       5,
-	CommentSection:    0,
-	LenOfStringEqual:  2,
-	MainFunction:      5,
-	GoFmt:             5,
-	GoLint:            5,
-	LengthSmallerZero: 2,
-	ExtraVar:          3,
-	ExtraFunction:     5,
+	SyntaxError:        5,
+	CommentSection:     0,
+	LenOfStringEqual:   2,
+	MainFunction:       5,
+	GoFmt:              5,
+	GoLint:             5,
+	LengthSmallerZero:  2,
+	ExtraVar:           3,
+	UseVarAssignment:   1,
+	ExtraFunction:      5,
+	OmittedErrorMsg:    3,
+	ErrorfWithoutParam: 2,
+	CustomErrorCreated: 0,
 }

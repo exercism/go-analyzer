@@ -11,7 +11,6 @@ const (
 	IncreaseOperator     = "go.hamming.use_increase_operator"
 	InvertIf             = "go.hamming.invert_if_for_happy_path_on_left"
 	NakedReturns         = "go.hamming.use_of_naked_returns"
-	OmittedErrorMsg      = "go.hamming.omitted_error_message"
 	ZeroValueOnErr       = "go.hamming.use_zero_values_on_error_return"
 	RuneToByte           = "go.hamming.lossy_rune_to_byte_conversion"
 	ToStringConversion   = "go.hamming.rune_or_byte_to_string_conversion"
@@ -20,6 +19,7 @@ const (
 	DefineEmptyErr       = "go.hamming.defining_empty_error"
 	ReturnOnError        = "go.hamming.return_on_error_case"
 	CaseInsensitive      = "go.hamming.hamming_is_case_sensitive"
+	TrimSpaceUsed        = "go.hamming.strings_trim_space_used"
 )
 
 // Severity defines how severe a comment is. A sum over all comments of 5 means no approval.
@@ -31,15 +31,19 @@ var severity = map[string]int{
 	MissingMainFunc:      5,
 	FuncSignatureChanged: 5,
 	MixtureRunesBytes:    3,
+	RuneByteIndex:        2,
 	DeclareWhenNeeded:    1,
 	ErrorMsgFormat:       1,
 	IncreaseOperator:     2,
 	InvertIf:             3,
 	NakedReturns:         3,
-	OmittedErrorMsg:      3,
 	ZeroValueOnErr:       2,
 	RuneToByte:           3,
 	ToStringConversion:   3,
 	StringsSplitUsed:     5,
 	ComparingBytes:       0,
+	DefineEmptyErr:       1,
+	ReturnOnError:        3,
+	CaseInsensitive:      3,
+	TrimSpaceUsed:        0,
 }

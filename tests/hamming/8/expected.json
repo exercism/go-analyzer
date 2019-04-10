@@ -1,11 +1,30 @@
 {
-	"status": "refer_to_mentor",
+	"status": "disapprove_with_comment",
 	"comments": [
 		"go.hamming.use_zero_values_on_error_return",
-		"go.hamming.custom_error_created",
-		"go.general.remove_extra_variable",
+		"go.general.custom_error_created",
+		{
+			"comment": "go.general.remove_extra_variable",
+			"params": {
+				"name": "lenB"
+			}
+		},
+		{
+			"comment": "go.general.use_variable_assignment",
+			"params": {
+				"line": "lenA, lenB int",
+				"name": "lenA"
+			}
+		},
+		{
+			"comment": "go.general.use_variable_assignment",
+			"params": {
+				"line": "lenA, lenB int",
+				"name": "lenB"
+			}
+		},
 		"go.hamming.extra_if_strings_empty",
-		"go.hamming.range_with_byte_comparison",
-		"go.hamming.rune_index_used_with_bytes"
+		"go.hamming.rune_index_used_with_bytes",
+		"go.hamming.comparing_bytes"
 	]
 }

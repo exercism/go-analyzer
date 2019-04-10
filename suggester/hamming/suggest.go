@@ -13,7 +13,6 @@ var Register = sugg.Register{
 	Funcs: []sugg.SuggestionFunc{
 		examMainFunc,
 		examReturns,
-		examNoErrorMsg,
 		examInvertIf,
 		examDeclareWhenNeeded,
 		examRuneToByte,
@@ -26,8 +25,16 @@ var Register = sugg.Register{
 		examDefineError,
 		examReturnOnError,
 		examCaseInsensitive,
+		examTrimSpace,
 	},
 	Severity: severity,
+}
+
+func examTrimSpace(pkg *astrav.Package, suggs sugg.Suggester) {
+	nodes := pkg.FindByName("TrimSpace")
+	if len(nodes) != 0 {
+		suggs.AppendUnique(TrimSpaceUsed)
+	}
 }
 
 // checks if the hamming distance is made case insensitive -- which is not tested for but should not be done
@@ -230,29 +237,6 @@ func examReturns(pkg *astrav.Package, suggs sugg.Suggester) {
 			if lit.(*astrav.BasicLit).Value != "0" {
 				suggs.AppendUnique(ZeroValueOnErr)
 			}
-		}
-	}
-}
-
-// check if an empty error message was provided
-func examNoErrorMsg(pkg *astrav.Package, suggs sugg.Suggester) {
-	nodes := pkg.FindByName("New")
-	for _, node := range nodes {
-		if !node.IsNodeType(astrav.NodeTypeSelectorExpr) {
-			continue
-		}
-		selExpr := node.(*astrav.SelectorExpr)
-		if selExpr.PackageName().Name != "errors" {
-			continue
-		}
-
-		bLit := selExpr.Parent().FindFirstByNodeType(astrav.NodeTypeBasicLit)
-		if bLit == nil {
-			continue
-		}
-
-		if bLit.(*astrav.BasicLit).Value == `""` {
-			suggs.AppendUnique(OmittedErrorMsg)
 		}
 	}
 }

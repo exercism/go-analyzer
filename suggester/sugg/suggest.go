@@ -1,6 +1,8 @@
 package sugg
 
 import (
+	"strings"
+
 	"github.com/tehsphinx/astrav"
 )
 
@@ -10,11 +12,16 @@ var GeneralRegister = Register{
 		examGoFmt,
 		examGoLint,
 		examMainFunction,
-		examLenComparison,
+		examStringLenComparison,
+		examNoErrorMsg,
+		examErrorfWithoutParams,
+		examCustomError,
+		examExtraVariable,
 	},
 	Severity: severity,
 }
 
+// checks if gofmt was applied
 func examGoFmt(pkg *astrav.Package, suggs Suggester) {
 	files := pkg.GetRawFiles()
 	res := fmtCode(files)
@@ -27,6 +34,7 @@ func examGoFmt(pkg *astrav.Package, suggs Suggester) {
 	})
 }
 
+// checks if golint is happy
 func examGoLint(pkg *astrav.Package, suggs Suggester) {
 	files := pkg.GetRawFiles()
 	res := lintCode(files)
@@ -39,6 +47,7 @@ func examGoLint(pkg *astrav.Package, suggs Suggester) {
 	})
 }
 
+// checks if a `main` function was declared
 func examMainFunction(pkg *astrav.Package, suggs Suggester) {
 	mainFunc := pkg.FuncDeclByName("main")
 	if mainFunc != nil {
@@ -46,7 +55,8 @@ func examMainFunction(pkg *astrav.Package, suggs Suggester) {
 	}
 }
 
-func examLenComparison(pkg *astrav.Package, suggs Suggester) {
+// examins if emptyness of a string was checked by taking its length
+func examStringLenComparison(pkg *astrav.Package, suggs Suggester) {
 	nodes := pkg.FindByNodeType(astrav.NodeTypeBinaryExpr)
 	for _, node := range nodes {
 		bin := node.(*astrav.BinaryExpr)
@@ -94,6 +104,94 @@ func examLenComparison(pkg *astrav.Package, suggs Suggester) {
 		}
 		if foundString {
 			suggs.AppendUnique(LenOfStringEqual)
+		}
+	}
+}
+
+// check if an empty error message was provided
+func examNoErrorMsg(pkg *astrav.Package, suggs Suggester) {
+	nodes := pkg.FindByName("New")
+	for _, node := range nodes {
+		if !node.IsNodeType(astrav.NodeTypeSelectorExpr) {
+			continue
+		}
+		selExpr := node.(*astrav.SelectorExpr)
+		if selExpr.PackageName().Name != "errors" {
+			continue
+		}
+
+		bLit := selExpr.Parent().FindFirstByNodeType(astrav.NodeTypeBasicLit)
+		if bLit == nil {
+			continue
+		}
+
+		if bLit.(*astrav.BasicLit).Value == `""` {
+			suggs.AppendUnique(OmittedErrorMsg)
+		}
+	}
+}
+
+// checks if fmt.Errorf was used without params instead of errors.New
+func examErrorfWithoutParams(pkg *astrav.Package, suggs Suggester) {
+	nodes := pkg.FindByName("Errorf")
+	for _, node := range nodes {
+		if !node.IsNodeType(astrav.NodeTypeSelectorExpr) {
+			continue
+		}
+		var count int
+		for _, ch := range node.Parent().Children() {
+			if ch.IsNodeType(astrav.NodeTypeSelectorExpr) {
+				continue
+			}
+			count++
+		}
+		if count == 1 {
+			suggs.AppendUnique(ErrorfWithoutParam)
+		}
+	}
+}
+
+// checks a custom error was created
+func examCustomError(pkg *astrav.Package, suggs Suggester) {
+	nodes := pkg.FindByName("Error")
+	for _, node := range nodes {
+		if !node.IsNodeType(astrav.NodeTypeFuncDecl) {
+			continue
+		}
+		funcType := node.ChildByNodeType(astrav.NodeTypeFuncType)
+		if funcType == nil {
+			continue
+		}
+		if strings.HasSuffix(funcType.GetSourceString(), "Error() string") {
+			suggs.AppendUnique(CustomErrorCreated)
+		}
+	}
+}
+
+func examExtraVariable(pkg *astrav.Package, suggs Suggester) {
+	decls := pkg.FindVarDeclarations()
+	for _, decl := range decls {
+		_, declScope := decl.GetScope()
+		usages := pkg.FindUsages(decl)
+		usageCount := len(usages)
+		for _, usage := range usages {
+			if !usage.Parent().IsNodeType(astrav.NodeTypeAssignStmt) {
+				continue
+			}
+			_, usageScope := usage.GetScope()
+			lhs := usage.Parent().(*astrav.AssignStmt).LHS()
+			if len(lhs) == 1 && lhs[0] == usage && usageScope == declScope {
+				usageCount--
+				suggs.AppendUniquePH(UseVarAssignment, map[string]string{
+					"name": decl.Name,
+					"line": decl.Parent().GetSourceString(),
+				})
+			}
+		}
+		if usageCount < 2 {
+			suggs.AppendUniquePH(ExtraVar, map[string]string{
+				"name": decl.Name,
+			})
 		}
 	}
 }
