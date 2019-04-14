@@ -15,10 +15,11 @@ import (
 )
 
 var (
-	exercise    = flag.String("exercise", "", "exercise slug (e.g. 'two-fer'). All sub-dirs must contain this exercise!")
-	parentDir   = flag.String("parentDir", "", "run analyzer for all sub-directories in this folder")
-	output      = flag.String("output", "analysis.json", "name of the output file")
-	printStatus = flag.String("printStatus", "", "prints out every folder with the provided status")
+	exercise     = flag.String("exercise", "", "exercise slug (e.g. 'two-fer'). All sub-dirs must contain this exercise!")
+	parentDir    = flag.String("parentDir", "", "run analyzer for all sub-directories in this folder")
+	output       = flag.String("output", "analysis.json", "name of the output file")
+	printStatus  = flag.String("printStatus", "", "prints out every folder with the provided status")
+	minPrintDiff = flag.Float64("minPrintDiff", 1, "prints out all diffs above set rating")
 )
 
 func main() {
@@ -44,8 +45,18 @@ func main() {
 		}
 
 		if res.Status == analyzer.Status(*printStatus) {
-			fmt.Printf("Status %s: %s (%s)\n",
-				*printStatus, path.Join(*parentDir, dir, fileName), path.Join(*parentDir, dir, "expected.json:1"))
+			var minDiff string
+			if *minPrintDiff <= res.Rating {
+				minDiff = res.MinDiff
+			}
+			fmt.Printf("Status %s: severity: %d, rating: %.2f, path: %s (%s)\n%s",
+				*printStatus,
+				res.Severity,
+				res.Rating,
+				path.Join(*parentDir, dir, fileName),
+				path.Join(*parentDir, dir, *output+":1"),
+				minDiff,
+			)
 		}
 
 		bytes, err := json.MarshalIndent(res, "", "\t")

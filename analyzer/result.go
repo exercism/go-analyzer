@@ -22,6 +22,7 @@ type Result struct {
 	Errors   []string       `json:"errors,omitempty"`
 	Severity int            `json:"-"`
 	Rating   float64        `json:"-"`
+	MinDiff  string         `json:"-"`
 }
 
 // Status defines the status of a solution to be acted upon by exercism.
@@ -36,41 +37,37 @@ const (
 	Ejected               Status = "ejected"
 )
 
-type patternReport struct {
-	// PatternRating is the pattern similarity with the closest pattern
-	PatternRating float64
-	// OptimalLimit is the exercise limit (similarity) for approve as optimal
-	OptimalLimit float64
-	// ApproveLimit is the exercise limit (similarity) for approve with comments
-	ApproveLimit float64
-}
-
-func getResult(exercise string, patternRating float64, suggReporter *sugg.SuggestionReport) Result {
+func getResult(exercise string, pattReport *PatternReport, suggReporter *sugg.SuggestionReport) Result {
 	var (
 		comments, severity = suggReporter.GetComments()
 		errs               = suggReporter.GetErrors()
-		report             = getPatternReport(exercise, patternRating)
 	)
+	if pattReport == nil {
+		pattReport = &PatternReport{}
+	}
+	addLimits(exercise, pattReport)
 	if comments == nil {
 		// make sure not to add nil to json
 		comments = []sugg.Comment{}
 	}
-	if report.OptimalLimit == 0 {
+	if pattReport.OptimalLimit == 0 {
 		panic(fmt.Sprintf("Programming Error: missing pattern limits for `%s`", exercise))
 	}
 
 	return Result{
-		Status:   getStatus(report, len(comments), severity, len(errs)),
+		Status:   getStatus(pattReport, len(comments), severity, len(errs)),
 		Comments: comments,
 		Errors:   fmtErrors(errs),
 		Severity: severity,
-		Rating:   patternRating,
+		Rating:   pattReport.PatternRating,
+		MinDiff:  pattReport.MinDiff,
 	}
 }
 
-func getPatternReport(exercise string, rating float64) patternReport {
-	report := patternLimits[exercise]
-	report.PatternRating = rating
+func addLimits(exercise string, report *PatternReport) *PatternReport {
+	limits := patternLimits[exercise]
+	report.OptimalLimit = limits.OptimalLimit
+	report.ApproveLimit = limits.ApproveLimit
 	return report
 }
 
@@ -82,7 +79,7 @@ func fmtErrors(errs []error) []string {
 	return strs
 }
 
-func getStatus(pattern patternReport, comments, severity int, errors int) Status {
+func getStatus(pattern *PatternReport, comments, severity int, errors int) Status {
 	switch {
 	case errors != 0:
 		// Some error(s) occured. Better leave it to a mentor.

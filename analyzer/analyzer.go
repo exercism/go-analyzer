@@ -22,27 +22,45 @@ func Analyze(exercise string, path string) Result {
 		suggs.AppendUniquePH(sugg.SyntaxError, map[string]string{
 			"err": fmt.Sprintf("%v", err),
 		})
-		return getResult(exercise, 0, suggs)
+		return getResult(exercise, nil, suggs)
 	}
 	if solution == nil {
 		return NewErrResult(errors.New("there doesn't seem to be any solution uploaded"))
 	}
 
-	patternRating, _, err := CheckPattern(exercise, solution)
+	pattReport, err := CheckPattern(exercise, solution)
 	if err != nil {
 		return NewErrResult(err)
 	}
 
 	suggester.Suggest(exercise, solution, suggs)
 
-	return getResult(exercise, patternRating, suggs)
+	return getResult(exercise, pattReport, suggs)
+}
+
+// PatternReport contain information on pattern matching
+type PatternReport struct {
+	// PatternRating is the pattern similarity with the closest pattern
+	PatternRating float64
+	// OptimalLimit is the exercise limit (similarity) for approve as optimal
+	OptimalLimit float64
+	// ApproveLimit is the exercise limit (similarity) for approve with comments
+	ApproveLimit float64
+	// Match is true if one of the patterns was a perfect match
+	PerfectMatch bool
+	// MinDiff is a git-like diff to the closest pattern
+	MinDiff string
 }
 
 // CheckPattern checks if the given package matches any good pattern
-func CheckPattern(exercise string, solution *astrav.Package) (float64, bool, error) {
+func CheckPattern(exercise string, solution *astrav.Package) (*PatternReport, error) {
 	patterns, err := assets.LoadPatterns(exercise)
-	_, ratio, ok := astpatt.DiffPatterns(patterns, solution)
-	return ratio, ok, err
+	minDiff, ratio, ok := astpatt.DiffPatterns(patterns, solution)
+	return &PatternReport{
+		PatternRating: ratio,
+		MinDiff:       minDiff,
+		PerfectMatch:  ok,
+	}, err
 }
 
 // LoadPackage loads a go package from a folder
