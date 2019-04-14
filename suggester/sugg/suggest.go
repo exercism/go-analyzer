@@ -183,6 +183,9 @@ func examExtraVariable(pkg *astrav.Package, suggs Suggester) {
 			usageCount = len(pkg.FindUsages(decl))
 			firstUsage = pkg.FindFirstUsage(decl)
 		)
+		if firstUsage == nil {
+			continue
+		}
 		if canBeCombined(decl, firstUsage) {
 			usageCount--
 			suggs.AppendUniquePH(UseVarAssignment, map[string]string{

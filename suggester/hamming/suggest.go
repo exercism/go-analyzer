@@ -107,6 +107,9 @@ func examReturnOnError(pkg *astrav.Package, suggs sugg.Suggester) {
 
 	for _, node := range nodes {
 		ifStmt := node.NextParentByType(astrav.NodeTypeIfStmt)
+		if ifStmt == nil {
+			continue
+		}
 		returns := ifStmt.FindByNodeType(astrav.NodeTypeReturnStmt)
 		if len(returns) == 0 {
 			suggs.AppendUnique(ReturnOnError)
