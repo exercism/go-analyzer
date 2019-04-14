@@ -36,10 +36,12 @@ func examMainFunc(pkg *astrav.Package, suggs sugg.Suggester) {
 		return
 	}
 
-	if len(main.Params().Children()) != 1 {
+	params := main.Params()
+	if params == nil || len(params.Children()) != 1 {
 		suggs.AppendUnique(FuncSignatureChanged)
 	}
-	if len(main.Results().Children()) != 1 {
+	results := main.Results()
+	if results == nil || len(results.Children()) != 1 {
 		suggs.AppendUnique(FuncSignatureChanged)
 	}
 }

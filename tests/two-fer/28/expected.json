@@ -1,0 +1,18 @@
+{
+	"status": "disapprove_with_comment",
+	"comments": [
+		{
+			"comment": "go.general.golint_not_satisfied",
+			"params": {
+				"golint": "comments: comment on exported function ShareWith should be of the form \"ShareWith ...\"\n\ttests/two-fer/28/two_fer.go:12:1\n\tdoc: https://golang.org/wiki/CodeReviewComments#doc-comments\n"
+			}
+		},
+		"go.general.remove_main_function_and_correct_package_name",
+		"go.two_fer.sharewith_signature_changed",
+		"go.two_fer.plus_used_for_concatenation",
+		"go.two_fer.replace_stub_comments",
+		"go.two_fer.missing_package_comment",
+		"go.general.section_about_comments",
+		"go.two_fer.wrong_function_comment"
+	]
+}
