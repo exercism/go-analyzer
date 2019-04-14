@@ -1,0 +1,10 @@
+{
+	"status": "disapprove_with_comment",
+	"comments": [
+		"go.hamming.defining_empty_error",
+		"go.hamming.return_on_error_case",
+		"go.hamming.hamming_is_case_sensitive",
+		"go.hamming.rune_or_byte_to_string_conversion",
+		"go.hamming.mixture_of_runes_and_bytes"
+	]
+}
