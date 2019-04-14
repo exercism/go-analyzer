@@ -30,7 +30,6 @@ linters:
     - golint
     - unconvert
     - dupl
-    - goconst
     - gocyclo
     - goimports
     - maligned

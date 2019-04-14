@@ -77,7 +77,7 @@ func examStringLenComparison(pkg *astrav.Package, suggs Suggester) {
 		)
 		for _, ident := range idents {
 			id := ident.(*astrav.Ident)
-			if id.NodeName().String() == "len" {
+			if id.NodeName() == "len" {
 				foundLen = true
 			} else if id.ValueType().String() == "string" {
 				foundString = true
@@ -110,7 +110,7 @@ func examStringLenComparison(pkg *astrav.Package, suggs Suggester) {
 
 // check if an empty error message was provided
 func examNoErrorMsg(pkg *astrav.Package, suggs Suggester) {
-	nodes := pkg.FindByName("New")
+	nodes := pkg.FindByName("errors.New")
 	for _, node := range nodes {
 		if !node.IsNodeType(astrav.NodeTypeSelectorExpr) {
 			continue
@@ -133,7 +133,7 @@ func examNoErrorMsg(pkg *astrav.Package, suggs Suggester) {
 
 // checks if fmt.Errorf was used without params instead of errors.New
 func examErrorfWithoutParams(pkg *astrav.Package, suggs Suggester) {
-	nodes := pkg.FindByName("Errorf")
+	nodes := pkg.FindByName("fmt.Errorf")
 	for _, node := range nodes {
 		if !node.IsNodeType(astrav.NodeTypeSelectorExpr) {
 			continue
@@ -168,30 +168,65 @@ func examCustomError(pkg *astrav.Package, suggs Suggester) {
 	}
 }
 
+var excludeVarTypes = []string{
+	"*bufio.Reader",
+}
+
 func examExtraVariable(pkg *astrav.Package, suggs Suggester) {
 	decls := pkg.FindVarDeclarations()
 	for _, decl := range decls {
-		_, declScope := decl.GetScope()
-		usages := pkg.FindUsages(decl)
-		usageCount := len(usages)
-		for _, usage := range usages {
-			if !usage.Parent().IsNodeType(astrav.NodeTypeAssignStmt) {
-				continue
-			}
-			_, usageScope := usage.GetScope()
-			lhs := usage.Parent().(*astrav.AssignStmt).LHS()
-			if len(lhs) == 1 && lhs[0] == usage && usageScope == declScope {
-				usageCount--
-				suggs.AppendUniquePH(UseVarAssignment, map[string]string{
+		if isExcludeType(decl) {
+			continue
+		}
+
+		var (
+			usageCount = len(pkg.FindUsages(decl))
+			firstUsage = pkg.FindFirstUsage(decl)
+		)
+		if canBeCombined(decl, firstUsage) {
+			usageCount--
+			suggs.AppendUniquePH(UseVarAssignment, map[string]string{
+				"name": decl.Name,
+				"line": decl.NextParentByType(astrav.NodeTypeGenDecl).GetSourceString(),
+			})
+		}
+
+		if usageCount == 1 {
+			_, declScope := decl.GetScope()
+			_, usageScope := firstUsage.GetScope()
+			if usageScope == declScope {
+				suggs.AppendUniquePH(ExtraVar, map[string]string{
 					"name": decl.Name,
-					"line": decl.Parent().GetSourceString(),
 				})
 			}
 		}
-		if usageCount < 2 {
-			suggs.AppendUniquePH(ExtraVar, map[string]string{
-				"name": decl.Name,
-			})
+	}
+}
+
+func canBeCombined(decl, firstUsage *astrav.Ident) bool {
+	// only if the declaration itself is not an assign statement,
+	// check if we can make it an assign statement because we assign it after anyway
+	if decl.Parent().IsNodeType(astrav.NodeTypeAssignStmt) {
+		return false
+	}
+	if !firstUsage.Parent().IsNodeType(astrav.NodeTypeAssignStmt) {
+		return false
+	}
+	_, usageScope := firstUsage.GetScope()
+	_, declScope := decl.GetScope()
+	if usageScope != declScope {
+		return false
+	}
+
+	lhs := firstUsage.Parent().(*astrav.AssignStmt).LHS()
+	return len(lhs) == 1 && lhs[0] == firstUsage
+}
+
+func isExcludeType(node astrav.Node) bool {
+	for _, varType := range excludeVarTypes {
+		if node.IsValueType(varType) {
+			return true
 		}
 	}
+	return false
 }

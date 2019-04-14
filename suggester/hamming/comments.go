@@ -20,6 +20,9 @@ const (
 	ReturnOnError        = "go.hamming.return_on_error_case"
 	CaseInsensitive      = "go.hamming.hamming_is_case_sensitive"
 	TrimSpaceUsed        = "go.hamming.strings_trim_space_used"
+	ExtraIfStringsEmpty  = "go.hamming.extra_if_strings_empty"
+	MinSliceRuneConv     = "go.hamming.minimize_slice_of_rune_conversions"
+	CompBytesInDisguise  = "go.hamming.comparing_bytes_disguised_as_runes"
 )
 
 // Severity defines how severe a comment is. A sum over all comments of 5 means no approval.
@@ -46,4 +49,7 @@ var severity = map[string]int{
 	ReturnOnError:        3,
 	CaseInsensitive:      3,
 	TrimSpaceUsed:        0,
+	ExtraIfStringsEmpty:  0,
+	MinSliceRuneConv:     2,
+	CompBytesInDisguise:  5,
 }

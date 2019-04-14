@@ -12,14 +12,14 @@
 		{
 			"comment": "go.general.use_variable_assignment",
 			"params": {
-				"line": "lenA, lenB int",
+				"line": "var lenA, lenB int",
 				"name": "lenA"
 			}
 		},
 		{
 			"comment": "go.general.use_variable_assignment",
 			"params": {
-				"line": "lenA, lenB int",
+				"line": "var lenA, lenB int",
 				"name": "lenB"
 			}
 		},

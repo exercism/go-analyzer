@@ -45,7 +45,7 @@ func examMainFunc(pkg *astrav.Package, suggs sugg.Suggester) {
 }
 
 func examStringsTrimSpace(pkg *astrav.Package, suggs sugg.Suggester) {
-	nodes := pkg.FindByName("TrimSpace")
+	nodes := pkg.FindByName("strings.TrimSpace")
 	if len(nodes) != 0 {
 		suggs.AppendUnique(TrimSpace)
 	}
@@ -80,7 +80,7 @@ func examExtraVariable(pkg *astrav.Package, suggs sugg.Suggester) {
 			if !node.IsNodeType(astrav.NodeTypeIdent) {
 				continue
 			}
-			if node.(astrav.Named).NodeName().Name == paramName.Name {
+			if node.(astrav.Named).NodeName() == paramName {
 				suggs.AppendUnique(ExtraNameVar)
 			}
 		}
@@ -90,8 +90,8 @@ func examExtraVariable(pkg *astrav.Package, suggs sugg.Suggester) {
 			if !node.IsNodeType(astrav.NodeTypeIdent) {
 				continue
 			}
-			varName := node.(astrav.Named).NodeName().Name
-			if varName != paramName.Name {
+			varName := node.(astrav.Named).NodeName()
+			if varName != paramName {
 				suggs.AppendUniquePH(sugg.ExtraVar, map[string]string{
 					"name": varName,
 				})
@@ -139,7 +139,7 @@ func examPlusUsed(pkg *astrav.Package, suggs sugg.Suggester) {
 }
 
 func examFmt(pkg *astrav.Package, suggs sugg.Suggester) {
-	nodes := pkg.FindByName("Sprintf")
+	nodes := pkg.FindByName("fmt.Sprintf")
 
 	var spfCount int
 	for _, fmtSprintf := range nodes {

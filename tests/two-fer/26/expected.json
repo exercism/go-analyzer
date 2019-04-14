@@ -10,6 +10,13 @@
 			"params": {
 				"name": "res"
 			}
+		},
+		{
+			"comment": "go.general.use_variable_assignment",
+			"params": {
+				"name": "res",
+				"line": "var res string"
+			}
 		}
 	]
 }

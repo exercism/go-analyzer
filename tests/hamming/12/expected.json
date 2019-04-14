@@ -1,6 +1,7 @@
 {
 	"status": "disapprove_with_comment",
 	"comments": [
-		"go.hamming.rune_index_used_with_bytes"
+		"go.hamming.rune_index_used_with_bytes",
+		"go.hamming.comparing_bytes_disguised_as_runes"
 	]
 }

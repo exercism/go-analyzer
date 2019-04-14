@@ -7,6 +7,12 @@
 				"golint": "indent: if block ends with a return statement, so drop this else and outdent its block\n\ttests/two-fer/19/two_fer.go:33:9\n\tdoc: https://golang.org/wiki/CodeReviewComments#indent-error-flow\n"
 			}
 		},
+		{
+			"comment": "go.general.remove_extra_variable",
+			"params": {
+				"name": "yourName"
+			}
+		},
 		"go.general.remove_main_function_and_correct_package_name",
 		"go.two_fer.replace_stub_comments"
 	]

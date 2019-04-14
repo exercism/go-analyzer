@@ -37,33 +37,52 @@ func TestAnalyze(t *testing.T) {
 		}
 
 		for _, dir := range paths {
+			if runOnly != "" && runOnly != dir {
+				continue
+			}
+			res := analyzer.Analyze(exercise, dir)
+
+			// if a specific exercise is set print ast for orientation while implementing
 			if runOnly != "" {
-				if runOnly != dir {
-					continue
-				}
-				// print ast for orientation while implementing
 				if err := printAST(dir); err != nil {
 					t.Fatal(err)
 				}
 			}
-			res := analyzer.Analyze(exercise, dir)
+
 			expected, err := GetExpected(dir)
 			if err != nil {
 				t.Errorf("error getting TestResult for path %s: %s", dir, err)
 			}
 
-			assert.Equal(t, expected.Status, res.Status,
-				fmt.Sprintf("Wrong status on %s (severity: %d, rating: %.2f)", dir, res.Severity, res.Rating))
+			var fail bool
+			if !assert.Equal(t, expected.Status, res.Status,
+				fmt.Sprintf("Wrong status on %s (severity: %d, rating: %.2f)", dir, res.Severity, res.Rating)) {
+				fail = true
+			}
 
-			checkContains(t, expected.Comments, res.Comments, "Missing comment", dir)
-			checkContains(t, res.Comments, expected.Comments, "Additional comment", dir)
+			if checkContains(t, expected.Comments, res.Comments, "Missing comment", dir) {
+				fail = true
+			}
+			if checkContains(t, res.Comments, expected.Comments, "Additional comment", dir) {
+				fail = true
+			}
 
-			checkContainsError(t, expected.Errors, res.Errors, dir)
+			if checkContainsError(t, expected.Errors, res.Errors, dir) {
+				fail = true
+			}
+
+			if fail {
+				diff, err := resultDiff(*expected, res)
+				if err != nil {
+					t.Error(err)
+				}
+				t.Errorf("Diff on %s\n%s", dir, diff)
+			}
 		}
 	}
 }
 
-func checkContains(t *testing.T, search, container []sugg.Comment, message, dir string) {
+func checkContains(t *testing.T, search, container []sugg.Comment, message, dir string) (fail bool) {
 	for _, comment := range search {
 		var (
 			diff     string
@@ -77,15 +96,19 @@ func checkContains(t *testing.T, search, container []sugg.Comment, message, dir 
 				msg = "Different parameters on comment"
 				diff, err = commentDiff(comment, cmt)
 				if err != nil {
+					fail = true
 					t.Error(err)
 				}
 			}
 		}
-		assert.True(t, contains, fmt.Sprintf("%s `%s` on %s\n%s", msg, comment.ID(), dir, diff))
+		if !assert.True(t, contains, fmt.Sprintf("%s `%s` on %s\n%s", msg, comment.ID(), dir, diff)) {
+			fail = true
+		}
 	}
+	return fail
 }
 
-func checkContainsError(t *testing.T, expected, got []string, dir string) {
+func checkContainsError(t *testing.T, expected, got []string, dir string) (fail bool) {
 	for _, err := range expected {
 		var found bool
 		for _, gotErr := range got {
@@ -93,7 +116,9 @@ func checkContainsError(t *testing.T, expected, got []string, dir string) {
 				found = true
 			}
 		}
-		assert.True(t, found, "missing error analyzing the solution %s: %s", dir, err)
+		if !assert.True(t, found, "missing error analyzing the solution %s: %s", dir, err) {
+			fail = true
+		}
 	}
 
 	for _, gotErr := range got {
@@ -103,8 +128,11 @@ func checkContainsError(t *testing.T, expected, got []string, dir string) {
 				found = true
 			}
 		}
-		assert.True(t, found, "unexpected error analyzing the solution %s: %s", dir, gotErr)
+		if !assert.True(t, found, "unexpected error analyzing the solution %s: %s", dir, gotErr) {
+			fail = true
+		}
 	}
+	return fail
 }
 
 // ExercisesWithTests returns a list of exercise slugs for which tests are provided.
@@ -179,6 +207,19 @@ func commentDiff(expected, got sugg.Comment) (string, error) {
 		return "", err
 	}
 	return getDiff(expectedB, gotB), nil
+}
+
+func resultDiff(expected, got analyzer.Result) (string, error) {
+	expB, err := json.MarshalIndent(expected, "", "\t")
+	if err != nil {
+		return "", err
+	}
+	gotB, err := json.MarshalIndent(got, "", "\t")
+	if err != nil {
+		return "", err
+	}
+	diff := getDiff(expB, gotB)
+	return diff, nil
 }
 
 func getDiff(expected, got []byte) string {

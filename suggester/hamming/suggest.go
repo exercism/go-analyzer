@@ -26,12 +26,64 @@ var Register = sugg.Register{
 		examReturnOnError,
 		examCaseInsensitive,
 		examTrimSpace,
+		examExtraIfEmpty,
+		examSliceRuneConv,
 	},
 	Severity: severity,
 }
 
+func examSliceRuneConv(pkg *astrav.Package, suggs sugg.Suggester) {
+	nodes := pkg.FindByName("[]rune")
+	conversions := map[string]int{}
+	for _, node := range nodes {
+		if !node.IsNodeType(astrav.NodeTypeCallExpr) {
+			continue
+		}
+
+		name := node.ChildByNodeType(astrav.NodeTypeIdent).(astrav.Named).NodeName()
+		conversions[name]++
+	}
+	for varName, count := range conversions {
+		if 1 < count {
+			suggs.AppendUniquePH(MinSliceRuneConv, map[string]string{
+				"name": varName,
+			})
+		}
+	}
+}
+
+// checks code for an extra `if string(s) are empty` condition
+func examExtraIfEmpty(pkg *astrav.Package, suggs sugg.Suggester) {
+	main := pkg.FuncDeclByName("Distance")
+	if main == nil {
+		return
+	}
+	ifs := pkg.FindByNodeType(astrav.NodeTypeIfStmt)
+	if len(ifs) < 3 {
+		return
+	}
+
+	returns := main.FindByNodeType(astrav.NodeTypeReturnStmt)
+	for _, node := range returns {
+		children := node.Children()
+		if len(children) != 2 {
+			continue
+		}
+		if !children[0].IsNodeType(astrav.NodeTypeBasicLit) ||
+			children[0].(*astrav.BasicLit).Value != "0" {
+			continue
+		}
+		if !children[1].IsNodeType(astrav.NodeTypeIdent) ||
+			children[1].(*astrav.Ident).Name != "nil" {
+			continue
+		}
+		suggs.AppendUnique(ExtraIfStringsEmpty)
+	}
+}
+
+// checks if `strings.TrimSpace` was used
 func examTrimSpace(pkg *astrav.Package, suggs sugg.Suggester) {
-	nodes := pkg.FindByName("TrimSpace")
+	nodes := pkg.FindByName("strings.TrimSpace")
 	if len(nodes) != 0 {
 		suggs.AppendUnique(TrimSpaceUsed)
 	}
@@ -39,8 +91,10 @@ func examTrimSpace(pkg *astrav.Package, suggs sugg.Suggester) {
 
 // checks if the hamming distance is made case insensitive -- which is not tested for but should not be done
 func examCaseInsensitive(pkg *astrav.Package, suggs sugg.Suggester) {
-	nodes := pkg.FindByName("ToLower")
-	nodes = append(nodes, pkg.FindByName("ToUpper")...)
+	nodes := pkg.FindByName("strings.ToLower")
+	nodes = append(nodes, pkg.FindByName("strings.ToUpper")...)
+	nodes = append(nodes, pkg.FindByName("unicode.ToLower")...)
+	nodes = append(nodes, pkg.FindByName("unicode.ToUpper")...)
 	if len(nodes) != 0 {
 		suggs.AppendUnique(CaseInsensitive)
 	}
@@ -48,8 +102,8 @@ func examCaseInsensitive(pkg *astrav.Package, suggs sugg.Suggester) {
 
 // checks if an error is being returned right away. It should be.
 func examReturnOnError(pkg *astrav.Package, suggs sugg.Suggester) {
-	nodes := pkg.FindByName("New")
-	nodes = append(nodes, pkg.FindByName("Errorf")...)
+	nodes := pkg.FindByName("errors.New")
+	nodes = append(nodes, pkg.FindByName("fmt.Errorf")...)
 
 	for _, node := range nodes {
 		ifStmt := node.NextParentByType(astrav.NodeTypeIfStmt)
@@ -68,7 +122,7 @@ func examDefineError(pkg *astrav.Package, suggs sugg.Suggester) {
 			continue
 		}
 		for _, child := range node.Children() {
-			if named, ok := child.(astrav.Named); ok && named.NodeName().Name == "nil" {
+			if named, ok := child.(astrav.Named); ok && named.NodeName() == "nil" {
 				suggs.AppendUnique(DefineEmptyErr)
 			}
 		}
@@ -134,7 +188,7 @@ func getUnderlyingValType(node astrav.Node) string {
 			}
 		}
 	}
-	if node.IsNodeType(astrav.NodeTypeIdent) && isOneOf(node.(astrav.Named).NodeName().Name, "byte", "string", "rune") {
+	if node.IsNodeType(astrav.NodeTypeIdent) && isOneOf(node.(astrav.Named).NodeName(), "byte", "string", "rune") {
 		return ""
 	}
 
@@ -161,7 +215,7 @@ func isOneOf(s string, strs ...string) bool {
 
 // check if strings.Split was used
 func examStringSplit(pkg *astrav.Package, suggs sugg.Suggester) {
-	nodes := pkg.FindByName("Split")
+	nodes := pkg.FindByName("strings.Split")
 	for _, node := range nodes {
 		if node.GetSourceString() == "strings.Split" {
 			suggs.AppendUnique(StringsSplitUsed)
@@ -183,8 +237,18 @@ func examComparingBytes(pkg *astrav.Package, suggs sugg.Suggester) {
 		expr := node.(*astrav.BinaryExpr)
 		if expr.X().IsValueType("byte") {
 			suggs.AppendUnique(ComparingBytes)
+			continue
+		}
+		if isByteIndexToRuneConv(expr.X()) && isByteIndexToRuneConv(expr.Y()) {
+			suggs.AppendUnique(CompBytesInDisguise)
 		}
 	}
+}
+
+func isByteIndexToRuneConv(node astrav.Node) bool {
+	return node.IsValueType("rune") &&
+		node.IsNodeType(astrav.NodeTypeCallExpr) &&
+		node.ChildByNodeType(astrav.NodeTypeIndexExpr) != nil
 }
 
 // check if Distance function exists
@@ -358,8 +422,8 @@ func examIncrease(pkg *astrav.Package, suggs sugg.Suggester) {
 
 // Check error message format for capitalization and punctuation
 func examErrorMessage(pkg *astrav.Package, suggs sugg.Suggester) {
-	checkErrMessage(pkg.FindByName("New"), suggs)
-	checkErrMessage(pkg.FindByName("Errorf"), suggs)
+	checkErrMessage(pkg.FindByName("errors.New"), suggs)
+	checkErrMessage(pkg.FindByName("fmt.Errorf"), suggs)
 }
 
 func checkErrMessage(nodes []astrav.Node, suggs sugg.Suggester) {

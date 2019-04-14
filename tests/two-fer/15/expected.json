@@ -2,6 +2,12 @@
 	"status": "disapprove_with_comment",
 	"comments": [
 		"go.two_fer.work_with_any_provided_name",
-		"go.two_fer.sharewith_signature_changed"
+		"go.two_fer.sharewith_signature_changed",
+		{
+			"comment": "go.general.remove_extra_variable",
+			"params": {
+				"name": "n"
+			}
+		}
 	]
 }
