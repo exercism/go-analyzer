@@ -28,6 +28,10 @@ func Analyze(exercise string, path string) Result {
 		return NewErrResult(errors.New("there doesn't seem to be any solution uploaded"))
 	}
 
+	if exercise == "" {
+		exercise = getExerciseSlug(solution)
+	}
+
 	pattReport, err := CheckPattern(exercise, solution)
 	if err != nil {
 		return NewErrResult(err)
@@ -76,4 +80,15 @@ func LoadPackage(dir string) (*astrav.Package, error) {
 		return nil, errors.WithStack(err)
 	}
 	return folder.Package(folder.Pkg.Name()), nil
+}
+
+var pkgNameToSlug = map[string]string{
+	"twofer": "two-fer",
+}
+
+func getExerciseSlug(pkg *astrav.Package) string {
+	if slug, ok := pkgNameToSlug[pkg.Name]; ok {
+		return slug
+	}
+	return pkg.Name
 }
