@@ -4,7 +4,7 @@ import "github.com/exercism/go-analyzer/suggester/sugg"
 
 // exercise comments
 const (
-	MissingMainFunc        = "go.two_fer.missing_share_with_function"
+	MissingEntryFunc       = "go.two_fer.missing_share_with_function"
 	FuncSignatureChanged   = "go.two_fer.sharewith_signature_changed"
 	CommentSection         = sugg.CommentSection
 	StringsJoin            = "go.two_fer.strings_join_used_for_concatenation"
@@ -19,7 +19,6 @@ const (
 	WrongFunctionComment   = "go.two_fer.wrong_function_comment"
 	GeneralizeName         = "go.two_fer.work_with_any_provided_name"
 	ExtraNameVar           = "go.two-fer.extra_name_variable_created"
-	TrimSpace              = "go.two_fer.strings_trimspace_used"
 )
 
 // Severity defines how severe a comment is. A sum over all comments of 5 means no approval.
@@ -29,7 +28,7 @@ const (
 // We can be very strict on automated comments since the student has a very fast feedback loop.
 var severity = map[string]int{
 	CommentSection:         0,
-	MissingMainFunc:        5,
+	MissingEntryFunc:       5,
 	StringsJoin:            5,
 	StringsBuilder:         5,
 	PlusUsed:               0,
@@ -43,5 +42,4 @@ var severity = map[string]int{
 	GeneralizeName:         5,
 	FuncSignatureChanged:   5,
 	ExtraNameVar:           1,
-	TrimSpace:              0,
 }

@@ -32,7 +32,7 @@ var Register = sugg.Register{
 func examMainFunc(pkg *astrav.Package, suggs sugg.Suggester) {
 	main := pkg.FuncDeclByName("ShareWith")
 	if main == nil {
-		suggs.AppendUnique(MissingMainFunc)
+		suggs.AppendUnique(MissingEntryFunc)
 		return
 	}
 
@@ -49,7 +49,7 @@ func examMainFunc(pkg *astrav.Package, suggs sugg.Suggester) {
 func examStringsTrimSpace(pkg *astrav.Package, suggs sugg.Suggester) {
 	nodes := pkg.FindByName("strings.TrimSpace")
 	if len(nodes) != 0 {
-		suggs.AppendUnique(TrimSpace)
+		suggs.AppendUnique(sugg.TrimSpaceUsed)
 	}
 }
 
@@ -120,7 +120,7 @@ func examStringsBuilder(pkg *astrav.Package, suggs sugg.Suggester) {
 func examPlusUsed(pkg *astrav.Package, suggs sugg.Suggester) {
 	main := pkg.FuncDeclByName("ShareWith")
 	if main == nil {
-		suggs.AppendUnique(MissingMainFunc)
+		suggs.AppendUnique(MissingEntryFunc)
 		return
 	}
 	nodes := main.FindByNodeType(astrav.NodeTypeBinaryExpr)
@@ -178,7 +178,7 @@ func examComments(pkg *astrav.Package, suggs sugg.Suggester) {
 
 	main := pkg.FuncDeclByName("ShareWith")
 	if main == nil {
-		suggs.AppendUnique(MissingMainFunc)
+		suggs.AppendUnique(MissingEntryFunc)
 		return
 	}
 	cGroup := main.ChildByNodeType(astrav.NodeTypeCommentGroup)
@@ -190,7 +190,7 @@ var outputPart = regexp.MustCompile(`, one for me\.`)
 func examConditional(pkg *astrav.Package, suggs sugg.Suggester) {
 	main := pkg.FuncDeclByName("ShareWith")
 	if main == nil {
-		suggs.AppendUnique(MissingMainFunc)
+		suggs.AppendUnique(MissingEntryFunc)
 		return
 	}
 
@@ -203,7 +203,7 @@ func examConditional(pkg *astrav.Package, suggs sugg.Suggester) {
 func examGeneralizeNames(pkg *astrav.Package, suggs sugg.Suggester) {
 	main := pkg.FuncDeclByName("ShareWith")
 	if main == nil {
-		suggs.AppendUnique(MissingMainFunc)
+		suggs.AppendUnique(MissingEntryFunc)
 		return
 	}
 

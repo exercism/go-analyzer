@@ -85,7 +85,7 @@ func examExtraIfEmpty(pkg *astrav.Package, suggs sugg.Suggester) {
 func examTrimSpace(pkg *astrav.Package, suggs sugg.Suggester) {
 	nodes := pkg.FindByName("strings.TrimSpace")
 	if len(nodes) != 0 {
-		suggs.AppendUnique(TrimSpaceUsed)
+		suggs.AppendUnique(sugg.TrimSpaceUsed)
 	}
 }
 
@@ -258,7 +258,7 @@ func isByteIndexToRuneConv(node astrav.Node) bool {
 func examMainFunc(pkg *astrav.Package, suggs sugg.Suggester) {
 	main := pkg.FuncDeclByName("Distance")
 	if main == nil {
-		suggs.AppendUnique(MissingMainFunc)
+		suggs.AppendUnique(MissingEntryFunc)
 		return
 	}
 
@@ -274,7 +274,7 @@ func examMainFunc(pkg *astrav.Package, suggs sugg.Suggester) {
 func examReturns(pkg *astrav.Package, suggs sugg.Suggester) {
 	main := pkg.FindFirstByName("Distance")
 	if main == nil {
-		suggs.AppendUnique(MissingMainFunc)
+		suggs.AppendUnique(MissingEntryFunc)
 		return
 	}
 

@@ -2,7 +2,7 @@ package hamming
 
 // exercise comments
 const (
-	MissingMainFunc      = "go.hamming.missing_distance_function"
+	MissingEntryFunc     = "go.hamming.missing_distance_function"
 	FuncSignatureChanged = "go.hamming.distance_signature_changed"
 	MixtureRunesBytes    = "go.hamming.mixture_of_runes_and_bytes"
 	RuneByteIndex        = "go.hamming.rune_index_used_with_bytes"
@@ -19,7 +19,6 @@ const (
 	DefineEmptyErr       = "go.hamming.defining_empty_error"
 	ReturnOnError        = "go.hamming.return_on_error_case"
 	CaseInsensitive      = "go.hamming.hamming_is_case_sensitive"
-	TrimSpaceUsed        = "go.hamming.strings_trim_space_used"
 	ExtraIfStringsEmpty  = "go.hamming.extra_if_strings_empty"
 	MinSliceRuneConv     = "go.hamming.minimize_slice_of_rune_conversions"
 	CompBytesInDisguise  = "go.hamming.comparing_bytes_disguised_as_runes"
@@ -31,7 +30,7 @@ const (
 // should block approval?
 // We can be very strict on automated comments since the student has a very fast feedback loop.
 var severity = map[string]int{
-	MissingMainFunc:      5,
+	MissingEntryFunc:     5,
 	FuncSignatureChanged: 5,
 	MixtureRunesBytes:    3,
 	RuneByteIndex:        2,
@@ -48,7 +47,6 @@ var severity = map[string]int{
 	DefineEmptyErr:       1,
 	ReturnOnError:        3,
 	CaseInsensitive:      3,
-	TrimSpaceUsed:        0,
 	ExtraIfStringsEmpty:  0,
 	MinSliceRuneConv:     2,
 	CompBytesInDisguise:  5,
