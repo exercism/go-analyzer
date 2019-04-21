@@ -15,3 +15,7 @@
     # will apply the changes
     gofmt -w filename.go
     ```
+
+    ```git
+    %{gofmt}
+    ```
