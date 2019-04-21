@@ -10,7 +10,7 @@ import (
 
 var getResultTests = []struct {
 	exercise    string
-	goodPattern float64
+	goodPattern *PatternReport
 	comments    []string
 	result      Result
 	severity    map[string]int
@@ -18,7 +18,7 @@ var getResultTests = []struct {
 }{
 	{
 		exercise:    "two-fer",
-		goodPattern: 1,
+		goodPattern: &PatternReport{PatternRating: 1},
 		result: Result{
 			Status:   ApproveAsOptimal,
 			Comments: []sugg.Comment{},
@@ -26,7 +26,7 @@ var getResultTests = []struct {
 	},
 	{
 		exercise:    "two-fer",
-		goodPattern: 0,
+		goodPattern: &PatternReport{PatternRating: 0},
 		result: Result{
 			Status:   ReferToMentor,
 			Comments: []sugg.Comment{},
@@ -34,7 +34,7 @@ var getResultTests = []struct {
 	},
 	{
 		exercise:    "two-fer",
-		goodPattern: 0,
+		goodPattern: &PatternReport{PatternRating: 0},
 		comments:    []string{"go.two_fer.some_comment"},
 		result: Result{
 			Status:   ReferToMentor,
@@ -43,7 +43,7 @@ var getResultTests = []struct {
 	},
 	{
 		exercise:    "two-fer",
-		goodPattern: 1,
+		goodPattern: &PatternReport{PatternRating: 1},
 		comments:    []string{"go.two_fer.some_comment"},
 		result: Result{
 			Status:   ApproveWithComment,
@@ -52,7 +52,7 @@ var getResultTests = []struct {
 	},
 	{
 		exercise:    "two-fer",
-		goodPattern: 1,
+		goodPattern: &PatternReport{PatternRating: 1},
 		comments:    []string{"go.two_fer.some_comment"},
 		result: Result{
 			Status:   DisapproveWithComment,
@@ -63,7 +63,7 @@ var getResultTests = []struct {
 	},
 	{
 		exercise:    "two-fer",
-		goodPattern: 1,
+		goodPattern: &PatternReport{PatternRating: 1},
 		result: Result{
 			Status:   ReferToMentor,
 			Comments: []sugg.Comment{},
@@ -73,7 +73,7 @@ var getResultTests = []struct {
 	},
 	{
 		exercise:    "two-fer",
-		goodPattern: 1,
+		goodPattern: &PatternReport{PatternRating: 1},
 		result: Result{
 			Status:   ApproveAsOptimal,
 			Comments: []sugg.Comment{},
@@ -82,7 +82,7 @@ var getResultTests = []struct {
 	},
 	{
 		exercise:    "two-fer",
-		goodPattern: 0,
+		goodPattern: &PatternReport{PatternRating: 0},
 		comments: []string{
 			"go.two_fer.some_comment",
 			"go.two_fer.some_comment_2",

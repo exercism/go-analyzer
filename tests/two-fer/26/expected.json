@@ -6,12 +6,6 @@
 		"go.general.taking_length_of_string_to_check_empty",
 		"go.two_fer.extra_name_variable_created",
 		{
-			"comment": "go.general.remove_extra_variable",
-			"params": {
-				"name": "res"
-			}
-		},
-		{
 			"comment": "go.general.use_variable_assignment",
 			"params": {
 				"name": "res",

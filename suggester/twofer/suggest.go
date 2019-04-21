@@ -92,13 +92,6 @@ func examExtraVariable(pkg *astrav.Package, suggs sugg.Suggester) {
 			if !node.IsNodeType(astrav.NodeTypeIdent) {
 				continue
 			}
-			varName := node.(astrav.Named).NodeName()
-			if varName != paramName {
-				suggs.AppendUniquePH(sugg.ExtraVar, map[string]string{
-					"name": varName,
-				})
-			}
-
 		}
 	}
 }
