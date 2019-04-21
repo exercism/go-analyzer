@@ -1,0 +1,1 @@
+- You are creating the extra variable %name% and only using it once. You can inline it instead.
