@@ -3,6 +3,18 @@ package sugg
 import (
 	"encoding/json"
 	"fmt"
+	"log"
+)
+
+// Category defines an enumeration of comment categories
+type Category string
+
+// Category contants
+const (
+	CtgTodo        Category = "todo"
+	CtgImprovement Category = "improvement"
+	CtgThought     Category = "thought"
+	CtgBlock       Category = "block"
 )
 
 // Comment defines a suggestion. A comment to the student.
@@ -15,6 +27,13 @@ type Comment interface {
 
 	// Severity reports the severity of the comment.
 	Severity() int
+
+	// ToString returns the final comment the way it will be provided to the student.
+	// If not already cached this involves pulling the comment from the git repository where it is located.
+	ToString() string
+
+	// Category returns the category of the comment.
+	Category() Category
 }
 
 // Contains reports if the list of comments includes a certain comment.
@@ -30,31 +49,29 @@ func Contains(comments []Comment, comment Comment) bool {
 // NewComment creates a new comment
 func NewComment(s string) Comment {
 	return &comment{
-		comment: s,
+		baseCmt: baseCmt{
+			comment: s,
+		},
+	}
+}
+
+// NewBlockComment creates a new block comment
+func NewBlockComment(s string) Comment {
+	return &comment{
+		baseCmt: baseCmt{
+			comment:  s,
+			category: CtgBlock,
+		},
 	}
 }
 
 type comment struct {
-	comment  string
-	severity int
+	baseCmt
 }
 
-// ID returns the comment identifier.
-func (s *comment) ID() string {
-	return s.comment
-}
-
-func (s *comment) compareString() string {
-	return s.ID()
-}
-
-func (s *comment) setSeverity(severity int) {
-	s.severity = severity
-}
-
-// Severity reports the severity of the comment.
-func (s *comment) Severity() int {
-	return s.severity
+// ToString returns the final comment text
+func (s *comment) ToString() string {
+	return s.toString(s)
 }
 
 // MarshalJSON converts the comment to json.
@@ -65,33 +82,26 @@ func (s *comment) MarshalJSON() ([]byte, error) {
 // NewPlaceholderComment creates a new comment with placeholder(s).
 func NewPlaceholderComment(comment string, params map[string]string) Comment {
 	return &placeholderComment{
-		comment: comment,
-		params:  params,
+		baseCmt: baseCmt{
+			comment: comment,
+		},
+		params: params,
 	}
 }
 
 type placeholderComment struct {
-	comment  string
-	params   map[string]string
-	severity int
-}
+	baseCmt
 
-// ID returns the comment identifier.
-func (s *placeholderComment) ID() string {
-	return s.comment
+	params map[string]string
 }
 
 func (s *placeholderComment) compareString() string {
 	return fmt.Sprintf("%s;%v", s.comment, s.params)
 }
 
-func (s *placeholderComment) setSeverity(severity int) {
-	s.severity = severity
-}
-
-// Severity reports the severity of the comment.
-func (s *placeholderComment) Severity() int {
-	return s.severity
+// ToString returns the final comment text
+func (s *placeholderComment) ToString() string {
+	return s.toString(s)
 }
 
 // MarshalJSON converts the placeholderComment to json.
@@ -103,4 +113,55 @@ func (s *placeholderComment) MarshalJSON() ([]byte, error) {
 		Comment: s.comment,
 		Params:  s.params,
 	})
+}
+
+// baseComment
+type baseCmt struct {
+	comment  string
+	severity int
+	category Category
+}
+
+// ID returns the comment identifier.
+func (s *baseCmt) ID() string {
+	return s.comment
+}
+
+func (s *baseCmt) compareString() string {
+	return s.ID()
+}
+
+func (s *baseCmt) setSeverity(severity int) {
+	s.severity = severity
+	if s.category == "" {
+		s.category = sevToCat(severity)
+	}
+}
+
+// Severity reports the severity of the comment.
+func (s *baseCmt) Severity() int {
+	return s.severity
+}
+
+// Category reports the category of the comment.
+func (s *baseCmt) Category() Category {
+	return s.category
+}
+
+func (*baseCmt) toString(s Comment) string {
+	txt, err := comments.GetCommentText(s)
+	if err != nil {
+		log.Println(err)
+	}
+	return txt
+}
+
+func sevToCat(severity int) Category {
+	switch {
+	case 5 <= severity:
+		return CtgTodo
+	case severity == 0:
+		return CtgThought
+	}
+	return CtgImprovement
 }

@@ -35,31 +35,31 @@ var getResultTests = []struct {
 	{
 		exercise:    "two-fer",
 		goodPattern: 0,
-		comments:    []string{"go.two-fer.some_comment"},
+		comments:    []string{"go.two_fer.some_comment"},
 		result: Result{
 			Status:   ReferToMentor,
-			Comments: []sugg.Comment{sugg.NewComment("go.two-fer.some_comment")},
+			Comments: []sugg.Comment{sugg.NewComment("go.two_fer.some_comment")},
 		},
 	},
 	{
 		exercise:    "two-fer",
 		goodPattern: 1,
-		comments:    []string{"go.two-fer.some_comment"},
+		comments:    []string{"go.two_fer.some_comment"},
 		result: Result{
 			Status:   ApproveWithComment,
-			Comments: []sugg.Comment{sugg.NewComment("go.two-fer.some_comment")},
+			Comments: []sugg.Comment{sugg.NewComment("go.two_fer.some_comment")},
 		},
 	},
 	{
 		exercise:    "two-fer",
 		goodPattern: 1,
-		comments:    []string{"go.two-fer.some_comment"},
+		comments:    []string{"go.two_fer.some_comment"},
 		result: Result{
 			Status:   DisapproveWithComment,
-			Comments: []sugg.Comment{sugg.NewComment("go.two-fer.some_comment")},
+			Comments: []sugg.Comment{sugg.NewComment("go.two_fer.some_comment")},
 			Severity: 5,
 		},
-		severity: map[string]int{"go.two-fer.some_comment": 5},
+		severity: map[string]int{"go.two_fer.some_comment": 5},
 	},
 	{
 		exercise:    "two-fer",
@@ -84,23 +84,23 @@ var getResultTests = []struct {
 		exercise:    "two-fer",
 		goodPattern: 0,
 		comments: []string{
-			"go.two-fer.some_comment",
-			"go.two-fer.some_comment_2",
-			"go.two-fer.some_comment_3",
+			"go.two_fer.some_comment",
+			"go.two_fer.some_comment_2",
+			"go.two_fer.some_comment_3",
 		},
 		result: Result{
 			Status: DisapproveWithComment,
 			Comments: []sugg.Comment{
-				sugg.NewComment("go.two-fer.some_comment"),
-				sugg.NewComment("go.two-fer.some_comment_2"),
-				sugg.NewComment("go.two-fer.some_comment_3"),
+				sugg.NewComment("go.two_fer.some_comment"),
+				sugg.NewComment("go.two_fer.some_comment_2"),
+				sugg.NewComment("go.two_fer.some_comment_3"),
 			},
 			Severity: 6,
 		},
 		severity: map[string]int{
-			"go.two-fer.some_comment":   2,
-			"go.two-fer.some_comment_2": 1,
-			"go.two-fer.some_comment_3": 3,
+			"go.two_fer.some_comment":   2,
+			"go.two_fer.some_comment_2": 1,
+			"go.two_fer.some_comment_3": 3,
 		},
 	},
 }

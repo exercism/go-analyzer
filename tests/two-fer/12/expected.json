@@ -1,7 +1,7 @@
 {
 	"status": "approve_with_comment",
 	"comments": [
-		"go.two-fer.extra_name_variable_created",
+		"go.two_fer.extra_name_variable_created",
 		{
 			"comment": "go.general.remove_extra_variable",
 			"params": {

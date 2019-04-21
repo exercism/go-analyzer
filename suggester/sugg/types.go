@@ -65,10 +65,12 @@ func (s *SuggestionReport) AppendUnique(commentID string) {
 
 // AppendUniquePH adds a comment with placeholder(s). Uniqueness includes the placeholder(s) and value(s).
 func (s *SuggestionReport) AppendUniquePH(commentID string, params map[string]string) {
-	s.appendUnique(&placeholderComment{
-		comment: commentID,
-		params:  params,
-	})
+	s.appendUnique(NewPlaceholderComment(commentID, params))
+}
+
+// AppendBlock adds a block comment if it does not exist.
+func (s *SuggestionReport) AppendBlock(commentID string) {
+	s.appendUnique(NewBlockComment(commentID))
 }
 
 // ReportError reports an error to the analyzer.
