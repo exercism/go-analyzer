@@ -5,7 +5,7 @@
     If you are keen on getting much more feedback from code linters there is the [golangci-lint](https://github.com/golangci/golangci-lint) 
     project allowing you to run a lot of linters with one command. You can create a config file for you project to adjust the behaviour to your needs.
 
-    ```
-    > golint
-    %{golint}
-    ```
+```
+> golint
+%{golint}
+```

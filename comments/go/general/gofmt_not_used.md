@@ -6,16 +6,16 @@
 
     - [Jetbrains Goland](https://www.jetbrains.com/go/) is an entire IDE for Go
     
-    If you want to get to know `gofmt` you can run it manually:
+If you want to get to know `gofmt` you can run it manually:
     
-    ```bash
-    # will only show the differences
-    gofmt -d filename.go
-    
-    # will apply the changes
-    gofmt -w filename.go
-    ```
+```bash
+# will only show the differences
+gofmt -d filename.go
 
-    ```git
-    %{gofmt}
-    ```
+# will apply the changes
+gofmt -w filename.go
+```
+
+```git
+%{gofmt}
+```

@@ -1,1 +1,1 @@
-- You are declaring the variable %{name} and only using it once. You can inline it instead.
+- You are declaring the variable `%{name}` and only using it once. You can inline it instead.
