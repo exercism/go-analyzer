@@ -5,8 +5,8 @@ Try adding the following test to see what happens if `non-ascii` characters get 
 ```go
 {
 	s1:          "aüa",
-	s2:          "aüa",
-	want:        0,
+	s2:          "aÃa",
+	want:        1,
 	expectError: false,
 }
 ```
