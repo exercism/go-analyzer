@@ -1,0 +1,7 @@
+{
+	"status": "disapprove_with_comment",
+	"comments": [
+		"go.general.taking_length_of_string_to_check_empty",
+		"go.two_fer.find_minimal_conditional"
+	]
+}

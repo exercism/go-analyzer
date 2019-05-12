@@ -5,7 +5,7 @@ import (
 	"errors"
 )
 
-// Distance calculates tha hamming distance between two string
+// Distance calculates the hamming distance between two string
 func Distance(a, b string) (int, error) {
 	var (
 		runesA = []rune(a)

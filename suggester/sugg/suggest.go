@@ -17,6 +17,7 @@ var GeneralRegister = Register{
 		examErrorfWithoutParams,
 		examCustomError,
 		examExtraVariable,
+		examStringsCompare,
 	},
 	Severity: severity,
 }
@@ -62,7 +63,8 @@ func examStringLenComparison(pkg *astrav.Package, suggs Suggester) {
 		bin := node.(*astrav.BinaryExpr)
 		op := bin.Op.String()
 		if op != "==" && op != "!=" &&
-			op != "<=" && op != "<" {
+			op != "<=" && op != "<" &&
+			op != ">=" && op != ">" {
 			continue
 		}
 		// check if there are 2 idents ("len" and variable name)
@@ -95,6 +97,9 @@ func examStringLenComparison(pkg *astrav.Package, suggs Suggester) {
 		basicVal := basic[0].(*astrav.BasicLit).Value
 		if op == "<" && basicVal == "1" {
 			suggs.AppendUnique(LengthSmallerZero)
+		}
+		if op == ">=" && basicVal == "1" {
+			suggs.AppendUnique(LenOfStringEqual)
 		}
 		if basicVal != "0" {
 			continue
@@ -232,4 +237,11 @@ func isExcludeType(node astrav.Node) bool {
 		}
 	}
 	return false
+}
+
+func examStringsCompare(pkg *astrav.Package, suggs Suggester) {
+	cmp := pkg.FindByName("strings.Compare")
+	if len(cmp) != 0 {
+		suggs.AppendUnique(StringsCompare)
+	}
 }

@@ -16,6 +16,7 @@ const (
 	ErrorfWithoutParam = "go.general.fmt_errorf_without_parameter"
 	CustomErrorCreated = "go.general.custom_error_created"
 	TrimSpaceUsed      = "go.general.strings_trim_space_used"
+	StringsCompare     = "go.general.strings_compare_used"
 )
 
 // Severity defines how severe a comment is. A sum over all comments of 5 means no approval.
@@ -38,4 +39,5 @@ var severity = map[string]int{
 	ErrorfWithoutParam: 2,
 	CustomErrorCreated: 0,
 	TrimSpaceUsed:      0,
+	StringsCompare:     3,
 }
