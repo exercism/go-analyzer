@@ -1,11 +1,11 @@
-//Package raindrops converts number to string and outputs info depending on numbers factors
+// Package raindrops converts number to string and outputs info depending on numbers factors
 package raindrops
 
 import (
 	"strconv"
 )
 
-//Convert converts number and returns Pling, Plang, Plong or number
+// Convert converts number and returns Pling, Plang, Plong or number
 func Convert(number int) (output string) {
 	var factors []int
 	for i := 1; i <= number; i++ {

@@ -2,6 +2,7 @@ package raindrops
 
 import "fmt"
 
+// Convert int to raindrop speak
 func Convert(number int) string {
 	result := ""
 	if number%3 == 0 {

@@ -5,6 +5,7 @@ import (
 	"strconv"
 )
 
+// Convert int to raindrop speak
 func Convert(num int) string {
 	// Store the requisite Strings as constant variables
 	const pling = "Pling"

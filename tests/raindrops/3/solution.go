@@ -5,6 +5,7 @@ import (
 	"strings"
 )
 
+// Convert int to raindrop speak
 func Convert(num int) string {
 	result := strings.Builder{}
 	if num%3 == 0 {

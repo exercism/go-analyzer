@@ -1,0 +1,11 @@
+{
+	"status": "disapprove_with_comment",
+	"comments": [
+		{
+			"comment": "go.general.golint_not_satisfied",
+			"params": {
+				"golint": "unary-op: should replace n += 1 with n++\n\ttests/raindrops/10/solution.go:9:22\n\tdoc: \n"
+			}
+		}
+	]
+}
