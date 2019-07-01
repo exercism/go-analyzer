@@ -1,10 +1,10 @@
 {
 	"status": "disapprove_with_comment",
 	"comments": [
-		"go.two_fer.plus_used_for_concatenation",
+		"go.two-fer.plus_used_for_concatenation",
 		"go.general.length_smaller_zero_impossible",
 		"go.general.taking_length_of_string_to_check_empty",
-		"go.two_fer.extra_name_variable_created",
+		"go.two-fer.extra_name_variable_created",
 		{
 			"comment": "go.general.use_variable_assignment",
 			"params": {

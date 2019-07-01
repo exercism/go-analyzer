@@ -1,7 +1,7 @@
 {
 	"status": "approve_with_comment",
 	"comments": [
-		"go.two_fer.missing_package_comment",
+		"go.two-fer.missing_package_comment",
 		"go.general.section_about_comments"
 	]
 }

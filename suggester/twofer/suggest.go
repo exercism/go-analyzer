@@ -233,7 +233,7 @@ var commentStrings = map[string]struct {
 func checkComment(cGroup astrav.Node, suggs sugg.Suggester, commentType, name string) {
 	strPack := commentStrings[commentType]
 	if cGroup == nil || len(cGroup.Children()) == 0 {
-		suggs.AppendUnique(fmt.Sprintf("go.two_fer.missing_%s_comment", commentType))
+		suggs.AppendUnique(fmt.Sprintf("go.two-fer.missing_%s_comment", commentType))
 		suggs.AppendUnique(CommentSection)
 		return
 	}
@@ -248,7 +248,7 @@ func checkComment(cGroup astrav.Node, suggs sugg.Suggester, commentType, name st
 	if strings.Contains(cmt, strPack.stubString) {
 		suggs.AppendUnique(StubComments)
 	} else if !strings.HasPrefix(cmt, fmt.Sprintf(strPack.prefixString, name)) {
-		suggs.AppendUnique(fmt.Sprintf("go.two_fer.wrong_%s_comment", commentType))
+		suggs.AppendUnique(fmt.Sprintf("go.two-fer.wrong_%s_comment", commentType))
 		suggs.AppendUnique(CommentSection)
 	}
 }

@@ -22,7 +22,7 @@ type Comment interface {
 	compareString() string
 	setSeverity(int)
 
-	// ID returns the comment identifier. e.g. `go.two_fer.missing_share_with_function`
+	// ID returns the comment identifier. e.g. `go.two-fer.missing_share_with_function`
 	ID() string
 
 	// Severity reports the severity of the comment.

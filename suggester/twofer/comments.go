@@ -4,21 +4,21 @@ import "github.com/exercism/go-analyzer/suggester/sugg"
 
 // exercise comments
 const (
-	MissingEntryFunc       = "go.two_fer.missing_share_with_function"
-	FuncSignatureChanged   = "go.two_fer.sharewith_signature_changed"
+	MissingEntryFunc       = "go.two-fer.missing_share_with_function"
+	FuncSignatureChanged   = "go.two-fer.sharewith_signature_changed"
 	CommentSection         = sugg.CommentSection
-	StringsJoin            = "go.two_fer.strings_join_used_for_concatenation"
-	StringsBuilder         = "go.two_fer.strings_builder_used_for_concatenation"
-	PlusUsed               = "go.two_fer.plus_used_for_concatenation"
-	MinimalConditional     = "go.two_fer.find_minimal_conditional"
-	UseStringPH            = "go.two_fer.use_fmt_placeholder_for_string"
-	StubComments           = "go.two_fer.replace_stub_comments"
-	MissingPackageComment  = "go.two_fer.missing_package_comment"
-	MissingFunctionComment = "go.two_fer.missing_function_comment"
-	WrongPackageComment    = "go.two_fer.wrong_package_comment"
-	WrongFunctionComment   = "go.two_fer.wrong_function_comment"
-	GeneralizeName         = "go.two_fer.work_with_any_provided_name"
-	ExtraNameVar           = "go.two_fer.extra_name_variable_created"
+	StringsJoin            = "go.two-fer.strings_join_used_for_concatenation"
+	StringsBuilder         = "go.two-fer.strings_builder_used_for_concatenation"
+	PlusUsed               = "go.two-fer.plus_used_for_concatenation"
+	MinimalConditional     = "go.two-fer.find_minimal_conditional"
+	UseStringPH            = "go.two-fer.use_fmt_placeholder_for_string"
+	StubComments           = "go.two-fer.replace_stub_comments"
+	MissingPackageComment  = "go.two-fer.missing_package_comment"
+	MissingFunctionComment = "go.two-fer.missing_function_comment"
+	WrongPackageComment    = "go.two-fer.wrong_package_comment"
+	WrongFunctionComment   = "go.two-fer.wrong_function_comment"
+	GeneralizeName         = "go.two-fer.work_with_any_provided_name"
+	ExtraNameVar           = "go.two-fer.extra_name_variable_created"
 )
 
 // Severity defines how severe a comment is. A sum over all comments of 5 means no approval.

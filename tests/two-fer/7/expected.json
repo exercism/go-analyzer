@@ -1,7 +1,7 @@
 {
 	"status": "disapprove_with_comment",
 	"comments": [
-		"go.two_fer.strings_join_used_for_concatenation",
+		"go.two-fer.strings_join_used_for_concatenation",
 		{
 			"comment": "go.general.remove_extra_variable",
 			"params": {

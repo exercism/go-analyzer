@@ -1,6 +1,6 @@
 {
 	"status": "approve_with_comment",
 	"comments": [
-		"go.two_fer.use_fmt_placeholder_for_string"
+		"go.two-fer.use_fmt_placeholder_for_string"
 	]
 }
