@@ -20,7 +20,7 @@ var getResultTests = []struct {
 		exercise:    "two-fer",
 		goodPattern: &PatternReport{PatternRating: 1},
 		result: Result{
-			Status:   ApproveAsOptimal,
+			Status:   Approve,
 			Comments: []sugg.Comment{},
 		},
 	},
@@ -46,7 +46,7 @@ var getResultTests = []struct {
 		goodPattern: &PatternReport{PatternRating: 1},
 		comments:    []string{"go.two-fer.some_comment"},
 		result: Result{
-			Status:   ApproveWithComment,
+			Status:   Approve,
 			Comments: []sugg.Comment{sugg.NewComment("go.two-fer.some_comment")},
 		},
 	},
@@ -55,7 +55,7 @@ var getResultTests = []struct {
 		goodPattern: &PatternReport{PatternRating: 1},
 		comments:    []string{"go.two-fer.some_comment"},
 		result: Result{
-			Status:   DisapproveWithComment,
+			Status:   Disapprove,
 			Comments: []sugg.Comment{sugg.NewComment("go.two-fer.some_comment")},
 			Severity: 5,
 		},
@@ -75,7 +75,7 @@ var getResultTests = []struct {
 		exercise:    "two-fer",
 		goodPattern: &PatternReport{PatternRating: 1},
 		result: Result{
-			Status:   ApproveAsOptimal,
+			Status:   Approve,
 			Comments: []sugg.Comment{},
 		},
 		errors: []error{nil},
@@ -89,7 +89,7 @@ var getResultTests = []struct {
 			"go.two-fer.some_comment_3",
 		},
 		result: Result{
-			Status: DisapproveWithComment,
+			Status: Disapprove,
 			Comments: []sugg.Comment{
 				sugg.NewComment("go.two-fer.some_comment"),
 				sugg.NewComment("go.two-fer.some_comment_2"),

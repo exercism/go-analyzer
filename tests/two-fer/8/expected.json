@@ -1,5 +1,5 @@
 {
-	"status": "approve_with_comment",
+	"status": "approve",
 	"comments": [
 		"go.two-fer.missing_package_comment",
 		"go.general.section_about_comments"

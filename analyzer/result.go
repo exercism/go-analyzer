@@ -30,11 +30,10 @@ type Status string
 
 // status constants
 const (
-	ApproveAsOptimal      Status = "approve_as_optimal"
-	ApproveWithComment    Status = "approve_with_comment"
-	DisapproveWithComment Status = "disapprove_with_comment"
-	ReferToMentor         Status = "refer_to_mentor"
-	Ejected               Status = "ejected"
+	Approve       Status = "approve"
+	Disapprove    Status = "disapprove"
+	ReferToMentor Status = "refer_to_mentor"
+	Ejected       Status = "ejected"
 )
 
 func getResult(exercise string, pattReport *PatternReport, suggReporter *sugg.SuggestionReport) Result {
@@ -84,23 +83,19 @@ func getStatus(pattern *PatternReport, comments, severity int, errors int) Statu
 	case errors != 0:
 		// Some error(s) occured. Better leave it to a mentor.
 		return ReferToMentor
-
-	case comments == 0 && pattern.OptimalLimit < pattern.PatternRating:
-		// The code is close enough to be approved as optimal and we have no suggestions.
-		return ApproveAsOptimal
 	case comments == 0 && pattern.PatternRating <= pattern.OptimalLimit:
 		// The code is not close enough to be approved as optimal, but we don't know how to improve it.
 		return ReferToMentor
 
 	case pattern.ApproveLimit < pattern.PatternRating && severity < 5:
-		// The code is close enough to approve, but we have minor improvement suggestions.
-		return ApproveWithComment
+		// The code is good enough to approve and we have no or minor improvement suggestions.
+		return Approve
 	case pattern.ApproveLimit < pattern.PatternRating:
 		// The code is close to a good solution, but we found too much or bigger things to improve on.
-		return DisapproveWithComment
+		return Disapprove
 	case 5 <= severity:
 		// The code is not close to a good solution, but the analyzer has enough suggestions to improve on.
-		return DisapproveWithComment
+		return Disapprove
 	}
 
 	// Default: Better leave it to a mentor.

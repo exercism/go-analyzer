@@ -1,5 +1,5 @@
 {
-	"status": "approve_with_comment",
+	"status": "approve",
 	"comments": [
 		"go.general.fmt_errorf_without_parameter",
 		"go.hamming.comparing_bytes"

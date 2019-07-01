@@ -1,5 +1,5 @@
 {
-	"status": "disapprove_with_comment",
+	"status": "disapprove",
 	"comments": [
 		"go.two-fer.strings_builder_used_for_concatenation"
 	]

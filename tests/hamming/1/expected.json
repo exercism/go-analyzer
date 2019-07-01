@@ -1,5 +1,5 @@
 {
-	"status": "disapprove_with_comment",
+	"status": "disapprove",
 	"comments": [
 		"go.hamming.use_zero_values_on_error_return",
 		"go.hamming.lossy_rune_to_byte_conversion",

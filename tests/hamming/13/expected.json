@@ -1,5 +1,5 @@
 {
-	"status": "disapprove_with_comment",
+	"status": "disapprove",
 	"comments": [
 		{
 			"comment": "go.hamming.minimize_slice_of_rune_conversions",

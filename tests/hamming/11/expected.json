@@ -1,5 +1,5 @@
 {
-	"status": "disapprove_with_comment",
+	"status": "disapprove",
 	"comments": [
 		"go.hamming.defining_empty_error",
 		"go.hamming.return_on_error_case",

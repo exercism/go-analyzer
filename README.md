@@ -59,9 +59,8 @@ docker run -v ~/solution-238382y7sds7fsadfasj23j:/solution exercism/go-analyzer 
 Out of 500 real world solutions we get:
 
 ```
-approve_as_optimal      10
-approve_with_comment    24
-disapprove_with_comment 463
-refer_to_mentor         3
-ejected (failed)        0
+approve           34
+disapprove        463
+refer_to_mentor   3
+ejected (failed)  0
 ```

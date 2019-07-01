@@ -1,5 +1,5 @@
 {
-	"status": "disapprove_with_comment",
+	"status": "disapprove",
 	"comments": [
 		"go.two-fer.find_minimal_conditional",
 		"go.two-fer.use_fmt_placeholder_for_string"

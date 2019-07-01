@@ -1,5 +1,5 @@
 {
-	"status": "disapprove_with_comment",
+	"status": "disapprove",
 	"comments": [
 		"go.general.taking_length_of_string_to_check_empty",
 		"go.two-fer.find_minimal_conditional"
