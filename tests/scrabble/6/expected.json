@@ -1,0 +1,47 @@
+{
+	"status": "disapprove_with_comment",
+	"comments": [
+		{
+			"comment": "go.general.remove_extra_variable",
+			"params": {
+				"name": "threeReg"
+			}
+		},
+		{
+			"comment": "go.general.remove_extra_variable",
+			"params": {
+				"name": "eightReg"
+			}
+		},
+		{
+			"comment": "go.general.remove_extra_variable",
+			"params": {
+				"name": "tenReg"
+			}
+		},
+		{
+			"comment": "go.general.remove_extra_variable",
+			"params": {
+				"name": "oneReg"
+			}
+		},
+		{
+			"comment": "go.general.remove_extra_variable",
+			"params": {
+				"name": "fiveReg"
+			}
+		},
+		{
+			"comment": "go.general.remove_extra_variable",
+			"params": {
+				"name": "twoReg"
+			}
+		},
+		{
+			"comment": "go.general.remove_extra_variable",
+			"params": {
+				"name": "thourReg"
+			}
+		}
+	]
+}
