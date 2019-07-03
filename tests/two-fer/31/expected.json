@@ -1,7 +1,12 @@
 {
 	"status": "disapprove",
 	"comments": [
-		"go.general.taking_length_of_string_to_check_empty",
+		{
+			"comment": "go.general.taking_length_of_string_to_check_empty",
+			"params": {
+				"name": "name"
+			}
+		},
 		"go.two-fer.find_minimal_conditional"
 	]
 }

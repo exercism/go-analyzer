@@ -1,6 +1,11 @@
 {
 	"status": "approve",
 	"comments": [
-		"go.general.taking_length_of_string_to_check_empty"
+		{
+			"comment": "go.general.taking_length_of_string_to_check_empty",
+			"params": {
+				"name": "name"
+			}
+		}
 	]
 }

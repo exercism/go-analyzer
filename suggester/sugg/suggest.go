@@ -76,9 +76,13 @@ func examStringLenComparison(pkg *astrav.Package, suggs Suggester) {
 		var (
 			foundLen    bool
 			foundString bool
+			varName     string
 		)
 		for _, ident := range idents {
 			id := ident.(*astrav.Ident)
+			if id.NodeName() != "len" {
+				varName = id.NodeName()
+			}
 			if id.NodeName() == "len" {
 				foundLen = true
 			} else if id.ValueType().String() == "string" {
@@ -99,7 +103,9 @@ func examStringLenComparison(pkg *astrav.Package, suggs Suggester) {
 			suggs.AppendUnique(LengthSmallerZero)
 		}
 		if op == ">=" && basicVal == "1" {
-			suggs.AppendUnique(LenOfStringEqual)
+			suggs.AppendUniquePH(LenOfStringEqual, map[string]string{
+				"name": varName,
+			})
 		}
 		if basicVal != "0" {
 			continue
@@ -108,7 +114,9 @@ func examStringLenComparison(pkg *astrav.Package, suggs Suggester) {
 			suggs.AppendUnique(LengthSmallerZero)
 		}
 		if foundString {
-			suggs.AppendUnique(LenOfStringEqual)
+			suggs.AppendUniquePH(LenOfStringEqual, map[string]string{
+				"name": varName,
+			})
 		}
 	}
 }

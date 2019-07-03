@@ -3,7 +3,12 @@
 	"comments": [
 		"go.two-fer.replace_stub_comments",
 		"go.two-fer.find_minimal_conditional",
-		"go.general.taking_length_of_string_to_check_empty",
+		{
+			"comment": "go.general.taking_length_of_string_to_check_empty",
+			"params": {
+				"name": "name"
+			}
+		},
 		"go.general.strings_trim_space_used"
 	]
 }
