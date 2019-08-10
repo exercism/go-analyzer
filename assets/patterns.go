@@ -41,7 +41,7 @@ func loadPatterns(paths ...string) ([]*astpatt.Pattern, error) {
 			err = e
 			continue
 		}
-		patts = append(patts, astpatt.ExtractPattern(pkg))
+		patts = append(patts, astpatt.ExtractPatternPermutations(pkg)...)
 	}
 	return patts, err
 }

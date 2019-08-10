@@ -5,15 +5,17 @@ import (
 	"runtime/debug"
 
 	"github.com/exercism/go-analyzer/suggester/hamming"
+	"github.com/exercism/go-analyzer/suggester/raindrops"
 	"github.com/exercism/go-analyzer/suggester/sugg"
 	"github.com/exercism/go-analyzer/suggester/twofer"
 	"github.com/tehsphinx/astrav"
 )
 
 var exercisePkgs = map[string]sugg.Register{
-	"general": sugg.GeneralRegister,
-	"two-fer": twofer.Register,
-	"hamming": hamming.Register,
+	"general":   sugg.GeneralRegister,
+	"two-fer":   twofer.Register,
+	"hamming":   hamming.Register,
+	"raindrops": raindrops.Register,
 }
 
 // Suggest statically analysis the solution and returns a list of comments to provide.

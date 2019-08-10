@@ -22,6 +22,7 @@ var Register = sugg.Register{
 		examMixture,
 		examComparingBytes,
 		examStringSplit,
+		sugg.ExamExtraVariable,
 		examDefineError,
 		examReturnOnError,
 		examCaseInsensitive,

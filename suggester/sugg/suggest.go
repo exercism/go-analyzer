@@ -16,7 +16,6 @@ var GeneralRegister = Register{
 		examNoErrorMsg,
 		examErrorfWithoutParams,
 		examCustomError,
-		examExtraVariable,
 		examStringsCompare,
 	},
 	Severity: severity,
@@ -185,7 +184,8 @@ var excludeVarTypes = []string{
 	"*bufio.Reader",
 }
 
-func examExtraVariable(pkg *astrav.Package, suggs Suggester) {
+// ExamExtraVariable checks for a variable that can be inlined
+func ExamExtraVariable(pkg *astrav.Package, suggs Suggester) {
 	decls := pkg.FindVarDeclarations()
 	for _, decl := range decls {
 		if isExcludeType(decl) {
@@ -210,13 +210,27 @@ func examExtraVariable(pkg *astrav.Package, suggs Suggester) {
 		if usageCount == 1 {
 			_, declScope := decl.GetScope()
 			_, usageScope := firstUsage.GetScope()
-			if usageScope == declScope {
-				suggs.AppendUniquePH(ExtraVar, map[string]string{
-					"name": decl.Name,
-				})
+			if usageScope != declScope {
+				continue
 			}
+			if IsMultiAssignment(decl.Parent()) {
+				continue
+			}
+			suggs.AppendUniquePH(ExtraVar, map[string]string{
+				"name": decl.Name,
+			})
 		}
 	}
+}
+
+// IsMultiAssignment declaration assigns to multiple variables
+func IsMultiAssignment(decl astrav.Node) bool {
+	assign, ok := decl.(*astrav.AssignStmt)
+	if !ok {
+		return false
+	}
+
+	return len(assign.LHS()) != 1
 }
 
 func canBeCombined(decl, firstUsage *astrav.Ident) bool {

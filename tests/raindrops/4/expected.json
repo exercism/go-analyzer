@@ -1,4 +1,7 @@
 {
-	"status": "refer_to_mentor",
-	"comments": []
+	"status": "approve",
+	"comments": [
+		"go.raindrops.use_strconv_itoa",
+		"go.raindrops.plus_equal_comment"
+	]
 }
