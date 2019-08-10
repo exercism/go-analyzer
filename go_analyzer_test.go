@@ -40,44 +40,47 @@ func TestAnalyze(t *testing.T) {
 			if runOnly != "" && runOnly != dir {
 				continue
 			}
-			res := analyzer.Analyze(exercise, dir)
 
-			// if a specific exercise is set print ast for orientation while implementing
-			if runOnly != "" {
-				if err := printAST(dir); err != nil {
-					t.Fatal(err)
+			t.Run(dir[6:], func(t *testing.T) {
+				res := analyzer.Analyze(exercise, dir)
+
+				// if a specific exercise is set print ast for orientation while implementing
+				if runOnly != "" {
+					if err := printAST(dir); err != nil {
+						t.Fatal(err)
+					}
 				}
-			}
 
-			expected, err := GetExpected(dir)
-			if err != nil {
-				t.Errorf("error getting TestResult for path %s: %s", dir, err)
-			}
-
-			var fail bool
-			if !assert.Equal(t, expected.Status, res.Status,
-				fmt.Sprintf("Wrong status on %s (severity: %d, rating: %.2f)", dir, res.Severity, res.Rating)) {
-				fail = true
-			}
-
-			if checkContains(t, expected.Comments, res.Comments, "Missing comment", dir) {
-				fail = true
-			}
-			if checkContains(t, res.Comments, expected.Comments, "Additional comment", dir) {
-				fail = true
-			}
-
-			if checkContainsError(t, expected.Errors, res.Errors, dir) {
-				fail = true
-			}
-
-			if fail {
-				diff, err := resultDiff(*expected, res)
+				expected, err := analyzer.GetResultFromFile(dir)
 				if err != nil {
-					t.Error(err)
+					t.Errorf("error getting TestResult for path %s: %s", dir, err)
 				}
-				t.Errorf("Diff on %s\n%s", dir, diff)
-			}
+
+				var fail bool
+				if !assert.Equal(t, expected.Status, res.Status,
+					fmt.Sprintf("Wrong status on %s (severity: %d, rating: %.2f)", dir, res.Severity, res.Rating)) {
+					fail = true
+				}
+
+				if checkContains(t, expected.Comments, res.Comments, "Missing comment", dir) {
+					fail = true
+				}
+				if checkContains(t, res.Comments, expected.Comments, "Additional comment", dir) {
+					fail = true
+				}
+
+				if checkContainsError(t, expected.Errors, res.Errors, dir) {
+					fail = true
+				}
+
+				if fail {
+					diff, err := resultDiff(*expected, res)
+					if err != nil {
+						t.Error(err)
+					}
+					t.Errorf("Diff on %s\n%s", dir, diff)
+				}
+			})
 		}
 	}
 }
