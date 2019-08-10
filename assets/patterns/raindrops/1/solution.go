@@ -16,7 +16,7 @@ func Convert(i int) string {
 	}
 
 	if res == "" {
-		res = strconv.Itoa(i)
+		return strconv.Itoa(i)
 	}
 
 	return res

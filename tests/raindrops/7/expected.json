@@ -1,4 +1,12 @@
 {
-	"status": "refer_to_mentor",
-	"comments": []
+	"status": "disapprove",
+	"comments": [
+		"go.raindrops.loop_over_a_map",
+		{
+			"comment": "go.raindrops.string_builder_used",
+			"params": {
+				"function": "strings.Builder"
+			}
+		}
+	]
 }

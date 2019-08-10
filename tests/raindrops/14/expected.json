@@ -1,11 +1,18 @@
 {
-	"status": "refer_to_mentor",
+	"status": "disapprove",
 	"comments": [
 		{
 			"comment": "go.general.taking_length_of_string_to_check_empty",
 			"params": {
 				"name": "res"
 			}
-		}
+		},
+		{
+			"comment": "go.raindrops.concatenation_via_fmt",
+			"params": {
+				"function": "fmt.Sprintf"
+			}
+		},
+		"go.general.remove_extra_function"
 	]
 }

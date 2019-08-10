@@ -1,4 +1,6 @@
 {
-	"status": "refer_to_mentor",
-	"comments": []
+	"status": "disapprove",
+	"comments": [
+		"go.raindrops.all_combinations_implemented"
+	]
 }

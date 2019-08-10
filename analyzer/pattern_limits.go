@@ -15,7 +15,7 @@ var patternLimits = map[string]limits{
 		ApproveLimit: 0.9,
 	},
 	"raindrops": {
-		OptimalLimit: 0.99,
-		ApproveLimit: 0.99, // TODO: change when comments are implemented
+		OptimalLimit: 0.95,
+		ApproveLimit: 0.85,
 	},
 }

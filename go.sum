@@ -24,8 +24,8 @@ github.com/stretchr/testify v1.2.2 h1:bSDNvY7ZPG5RlJ8otE/7V6gMiyenm9RtJ7IUVIAoJ1
 github.com/stretchr/testify v1.2.2/go.mod h1:a8OnRcib4nhh0OaRAV+Yts87kKdq0PP7pXfy6kDkUVs=
 github.com/stretchr/testify v1.3.0 h1:TivCn/peBQ7UY8ooIcPgZFpTNSz0Q2U6UrFlUfqbe0Q=
 github.com/stretchr/testify v1.3.0/go.mod h1:M5WIy9Dh21IEIfnGCwXGc5bZfKNJtfHm1UVUgZn+9EI=
-github.com/tehsphinx/astpatt v0.2.1 h1:ToNB0mviTE+Y2PY5NnB3HD1xgNKaHU30Gsjokwr0gbE=
-github.com/tehsphinx/astpatt v0.2.1/go.mod h1:iZdDB0J0Zhz9sW+Q8tzpR19L9b8fcUoSSaao+6s9Pho=
+github.com/tehsphinx/astpatt v0.3.1 h1:pg9MHu/cqjdsLLYgkHFCtuQNcuQfaptB7GBQFugu/n4=
+github.com/tehsphinx/astpatt v0.3.1/go.mod h1:iZdDB0J0Zhz9sW+Q8tzpR19L9b8fcUoSSaao+6s9Pho=
 github.com/tehsphinx/astrav v0.4.0 h1:VChorG4J/rBRXpTrLuFxwDauo6dnLaDifBwtWXoNSmQ=
 github.com/tehsphinx/astrav v0.4.0/go.mod h1:zEFhb8ClsLyrt/CT5cGip7dRM7POzPQPUZAHlJkb/3I=
 github.com/tehsphinx/dbg v0.0.0-20180912080624-6ae3be1fde4a h1:An4JM6FGIm6VrD89WG9XirMuT1qNS1KzLgA0DcXoRkU=

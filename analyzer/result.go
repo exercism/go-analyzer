@@ -1,7 +1,10 @@
 package analyzer
 
 import (
+	"encoding/json"
 	"fmt"
+	"io/ioutil"
+	"path"
 
 	"github.com/exercism/go-analyzer/suggester/sugg"
 )
@@ -100,4 +103,48 @@ func getStatus(pattern *PatternReport, comments, severity int, errors int) Statu
 
 	// Default: Better leave it to a mentor.
 	return ReferToMentor
+}
+
+// GetResultFromFile returns the content of the `expected.json` file in given path.
+func GetResultFromFile(dir string) (*Result, error) {
+	bytes, err := ioutil.ReadFile(path.Join(dir, "expected.json"))
+	if err != nil {
+		return nil, err
+	}
+
+	// transforming to struct and back to json to eliminate different formatting
+	var res = unmarshalResult{}
+	if err := json.Unmarshal(bytes, &res); err != nil {
+		return nil, err
+	}
+
+	result := &Result{
+		Status:   res.Status,
+		Severity: res.Severity,
+		Errors:   res.Errors,
+	}
+	for _, comment := range res.Comments {
+		switch cmt := comment.(type) {
+		case string:
+			result.Comments = append(result.Comments, sugg.NewComment(cmt))
+		case map[string]interface{}:
+			comment, _ := cmt["comment"].(string)
+			ps, _ := cmt["params"].(map[string]interface{})
+
+			params := map[string]string{}
+			for key, value := range ps {
+				params[key], _ = value.(string)
+			}
+
+			result.Comments = append(result.Comments, sugg.NewPlaceholderComment(comment, params))
+		}
+	}
+	return result, err
+}
+
+type unmarshalResult struct {
+	Status   Status        `json:"status"`
+	Comments []interface{} `json:"comments"`
+	Errors   []string      `json:"errors,omitempty"`
+	Severity int           `json:"-"`
 }

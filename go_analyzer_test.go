@@ -3,7 +3,6 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
 	"net/http"
 	"path"
 	"strings"
@@ -58,7 +57,7 @@ func TestAnalyze(t *testing.T) {
 
 				var fail bool
 				if !assert.Equal(t, expected.Status, res.Status,
-					fmt.Sprintf("Wrong status on %s (severity: %d, rating: %.2f)", dir, res.Severity, res.Rating)) {
+					fmt.Sprintf("Wrong status on %s/solution.go:1\n\t-> severity: %d, rating: %.2f", dir, res.Severity, res.Rating)) {
 					fail = true
 				}
 
@@ -104,7 +103,7 @@ func checkContains(t *testing.T, search, container []sugg.Comment, message, dir 
 				}
 			}
 		}
-		if !assert.True(t, contains, fmt.Sprintf("%s `%s` on %s\n%s", msg, comment.ID(), dir, diff)) {
+		if !assert.True(t, contains, fmt.Sprintf("%s `%s` \n\t-> on %s/solution.go:1\n%s", msg, comment.ID(), dir, diff)) {
 			fail = true
 		}
 	}
@@ -154,50 +153,6 @@ func ExerciseTests(exercise string) ([]string, error) {
 		paths[i] = path.Join("tests", exercise, dir)
 	}
 	return paths, err
-}
-
-// GetExpected returns the content of the `test.json` file in given path.
-func GetExpected(dir string) (*analyzer.Result, error) {
-	bytes, err := ioutil.ReadFile(path.Join(dir, "expected.json"))
-	if err != nil {
-		return nil, err
-	}
-
-	// transforming to struct and back to json to eliminate different formatting
-	var res = unmarshalResult{}
-	if err := json.Unmarshal(bytes, &res); err != nil {
-		return nil, err
-	}
-
-	result := &analyzer.Result{
-		Status:   res.Status,
-		Severity: res.Severity,
-		Errors:   res.Errors,
-	}
-	for _, comment := range res.Comments {
-		switch cmt := comment.(type) {
-		case string:
-			result.Comments = append(result.Comments, sugg.NewComment(cmt))
-		case map[string]interface{}:
-			comment, _ := cmt["comment"].(string)
-			ps, _ := cmt["params"].(map[string]interface{})
-
-			params := map[string]string{}
-			for key, value := range ps {
-				params[key], _ = value.(string)
-			}
-
-			result.Comments = append(result.Comments, sugg.NewPlaceholderComment(comment, params))
-		}
-	}
-	return result, err
-}
-
-type unmarshalResult struct {
-	Status   analyzer.Status `json:"status"`
-	Comments []interface{}   `json:"comments"`
-	Errors   []string        `json:"errors,omitempty"`
-	Severity int             `json:"-"`
 }
 
 func commentDiff(expected, got sugg.Comment) (string, error) {

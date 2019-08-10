@@ -1,4 +1,11 @@
 {
-	"status": "refer_to_mentor",
-	"comments": []
+	"status": "approve",
+	"comments": [
+		{
+			"comment": "go.raindrops.string_builder_used",
+			"params": {
+				"function": "strings.Builder"
+			}
+		}
+	]
 }

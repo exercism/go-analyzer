@@ -1,11 +1,8 @@
 {
-	"status": "refer_to_mentor",
+	"status": "disapprove",
 	"comments": [
-		{
-			"comment": "go.general.remove_extra_variable",
-			"params": {
-				"name": "ok"
-			}
-		}
+		"go.raindrops.multiple_loops",
+		"go.raindrops.use_strconv_itoa",
+		"go.general.remove_extra_function"
 	]
 }

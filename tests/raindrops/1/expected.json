@@ -1,4 +1,8 @@
 {
-	"status": "refer_to_mentor",
-	"comments": []
+	"status": "disapprove",
+	"comments": [
+		"go.raindrops.multiple_loops",
+		"go.raindrops.extensive_for_loop",
+		"go.raindrops.plus_equal_comment"
+	]
 }

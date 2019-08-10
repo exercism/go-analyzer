@@ -6,6 +6,8 @@
 			"params": {
 				"golint": "unary-op: should replace n += 1 with n++\n\ttests/raindrops/10/solution.go:9:22\n\tdoc: \n"
 			}
-		}
+		},
+		"go.raindrops.extensive_for_loop",
+		"go.raindrops.plus_equal_comment"
 	]
 }

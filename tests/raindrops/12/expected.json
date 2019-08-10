@@ -1,4 +1,18 @@
 {
-	"status": "refer_to_mentor",
-	"comments": []
+	"status": "disapprove",
+	"comments": [
+		"go.raindrops.extensive_for_loop",
+		{
+			"comment": "go.raindrops.string_builder_used",
+			"params": {
+				"function": "bytes.Buffer"
+			}
+		},
+		{
+			"comment": "go.raindrops.remove_extra_bool",
+			"params": {
+				"name": "foundName"
+			}
+		}
+	]
 }

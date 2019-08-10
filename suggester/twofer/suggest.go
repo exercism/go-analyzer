@@ -23,6 +23,7 @@ var Register = sugg.Register{
 		examStringsJoin,
 		examStringsBuilder,
 		examExtraVariable,
+		sugg.ExamExtraVariable,
 		examExtraFunction,
 		examStringsTrimSpace,
 	},
