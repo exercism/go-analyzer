@@ -28,6 +28,8 @@ github.com/tehsphinx/astpatt v0.3.1 h1:pg9MHu/cqjdsLLYgkHFCtuQNcuQfaptB7GBQFugu/
 github.com/tehsphinx/astpatt v0.3.1/go.mod h1:iZdDB0J0Zhz9sW+Q8tzpR19L9b8fcUoSSaao+6s9Pho=
 github.com/tehsphinx/astrav v0.4.0 h1:VChorG4J/rBRXpTrLuFxwDauo6dnLaDifBwtWXoNSmQ=
 github.com/tehsphinx/astrav v0.4.0/go.mod h1:zEFhb8ClsLyrt/CT5cGip7dRM7POzPQPUZAHlJkb/3I=
+github.com/tehsphinx/astrav v0.4.1 h1:nmWhVgZBRV9ZBG6s5XdPRIs78LghrLEopaF2DZnQHnY=
+github.com/tehsphinx/astrav v0.4.1/go.mod h1:zEFhb8ClsLyrt/CT5cGip7dRM7POzPQPUZAHlJkb/3I=
 github.com/tehsphinx/dbg v0.0.0-20180912080624-6ae3be1fde4a h1:An4JM6FGIm6VrD89WG9XirMuT1qNS1KzLgA0DcXoRkU=
 github.com/tehsphinx/dbg v0.0.0-20180912080624-6ae3be1fde4a/go.mod h1:0lc75gUc5PIEHuvMfdbFQqjEGKFkP+V7XBa75j6s91c=
 golang.org/x/crypto v0.0.0-20190308221718-c2843e01d9a2 h1:VklqNMn3ovrHsnt90PveolxSbWFaJdECFbxSq0Mqo2M=

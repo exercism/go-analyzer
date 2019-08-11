@@ -10,7 +10,7 @@
 		{
 			"comment": "go.general.golint_not_satisfied",
 			"params": {
-				"golint": "indent: if block ends with a return statement, so drop this else and outdent its block\n\ttests/two-fer/21/two_fer.go:12:9\n\tdoc: https://golang.org/wiki/CodeReviewComments#indent-error-flow\n"
+				"golint": "indent: if block ends with a return statement, so drop this else and outdent its block\n\ttests/two-fer/21/solution.go:12:9\n\tdoc: https://golang.org/wiki/CodeReviewComments#indent-error-flow\n"
 			}
 		},
 		"go.two-fer.plus_used_for_concatenation",

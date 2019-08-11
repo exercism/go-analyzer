@@ -4,7 +4,7 @@
 		{
 			"comment": "go.general.golint_not_satisfied",
 			"params": {
-				"golint": "indent: if block ends with a return statement, so drop this else and outdent its block\n\ttests/two-fer/19/two_fer.go:33:9\n\tdoc: https://golang.org/wiki/CodeReviewComments#indent-error-flow\n"
+				"golint": "indent: if block ends with a return statement, so drop this else and outdent its block\n\ttests/two-fer/19/solution.go:33:9\n\tdoc: https://golang.org/wiki/CodeReviewComments#indent-error-flow\n"
 			}
 		},
 		{
@@ -14,6 +14,7 @@
 			}
 		},
 		"go.general.remove_main_function_and_correct_package_name",
-		"go.two-fer.replace_stub_comments"
+		"go.two-fer.replace_stub_comments",
+		"go.general.avoid_printing_and_logging"
 	]
 }

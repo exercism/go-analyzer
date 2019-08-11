@@ -4,7 +4,7 @@
 		{
 			"comment": "go.general.golint_not_satisfied",
 			"params": {
-				"golint": "comments: exported function Distance should have comment or be unexported\n\ttests/hamming/15/hamming.go:7:1\n\tdoc: https://golang.org/wiki/CodeReviewComments#doc-comments\nindent: if block ends with a return statement, so drop this else and outdent its block\n\ttests/hamming/15/hamming.go:14:10\n\tdoc: https://golang.org/wiki/CodeReviewComments#indent-error-flow\nunary-op: should replace hammingDistance += 1 with hammingDistance++\n\ttests/hamming/15/hamming.go:19:7\n\tdoc: \n"
+				"golint": "comments: exported function Distance should have comment or be unexported\n\ttests/hamming/15/solution.go:7:1\n\tdoc: https://golang.org/wiki/CodeReviewComments#doc-comments\nindent: if block ends with a return statement, so drop this else and outdent its block\n\ttests/hamming/15/solution.go:14:10\n\tdoc: https://golang.org/wiki/CodeReviewComments#indent-error-flow\nunary-op: should replace hammingDistance += 1 with hammingDistance++\n\ttests/hamming/15/solution.go:19:7\n\tdoc: \n"
 			}
 		},
 		{
@@ -15,6 +15,7 @@
 		},
 		"go.general.fmt_errorf_without_parameter",
 		"go.hamming.invert_if_for_happy_path_on_left",
-		"go.hamming.rune_index_used_with_bytes"
+		"go.hamming.rune_index_used_with_bytes",
+		"go.general.avoid_printing_and_logging"
 	]
 }
