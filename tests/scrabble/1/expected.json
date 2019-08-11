@@ -1,4 +1,12 @@
 {
-	"status": "refer_to_mentor",
-	"comments": []
+	"status": "approve",
+	"comments": [
+		"go.general.benchmark_comment",
+		{
+			"comment": "go.scrabble.use_unicode_in_loop_instead_strings_before_loop",
+			"params": {
+				"function": "ToUpper"
+			}
+		}
+	]
 }

@@ -36,7 +36,9 @@ func TestAnalyze(t *testing.T) {
 		}
 
 		for _, dir := range paths {
-			if runOnly != "" && runOnly != dir {
+			if runOnly != "" &&
+				(!strings.HasPrefix(dir, runOnly) ||
+					strings.Count(runOnly, "/") == 2 && runOnly != dir) {
 				continue
 			}
 
@@ -44,7 +46,7 @@ func TestAnalyze(t *testing.T) {
 				res := analyzer.Analyze(exercise, dir)
 
 				// if a specific exercise is set print ast for orientation while implementing
-				if runOnly != "" {
+				if strings.Count(runOnly, "/") == 2 {
 					if err := printAST(dir); err != nil {
 						t.Fatal(err)
 					}

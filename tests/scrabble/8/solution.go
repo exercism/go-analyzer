@@ -35,7 +35,7 @@ func Score(input string) (score int) {
 	for _, letter := range r {
 		// Score can only evaluate ASCII characters.
 		if letter < asciiA || letter > asciiZ {
-			log.Printf("Invalid letter: %s\n", string(letter))
+			log.Println("Invalid letter")
 			return
 		}
 

@@ -1,9 +1,9 @@
-//Package scrabble implements a scoring function for taking scrabble words and finding the associated points
+// Package scrabble implements a scoring function for taking scrabble words and finding the associated points
 package scrabble
 
 import "strings"
 
-//Score returns an int based on the Scrabble score of the string that is passed in as a parameter
+// Score returns an int based on the Scrabble score of the string that is passed in as a parameter
 func Score(input string) (scrabbleScore int) {
 	scoreMap := map[string]int{
 		"A": 1,

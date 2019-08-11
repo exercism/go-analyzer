@@ -20,6 +20,6 @@ var patternLimits = map[string]limits{
 	},
 	"scrabble": {
 		OptimalLimit: 0.97,
-		ApproveLimit: 0.97, // TODO: change when comments are implemented
+		ApproveLimit: 0.9,
 	},
 }

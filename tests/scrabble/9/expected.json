@@ -1,4 +1,7 @@
 {
-	"status": "refer_to_mentor",
-	"comments": []
+	"status": "approve",
+	"comments": [
+		"go.general.benchmark_comment",
+		"go.scrabble.multiple_loops"
+	]
 }

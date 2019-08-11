@@ -17,6 +17,8 @@ var GeneralRegister = Register{
 		examErrorfWithoutParams,
 		examCustomError,
 		examStringsCompare,
+		examInitFunction,
+		examPrinting,
 	},
 	Severity: severity,
 }
@@ -177,6 +179,30 @@ func examCustomError(pkg *astrav.Package, suggs Suggester) {
 		if strings.HasSuffix(funcType.GetSourceString(), "Error() string") {
 			suggs.AppendUnique(CustomErrorCreated)
 		}
+	}
+}
+
+func examInitFunction(pkg *astrav.Package, suggs Suggester) {
+	initFunc := pkg.FuncDeclByName("init")
+	if initFunc != nil {
+		suggs.AppendUnique(AvoidInit)
+	}
+}
+
+var printFuncs = []string{
+	"fmt.Print", "fmt.Printf", "fmt.Println",
+	"log.Print", "log.Printf", "log.Println",
+	"log.Fatal", "log.Fatalf", "log.Fatalln",
+	"log.Panic", "log.Panicf", "log.Panicln",
+}
+
+func examPrinting(pkg *astrav.Package, suggs Suggester) {
+	var printers []astrav.Node
+	for _, f := range printFuncs {
+		printers = append(printers, pkg.FindByName(f)...)
+	}
+	if len(printers) != 0 {
+		suggs.AppendUnique(AvoidPrinting)
 	}
 }
 

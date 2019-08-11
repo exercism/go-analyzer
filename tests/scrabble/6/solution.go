@@ -8,7 +8,7 @@ import (
 	"strings"
 )
 
-//Score used to calculate score for input word
+// Score used to calculate score for input word
 func Score(input string) int {
 	input = strings.ToLower(input)
 	oneReg := regexp.MustCompile("[aeioulnrst]")

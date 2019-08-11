@@ -1,4 +1,13 @@
 {
-	"status": "approve_as_optimal",
-	"comments": []
+	"status": "approve",
+	"comments": [
+		"go.general.benchmark_comment",
+		{
+			"comment": "go.scrabble.use_unicode_in_loop_instead_strings_before_loop",
+			"params": {
+				"function": "ToLower"
+			}
+		},
+		"go.scrabble.try_switch"
+	]
 }

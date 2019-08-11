@@ -17,6 +17,11 @@ const (
 	CustomErrorCreated = "go.general.custom_error_created"
 	TrimSpaceUsed      = "go.general.strings_trim_space_used"
 	StringsCompare     = "go.general.strings_compare_used"
+	AvoidInit          = "go.general.avoid_init_function"
+	AvoidPrinting      = "go.general.avoid_printing_and_logging"
+
+	RegexComment     = "go.general.regex_comment"
+	BenchmarkComment = "go.general.benchmark_comment"
 )
 
 // Severity defines how severe a comment is. A sum over all comments of 5 means no approval.
@@ -40,4 +45,9 @@ var severity = map[string]int{
 	CustomErrorCreated: 0,
 	TrimSpaceUsed:      0,
 	StringsCompare:     3,
+	AvoidInit:          3,
+	AvoidPrinting:      2,
+
+	RegexComment:     0,
+	BenchmarkComment: 0,
 }

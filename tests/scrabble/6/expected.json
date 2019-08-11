@@ -1,6 +1,10 @@
 {
-	"status": "disapprove_with_comment",
+	"status": "disapprove",
 	"comments": [
+		"go.scrabble.static_regex_in_func",
+		"go.scrabble.challenge",
+		"go.general.regex_comment",
+		"go.general.benchmark_comment",
 		{
 			"comment": "go.general.remove_extra_variable",
 			"params": {

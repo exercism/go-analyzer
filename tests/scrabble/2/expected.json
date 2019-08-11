@@ -1,4 +1,20 @@
 {
-	"status": "refer_to_mentor",
-	"comments": []
+	"status": "disapprove",
+	"comments": [
+		"go.general.benchmark_comment",
+		"go.scrabble.static_map_in_func",
+		{
+			"comment": "go.scrabble.use_map_rune",
+			"params": {
+				"type": "map[string]int"
+			}
+		},
+		{
+			"comment": "go.scrabble.use_unicode_instead_strings_in_loop",
+			"params": {
+				"function": "ToUpper"
+			}
+		},
+		"go.scrabble.try_switch"
+	]
 }
