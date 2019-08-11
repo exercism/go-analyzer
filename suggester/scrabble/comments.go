@@ -2,8 +2,8 @@ package scrabble
 
 // exercise comments
 const (
-	MissingEntryFunc     = "go.scrabble.missing_share_with_function"
-	FuncSignatureChanged = "go.scrabble.sharewith_signature_changed"
+	MissingEntryFunc     = "go.scrabble.missing_score_function"
+	FuncSignatureChanged = "go.scrabble.score_signature_changed"
 	Regex                = "go.scrabble.static_regex_in_func"
 	GoRoutines           = "go.scrabble.using_goroutines"
 	IfsToSwitch          = "go.scrabble.transform_ifs_to_switch"
@@ -15,7 +15,7 @@ const (
 	MapRune              = "go.scrabble.use_map_rune"
 	LoopRuneNotByte      = "go.scrabble.iterate_runes_not_bytes"
 	TypeConversion       = "go.scrabble.unnecessary_type_conversion"
-	RegexChallenge       = "go.scrabble.challenge"
+	RegexChallenge       = "go.scrabble.regex_challenge"
 	TrySwitch            = "go.scrabble.try_switch"
 )
 

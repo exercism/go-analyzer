@@ -2,7 +2,7 @@
 	"status": "disapprove",
 	"comments": [
 		"go.scrabble.static_regex_in_func",
-		"go.scrabble.challenge",
+		"go.scrabble.regex_challenge",
 		"go.general.regex_comment",
 		"go.general.benchmark_comment",
 		{
