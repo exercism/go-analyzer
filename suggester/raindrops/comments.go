@@ -4,8 +4,8 @@ import "github.com/exercism/go-analyzer/suggester/sugg"
 
 // exercise comments
 const (
-	MissingEntryFunc     = "go.raindrops.missing_share_with_function"
-	FuncSignatureChanged = "go.raindrops.sharewith_signature_changed"
+	MissingEntryFunc     = "go.raindrops.missing_entry_function"
+	FuncSignatureChanged = "go.raindrops.entry_signature_changed"
 	AllCombinations      = "go.raindrops.all_combinations_implemented"
 	ConcatFMT            = "go.raindrops.concatenation_via_fmt"
 	RemoveExtraBool      = "go.raindrops.remove_extra_bool"
