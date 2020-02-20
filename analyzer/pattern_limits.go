@@ -18,4 +18,8 @@ var patternLimits = map[string]limits{
 		OptimalLimit: 0.95,
 		ApproveLimit: 0.85,
 	},
+	"concepts-basicstrings": {
+		OptimalLimit: 0.99,
+		ApproveLimit: 0.9,
+	},
 }

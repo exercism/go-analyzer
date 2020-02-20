@@ -51,6 +51,9 @@ Example:
 docker run -v ~/solution-238382y7sds7fsadfasj23j:/solution exercism/go-analyzer two-fer /solution
 ```
 
+## Contributing
+
+To contribute to this tool please see [CONTRIBUTING.md](./CONTRIBUTING.md)
 
 ## Stats
 
