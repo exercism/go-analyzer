@@ -1,3 +1,11 @@
+# Aseets
 assets/patterns_build.go
 samples
 samples.zip
+
+# Dependency management
+vendor
+
+# Binaries
+*.exe
+analyze
