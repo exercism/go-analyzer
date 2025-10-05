@@ -1,5 +1,5 @@
-//Package twofer or 2-fer is short for two for one.
-//One for you and one for me.
+// Package twofer or 2-fer is short for two for one.
+// One for you and one for me.
 package twofer
 
 import "strings"

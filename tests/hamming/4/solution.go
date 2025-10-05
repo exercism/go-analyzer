@@ -10,7 +10,7 @@ import (
 	"strings"
 )
 
-//Distance is used for calculating difference between 2 DNA, represented in strings.
+// Distance is used for calculating difference between 2 DNA, represented in strings.
 func Distance(a, b string) (int, error) {
 	var answer int
 	first := strings.Split(a, "")

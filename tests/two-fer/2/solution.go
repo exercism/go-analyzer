@@ -9,7 +9,7 @@ import "fmt"
 
 // ShareWith function
 // Input: Name of the person, if null then it you!
-//Output: Return the string
+// Output: Return the string
 func ShareWith(name string) string {
 	if name != "" {
 		t := fmt.Sprintf("One for %s, one for me.", name)
