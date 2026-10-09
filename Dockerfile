@@ -27,7 +27,7 @@ RUN GOOS=linux GOARCH=amd64 go build --tags=build -o /go/bin/analyzer .
 # Build a minimal and secured container
 # The ast parser needs Go installed for import statements.
 # Therefore, unfortunately we cannot build from scratch as we would normally do with Go.
-FROM golang:1.27.0-alpine3.23@sha256:3747dcba41c8b0db3211fda4db61638b980e17ac5bb3c94460a975a9cfe19395
+FROM golang:1.27.0-alpine3.23@sha256:8a5910f31396cd4d89662f56c68b3ae31d374308270a1c3bd96672ee5ed43414
 COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
 COPY --from=builder /etc/passwd /etc/passwd
 COPY --from=builder /go/bin /opt/analyzer/bin
